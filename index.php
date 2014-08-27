@@ -5,8 +5,9 @@ include 'include/mysql.php';
 
 // Read the form values
 //generics
-//if (isset($_GET["action"])) { $action = $_GET["action"]; }
-$action = $_GET["action"];
+if (isset($_GET["action"])) { $action = $_GET["action"]; }
+if (isset($_POST['action'])) { $action = $_POST['action']; }
+//$action = $_GET["action"];
 
 $flag = 0;
 if (!isset($action)) { $action = "home"; }
@@ -19,8 +20,7 @@ if ($action == "home") { $flag += 1; }
 
 if ($flag < 1) { $action = "home"; }
 
-if (isset($_POST['action'])) { $action = $_POST['action']; }
-
+//defaults
 if (isset($_POST['name'])) { $name= $_POST['name']; }
 else { $name = "none"; }
 

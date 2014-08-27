@@ -58,7 +58,7 @@ echo '</div>'; //end body, panel, col
                         <input type="checkbox" name="superuser" value="superuser">&nbsp;Superuser<br>
                         <input type="checkbox" name="user" value="user">&nbsp;user<br>
                         <br><br>
-			<input type="hidden" name="action" value="user">
+			<input type="hidden" name="action" value="users">
 			<input type="hidden" name="edit" value="new">
 			<input type="submit" name="new" value="submit" maxlength="1024">
 			</form>
