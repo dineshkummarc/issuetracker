@@ -6,14 +6,14 @@ if (!isset($reentry)) { $reentry = "0"; }
 echo '<div class="col">';
 
 /* ******************* */
-/* show all taloyhtiot */
+/* show all houses */
 /* ******************* */
 
-// taloyhtio col
+// houses col
 echo '<div class="col width-1of3">';
 echo '<div class="cell panel">';
 echo '<div class="header">';
-echo '<h3>Taloyhtiot</h3>';
+echo '<h3>Houses</h3>';
 echo '</div>';
 echo '<div class="body">';
 
@@ -57,13 +57,13 @@ echo '<div class="col width-fill">';
 if ($reentry == "0") {
 	echo '<div class="cell panel">';
 	echo '<div class="header">';
-	echo ' <h3>New Taloyhtio</h3>';
+	echo ' <h3>New House</h3>';
 	echo '</div>';
 	echo '<div class="body">';
 
 	// add new house form
 	echo '<form action="index.php" method="post" class="padded">';
-	echo '<p><span class="left">Taloyhtio Nimi:</span>';
+	echo '<p><span class="left">House Name:</span>';
 	echo '<span class="right"><input name="name" type="text" size="44" maxlength="50" ></span>';
 	echo '</p>';
 	echo '<br><br>';
@@ -86,7 +86,7 @@ if ($reentry == "0") {
 	echo '<input type="hidden" name="action" value="house">';
 	echo '<input type="hidden" name="edit" value="new">';
 	echo '<input type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
-        echo '<a href="index.php?action=taloyhtiot" class="button right">RESET</a>';
+        echo '<a href="index.php?action=houses" class="button right">RESET</a>';
 	echo '</form>';
 	
 	echo '</div></div>'; //end body, end panel
@@ -95,7 +95,7 @@ if ($reentry == "0") {
 if ($reentry == "1") {
         echo '<div class="cell panel">';
         echo '<div class="header">';
-        echo ' <h3>Update Taloyhtio</h3>';
+        echo ' <h3>Update House</h3>';
         echo '</div>';
         echo '<div class="body">';
 
@@ -104,7 +104,7 @@ if ($reentry == "1") {
         echo '<input type="hidden" name="action" value="house">';
         echo '<input type="hidden" name="edit" value="update">';
         echo '<input type="hidden" name="id" value="' . $id . '">';
-        echo '<p><span class="left">Taloyhtio Nimi:</span>';
+        echo '<p><span class="left">House Name:</span>';
         echo '<span class="right"><input name="name" type="text" size="44" maxlength="50" value="' . $name . '"></span>';
         echo '</p>';
         echo '<br><br>';
@@ -125,7 +125,7 @@ if ($reentry == "1") {
         echo '</p>';
         echo '<br><br>';
         echo '<input type="submit" name="Update &raquo;" value="submit" maxlength="1024">';
-        echo '<a href="index.php?action=taloyhtiot" class="button right">RESET</a>';
+        echo '<a href="index.php?action=houses" class="button right">RESET</a>';
         echo '</form>';
 
         echo '</div></div>'; //end body, end panel
@@ -134,7 +134,7 @@ if ($reentry == "1") {
 if ($reentry == "1") {
 	echo '<div class="cell panel">';
 	echo '<div class="header">';
-	echo '<h3>Taloyhtio Issues</h3>';
+	echo '<h3>House Issues</h3>';
 	echo '</div>';
 	echo '<div class="body">';
 

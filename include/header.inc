@@ -32,10 +32,10 @@
 			<span class="button-group">
                         <a class="button <?php if ($selected == "users") echo 'active'; ?>" href="index.php?action=users">
                                 <i class="fa fa-home"></i>&nbsp;User Admin</a>
+                        <a class="button <?php if ($selected == "houses") echo 'active'; ?>" a href="index.php?action=houses">
+                                <i class="fa fa-gear"></i>&nbsp;House Admin</a>
                         <a class="button <?php if ($selected == "editissues") echo 'active'; ?>" a href="index.php?action=editissues">
                                 <i class="fa fa-gear"></i>&nbsp;Manage Issues</a>
-                        <a class="button <?php if ($selected == "houses") echo 'active'; ?>" a href="index.php?action=houses">
-                                <i class="fa fa-gear"></i>&nbsp;Manage Houses</a>
                         <a class="button <?php if ($selected == "trackissues") echo 'active'; ?>" a href="index.php?action=trackissues">
                                 <i class="fa fa-gear"></i>&nbsp;Track Issues</a>
 			</span>
