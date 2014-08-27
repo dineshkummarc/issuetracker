@@ -1,7 +1,7 @@
 <?php
 
-echo '<div class="col">';
-echo '<div class="col width-1of3">';
+echo '<div class="grid-container">';
+echo '<div class="grid-50">';
 
 if (!isset($reentry)) { $reentry = "0"; }
 
@@ -62,10 +62,10 @@ if ($reentry == "0") {
 //end column div
 echo '</div>';
 
-echo '<div class="col width-fill">';
+echo '<div class="grid-50">';
 echo '<div class="cell panel">';
 echo '  <div class="header">';
-echo '   <p>Issue List:</p>';
+echo '   <p>Issue Type List:</p>';
 echo '  </div>';
 echo '<div class="body">';
 

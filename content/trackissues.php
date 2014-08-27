@@ -3,10 +3,10 @@
 if (!isset($reentry)) { $reentry = "0"; }
 
 // begin main column div
-echo '<div class="col">';
+echo '<div class="grid-container">';
 
 // begin 2of3 wide col
-echo '<div class="col width-2of3">';
+echo '<div class="grid-66">';
 
 // browse issues DB -->
 
@@ -50,7 +50,7 @@ echo '</div></div>'; // end body, end cell
 
 echo '</div>'; // end col
 
-echo '<div class="col width-fill">'; // begin new column
+echo '<div class="grid-33">'; // begin new column
 
 //begin new/edit issue box
 

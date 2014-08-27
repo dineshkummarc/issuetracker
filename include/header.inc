@@ -16,6 +16,7 @@
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
 <!-- css tweaks -->
+<link rel="stylesheet" href="css/unsemantic-grid-responsive-no-ie7.css" type="text/css">
 <link rel="stylesheet" href="css/style.css" type="text/css">
 
 <link rel="icon" href="icons/favicon.ico">
@@ -26,20 +27,16 @@
 <body>
 
 <!-- top menu div -->
-<div id="header" class="col">
-	<div class="nav">
-		<div class="padded col width-1of3" style="width: auto;">
-			<span class="button-group">
-                        <a class="button <?php if ($selected == "users") echo 'active'; ?>" href="index.php?action=users">
-                                <i class="fa fa-home"></i>&nbsp;User Admin</a>
-                        <a class="button <?php if ($selected == "houses") echo 'active'; ?>" a href="index.php?action=houses">
-                                <i class="fa fa-gear"></i>&nbsp;House Admin</a>
-                        <a class="button <?php if ($selected == "editissues") echo 'active'; ?>" a href="index.php?action=editissues">
-                                <i class="fa fa-gear"></i>&nbsp;Manage Issues</a>
-                        <a class="button <?php if ($selected == "trackissues") echo 'active'; ?>" a href="index.php?action=trackissues">
-                                <i class="fa fa-gear"></i>&nbsp;Track Issues</a>
-			</span>
-		</div>
-	</div>
-</div>
+<nav>
+	<ul>
+		<li><a class="button <?php if ($selected == "users") echo 'active'; ?>" href="index.php?action=users">
+				<i class="fa fa-home"></i>&nbsp;User Admin</a></li>
+		<li><a class="button <?php if ($selected == "houses") echo 'active'; ?>" a href="index.php?action=houses">
+				<i class="fa fa-gear"></i>&nbsp;House Admin</a></li>
+		<li><a class="button <?php if ($selected == "editissues") echo 'active'; ?>" a href="index.php?action=editissues">
+				<i class="fa fa-gear"></i>&nbsp;Manage Issues</a></li>
+		<li><a class="button <?php if ($selected == "trackissues") echo 'active'; ?>" a href="index.php?action=trackissues">
+				<i class="fa fa-gear"></i>&nbsp;Track Issues</a></li>
+	</ul>
+</nav>
 

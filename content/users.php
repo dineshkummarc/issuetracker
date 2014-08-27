@@ -1,11 +1,11 @@
 <?php
 
-//fetch user data from isannointikkk.users table -->
+//fetch user data from issuetracker.users table -->
 $datas=$database->select("users",array("id", "username", "name", "admin", "superuser", "user"));
 
-echo '<div class="col">';
+echo '<div class="grid-container">';
 
-echo '<div class="col width-1of2">';
+echo '<div class="grid-50">';
 echo '<div class="cell panel">';
 	echo '<div class="header">';
 	echo '<h3>Users:</h3>';
@@ -41,7 +41,7 @@ echo '</div>'; //end body, panel, col
 ?>
 
 <!-- add new users form -->
-<div class="col width-fill">
+<div class="grid-50">
 	<div class="cell panel">
 		<div class="header">
 			<h3>New User</h3>

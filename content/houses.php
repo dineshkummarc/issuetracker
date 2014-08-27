@@ -3,14 +3,14 @@
 if (!isset($reentry)) { $reentry = "0"; }
 
 // begin main col
-echo '<div class="col">';
+echo '<div class="grid-container">';
 
 /* ******************* */
 /* show all houses */
 /* ******************* */
 
 // houses col
-echo '<div class="col width-1of3">';
+echo '<div class="grid-50">';
 echo '<div class="cell panel">';
 echo '<div class="header">';
 echo '<h3>Houses</h3>';
@@ -52,7 +52,7 @@ echo '</div></div>'; // end cel body, end panel
 echo '</div>'; // end column div
 
 // begin second column
-echo '<div class="col width-fill">';
+echo '<div class="grid-50">';
 
 if ($reentry == "0") {
 	echo '<div class="cell panel">';
