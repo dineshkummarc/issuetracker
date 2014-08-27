@@ -17,11 +17,11 @@ $datas=$database->select("issues",
 	array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)")
 	);
 
-echo '<div class="cell panel">';
-echo '<div class="header">';
-echo ' <p>Issue List:</p>';
+echo '<div class="padded box">';
+echo '<div class="box-header">';
+echo 'Issue List';
 echo '</div>';
-echo '<div class="body">';
+echo '<div class="box-body">';
 
 echo '<table class="table horizontal-border"><thead><tr><th>ID</th><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
 echo '<tbody>';
@@ -55,11 +55,11 @@ echo '<div class="grid-33">'; // begin new column
 //begin new/edit issue box
 
 if ($reentry == "0") {
-echo '<div class="cell panel">';
-echo '<div class="header">';
-echo ' <p>New Issue</p>';
+echo '<div class="padded box">';
+echo '<div class="box-header">';
+echo 'New Issue';
 echo '</div>';
-echo '<div class="body">';
+echo '<div class="box-body">';
 
 	echo '<form action="index.php" method="post" class="padded">';
 	echo '<input type="hidden" name="action" value="trackissues">';
@@ -84,7 +84,7 @@ echo '<div class="body">';
 	echo '<input name="issue" type="text" size="40" maxlength="128" >';
 	echo '<br><br>';
 	echo 'Issue Details:<br>';
-	echo '<textarea name="description" cols="40" rows="8"></textarea><br><br>';
+	echo '<textarea name="description" cols="36" rows="8"></textarea><br><br>';
 	echo '<input type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
 	echo '<a href="index.php?action=editissues" class="button right">RESET</a>';
 	echo '</form>';
@@ -93,11 +93,11 @@ echo '<div class="body">';
 }
 
 if ($reentry == "1") {
-	echo '<div class="cell panel">';
-	echo '<div class="header">';
-	echo ' <p>Edit Issue:</p>';
+	echo '<div class="padded box">';
+	echo '<div class="box-header">';
+	echo 'Edit Issue';
 	echo '</div>';
-	echo '<div class="body">';
+	echo '<div class="box-body">';
 
 	// select issues left join houses left join issuetypes
 	$datas=$database->select("issues",

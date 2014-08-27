@@ -1,17 +1,18 @@
 <?php
 
 echo '<div class="grid-container">';
+
 echo '<div class="grid-50">';
 
 if (!isset($reentry)) { $reentry = "0"; }
 
 if ($reentry == "1") {
 
-        echo '<div class="cell panel">';
-        echo '  <div class="header">';
-        echo '   <p>Update Issue Type:</p>';
-        echo '  </div>';
-        echo '<div class="body">';
+        echo '<div class="padded box">';
+        echo '<div class="box-header">';
+        echo 'Update Issue Type';
+        echo '</div>';
+        echo '<div class="box-body">';
 
         $datas = $database->select("issuetypes","*",array( "id[=]" => $id ));
 
@@ -36,11 +37,11 @@ if ($reentry == "1") {
 
 if ($reentry == "0") {
 
-        echo '<div class="cell panel">';
-        echo '  <div class="header">';
-        echo '   <p>New Issue Type:</p>';
+        echo '<div class="padded box">';
+        echo '  <div class="box-header">';
+        echo 'New Issue Type';
         echo '  </div>';
-        echo '<div class="body">';
+        echo '<div class="box-body">';
 
         echo '<form action="index.php" method="post" class="padded">';
         echo '<input type="hidden" name="action" value="editissues">';
@@ -63,11 +64,11 @@ if ($reentry == "0") {
 echo '</div>';
 
 echo '<div class="grid-50">';
-echo '<div class="cell panel">';
-echo '  <div class="header">';
-echo '   <p>Issue Type List:</p>';
+echo '<div class="padded box">';
+echo '  <div class="box-header">';
+echo 'Issue Type List';
 echo '  </div>';
-echo '<div class="body">';
+echo '<div class="box-body">';
 
 $datas = $database->select("issuetypes","*");
 
@@ -93,5 +94,7 @@ foreach($datas as $data) {
 
 echo '</div></div>'; //end body, end cell
 echo '</div>'; // end col
+
+echo '</div>'; // end grid container
 
 ?>

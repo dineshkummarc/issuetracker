@@ -11,11 +11,11 @@ echo '<div class="grid-container">';
 
 // houses col
 echo '<div class="grid-50">';
-echo '<div class="cell panel">';
-echo '<div class="header">';
-echo '<h3>Houses</h3>';
+echo '<div class="padded box">';
+echo '<div class="box-header">';
+echo 'Houses';
 echo '</div>';
-echo '<div class="body">';
+echo '<div class="box-body">';
 
 // fetch all house data
 $datas=$database->select("houses", array("name", "address1", "address2", "postcode", "town", "id"));
@@ -55,11 +55,11 @@ echo '</div>'; // end column div
 echo '<div class="grid-50">';
 
 if ($reentry == "0") {
-	echo '<div class="cell panel">';
-	echo '<div class="header">';
-	echo ' <h3>New House</h3>';
+	echo '<div class="padded box">';
+	echo '<div class="box-header">';
+	echo 'New House';
 	echo '</div>';
-	echo '<div class="body">';
+	echo '<div class="box-body">';
 
 	// add new house form
 	echo '<form action="index.php" method="post" class="padded">';
@@ -93,11 +93,11 @@ if ($reentry == "0") {
 }
 
 if ($reentry == "1") {
-        echo '<div class="cell panel">';
-        echo '<div class="header">';
-        echo ' <h3>Update House</h3>';
+        echo '<div class="padded box">';
+        echo '<div class="box-header">';
+        echo 'Update House';
         echo '</div>';
-        echo '<div class="body">';
+        echo '<div class="box-body">';
 
         // edit house form -->
         echo '<form action="index.php" method="post" class="padded">';
@@ -132,11 +132,11 @@ if ($reentry == "1") {
 }
 
 if ($reentry == "1") {
-	echo '<div class="cell panel">';
-	echo '<div class="header">';
-	echo '<h3>House Issues</h3>';
+	echo '<div class="padded box">';
+	echo '<div class="box-header">';
+	echo 'House Issues';
 	echo '</div>';
-	echo '<div class="body">';
+	echo '<div class="box-body">';
 
 	echo '<table><thead><tr><th></th><th></th><th></th></tr></thead>';
 

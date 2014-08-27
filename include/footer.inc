@@ -1,11 +1,13 @@
-<!-- clear div -->
-<div class="clear">
-
 <!-- footer div -->
-<div id="site-footer" class="padded">
-<hr class="clear"/>
+<div class="clear"></div>
+<div id="footer" class="padded">
+<div class="padded">
+<hr>
+<span class="light">| IssueTracker | Copyright &copy; 2014 | Daniel Mayoss |</span>
+</div>
 </div>
 
+</div> <!-- end content div -->
 </body>
 
 </html>

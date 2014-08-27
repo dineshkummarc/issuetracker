@@ -26,6 +26,8 @@
 <!-- page body -->
 <body>
 
+<div id="content">
+
 <!-- top menu div -->
 <nav>
 	<ul>

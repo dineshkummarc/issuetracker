@@ -6,11 +6,11 @@ $datas=$database->select("users",array("id", "username", "name", "admin", "super
 echo '<div class="grid-container">';
 
 echo '<div class="grid-50">';
-echo '<div class="cell panel">';
-	echo '<div class="header">';
-	echo '<h3>Users:</h3>';
+echo '<div class="padded box">';
+	echo '<div class="box-header">';
+	echo 'Users';
 	echo '</div>';
-	echo '<div class="body">';
+	echo '<div class="box-body">';
 
 echo '<table class="table table-striped">';
 echo '<thead><tr><th>ID</th><th>Username</th><th>Name</th><th>Site Admin</th><th>Superuser</th><th>Active</th></tr></thead>';
@@ -36,17 +36,17 @@ echo '</tbody></table>';
 
 echo '</div>';
 echo '</div>';
-echo '</div>'; //end body, panel, col
+echo '</div>'; //end body, box, grid
 
 ?>
 
 <!-- add new users form -->
 <div class="grid-50">
-	<div class="cell panel">
-		<div class="header">
-			<h3>New User</h3>
+	<div class="padded box">
+		<div class="box-header">
+		New User
 		</div>
-		<div class="body">
+		<div class="box-body">
 			<form action="index.php" method="post" class="padded">
 			User Full Name:<br>
 			<input name="name" type="text" size="44" maxlength="50" >
@@ -65,3 +65,5 @@ echo '</div>'; //end body, panel, col
 		</div>
 	</div>
 </div>
+
+</div> <!-- end grid container -->
