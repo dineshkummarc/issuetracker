@@ -11,13 +11,10 @@ $action = $_GET["action"];
 $flag = 0;
 if (!isset($action)) { $action = "home"; }
 
-//if (($action != 'users') or if ($action != 'issues') or if ($action != 'taloyhtiot') or if ($action != 'editissues')) { $action = "home"; }
-// why doesn't ^ work?
-
 if ($action == "users") { $flag += 1; }
-if ($action == "issues") { $flag += 1; }
-if ($action == "taloyhtiot") { $flag += 1; }
 if ($action == "editissues") { $flag += 1; }
+if ($action == "houses") { $flag += 1; }
+if ($action == "trackissues") { $flag += 1; }
 if ($action == "home") { $flag += 1; }
 
 if ($flag < 1) { $action = "home"; }
@@ -65,7 +62,7 @@ else { $edit = "none"; }
 // if (isset($_POST['action'])){ $action= $_POST['action']; }
 // else { $action = "none"; }
 
-//success flag
+//success flag (not used)
 $success = 0;
 
 //set a standard selected item for the menu
@@ -73,13 +70,9 @@ $selected = "home";
 
 include 'include/header.inc';
 
-if ($action == "home") { include 'content/home.php'; }
-if ($action == "users") { include 'content/users.php'; }
-if ($action == "issues") { include 'content/issues.php'; }
-if ($action == "taloyhtiot") { include 'content/taloyhtiot.php'; }
-if ($action == "editissues") { include 'content/editissues.php'; }
+if ($action == "home")  { include 'content/home.php'; }
 
-if ($action == "user") {
+if ($action == "users") {
 
 	if ($edit == "new") {
 		$last_id = $database->insert("users", array(
@@ -96,7 +89,7 @@ if ($action == "user") {
 	include 'content/users.php';
 }
 
-if ($action == "issue") {
+if ($action == "editissues") {
 	if ($edit == "new") {
 		$last_id = $database->insert("issues", array(
 			"house" => "$id",
@@ -124,7 +117,7 @@ if ($action == "issue") {
 	include 'content/editissues.php';
 }
 
-if ($action == "issuetype") {
+if ($action == "trackissues") {
 
 	if ($edit == "new") {
 		$last_id = $database->insert("issuetypes", array(
@@ -149,10 +142,10 @@ if ($action == "issuetype") {
 		$reentry = "0";
 	}
 
-	include 'content/issues.php';
+	include 'content/trackissues.php';
 }
 
-if ($action == "house") {
+if ($action == "houses") {
 
 	if ($edit == "new") {
 		$last_id = $database->insert("houses", array(
@@ -202,7 +195,7 @@ if ($action == "house") {
 		$reentry = "1";
 	}
 
-	include 'content/taloyhtiot.php';
+	include 'content/houses.php';
 
 }
 
