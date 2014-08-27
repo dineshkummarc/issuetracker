@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<title>Isannointi KkK Oy</title>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="Unknown" >
+
+<!-- fontawesome etc -->
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- css tweaks -->
+<link rel="stylesheet" href="assets/css/cascade/development/build-full-no-icons.css" type="text/css">
+<link rel="stylesheet" href="css/style.css" type="text/css">
+
+<link rel="icon" href="icons/favicon.ico">
+
+</head>
+
+<!-- page body -->
+<body>
+
+<!-- top menu div -->
+<div id="header" class="col">
+	<div class="nav">
+		<div class="padded col width-1of3" style="width: auto;">
+			<span class="button-group">
+                        <a class="button <?php if ($selected == "users") echo 'active'; ?>" href="index.php?action=users">
+                                <i class="fa fa-home"></i>&nbsp;User Admin</a>
+                        <a class="button <?php if ($selected == "iadmin") echo 'active'; ?>" a href="index.php?action=issues">
+                                <i class="fa fa-gear"></i>&nbsp;Manage Issue Types</a>
+                        <a class="button <?php if ($selected == "taloyhtiot") echo 'active'; ?>" a href="index.php?action=taloyhtiot">
+                                <i class="fa fa-gear"></i>&nbsp;Manage Taloyhtiot</a>
+                        <a class="button <?php if ($selected == "editissues") echo 'active'; ?>" a href="index.php?action=editissues">
+                                <i class="fa fa-gear"></i>&nbsp;Edit Issues</a>
+			</span>
+		</div>
+	</div>
+</div>
+
