@@ -5,7 +5,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>Isannointi KkK Oy</title>
+<title>Issuetracker</title>
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +16,6 @@
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
 <!-- css tweaks -->
-<link rel="stylesheet" href="assets/css/cascade/development/build-full-no-icons.css" type="text/css">
 <link rel="stylesheet" href="css/style.css" type="text/css">
 
 <link rel="icon" href="icons/favicon.ico">
@@ -33,12 +32,12 @@
 			<span class="button-group">
                         <a class="button <?php if ($selected == "users") echo 'active'; ?>" href="index.php?action=users">
                                 <i class="fa fa-home"></i>&nbsp;User Admin</a>
-                        <a class="button <?php if ($selected == "iadmin") echo 'active'; ?>" a href="index.php?action=issues">
-                                <i class="fa fa-gear"></i>&nbsp;Manage Issue Types</a>
-                        <a class="button <?php if ($selected == "taloyhtiot") echo 'active'; ?>" a href="index.php?action=taloyhtiot">
-                                <i class="fa fa-gear"></i>&nbsp;Manage Taloyhtiot</a>
-                        <a class="button <?php if ($selected == "editissues") echo 'active'; ?>" a href="index.php?action=editissues">
-                                <i class="fa fa-gear"></i>&nbsp;Edit Issues</a>
+                        <a class="button <?php if ($selected == "editissues") echo 'active'; ?>" a href="index.php?action=issues">
+                                <i class="fa fa-gear"></i>&nbsp;Manage Issues</a>
+                        <a class="button <?php if ($selected == "houses") echo 'active'; ?>" a href="index.php?action=taloyhtiot">
+                                <i class="fa fa-gear"></i>&nbsp;Manage Houses</a>
+                        <a class="button <?php if ($selected == "trackissues") echo 'active'; ?>" a href="index.php?action=editissues">
+                                <i class="fa fa-gear"></i>&nbsp;Track Issues</a>
 			</span>
 		</div>
 	</div>

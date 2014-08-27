@@ -1,21 +1,13 @@
 <?php
 
-/*
-$dbuser = "isannointi";
-$dbpass = "password";
-$dbhost = "localhost";
-$dbname = "isannointikkk";
-*/
-
-// Independent configuration
 require  'medoo.php';
  
 $database = new medoo(array(
 	// required
 	'database_type' => 'mysql',
-	'database_name' => 'isannointikkk',
+	'database_name' => 'issuetracker',
 	'server' => 'localhost',
-	'username' => 'isannointi',
+	'username' => 'username',
 	'password' => 'password',
 
 /* Cut out the optional parts, leave in code for future use
@@ -29,12 +21,5 @@ $database = new medoo(array(
 */
 
 ));
-
-/* example code insert
-$database->insert("account", [
-	"user_name" => "foo",
-	"email" => "foo@bar.com"
-]);
-*/
 
 ?>
