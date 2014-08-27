@@ -17,7 +17,7 @@ if ($reentry == "1") {
 
         foreach ($datas as $data) {
                 echo '<form action="index.php" method="post" class="padded">';
-                echo '<input type="hidden" name="action" value="issuetype">';
+                echo '<input type="hidden" name="action" value="editissues">';
                 echo '<input type="hidden" name="edit" value="update">';
                 echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
 
@@ -27,7 +27,7 @@ if ($reentry == "1") {
                 echo 'Issue Long Description:<br>';
                 echo '<textarea name="description" cols="40" rows="8">' . $data["description"] . '</textarea><br><br>';
                 echo '<input type="submit" name="Add &raquo;" value="Update" maxlength="1024">';
-                echo '<a class="button right" href="index.php?action=issues">RESET</a>';
+                echo '<a class="button right" href="index.php?action=editissues">RESET</a>';
                 echo '</form>';  
         }
 
@@ -43,17 +43,17 @@ if ($reentry == "0") {
         echo '<div class="body">';
 
         echo '<form action="index.php" method="post" class="padded">';
-        echo '<input type="hidden" name="action" value="issuetype">';
+        echo '<input type="hidden" name="action" value="editissues">';
         echo '<input type="hidden" name="edit" value="new">';
 
         // issue types dropdown
         echo 'Issue Short Description:<br>';
-        echo '<input name="issue" type="text" size="40" maxlength="128" >';
+        echo '<input name="issuetype" type="text" size="40" maxlength="128" >';
         echo '<br><br>';
         echo 'Issue Long Description:<br>';
         echo '<textarea name="description" cols="40" rows="8"></textarea><br><br>';
-        echo '<input type="submit" name="Add &raquo;" value="Add &raquo;" maxlength="1024">';
-        echo '<a class="button right" href="index.php?action=issues">RESET</a>';
+        echo '<input type="submit" name="Add &raquo;" value="New" maxlength="1024">';
+        echo '<a class="button right" href="index.php?action=editissues">RESET</a>';
         echo '</form>';
 
         echo '</div></div>';
@@ -81,9 +81,9 @@ foreach($datas as $data) {
 	echo '<td>' . $data["type"] . '</td>';
 	echo '<td>' . $data["description"] . '</td>';
         echo '<td><form action="index.php" class="padded" method="post">';
-        echo '<input type="hidden" name="action" value="issuetype">';
-        echo '<button type="submit" name="edit" value="edit">Edit</button>';
+        echo '<input type="hidden" name="action" value="editissues">';
         echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
+        echo '<button type="submit" name="edit" value="edit">Edit</button>';
 	echo '</form></td>';
         echo '</tr>';
 }

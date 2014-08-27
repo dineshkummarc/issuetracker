@@ -36,7 +36,7 @@ echo '<td>' . $data["id"] . '</td><td>' . $data["name"] . '</td>';
         echo '</td>';
 //edit/delete taloyhtio form
         echo '<td><form action="index.php" class="padded" method="post">';
-        echo '<input type="hidden" name="action" value="house">';
+        echo '<input type="hidden" name="action" value="houses">';
         echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
 //      echo '<button type="submit" name="edit" value="edit">Edit</button>';
 //      echo '<button type="submit" name="edit" value="delete">Delete</button>';
@@ -83,7 +83,7 @@ if ($reentry == "0") {
 	echo '<span class="right"><input name="town" type="text" size="44" maxlength="32"></span>';
 	echo '</p>';
 	echo '<br><br>';
-	echo '<input type="hidden" name="action" value="house">';
+	echo '<input type="hidden" name="action" value="houses">';
 	echo '<input type="hidden" name="edit" value="new">';
 	echo '<input type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
         echo '<a href="index.php?action=houses" class="button right">RESET</a>';
@@ -101,7 +101,7 @@ if ($reentry == "1") {
 
         // edit house form -->
         echo '<form action="index.php" method="post" class="padded">';
-        echo '<input type="hidden" name="action" value="house">';
+        echo '<input type="hidden" name="action" value="houses">';
         echo '<input type="hidden" name="edit" value="update">';
         echo '<input type="hidden" name="id" value="' . $id . '">';
         echo '<p><span class="left">House Name:</span>';

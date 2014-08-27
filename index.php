@@ -6,7 +6,7 @@ include 'include/mysql.php';
 // Read the form values
 //generics
 if (isset($_GET["action"])) { $action = $_GET["action"]; }
-if (isset($_POST['action'])) { $action = $_POST['action']; }
+if (isset($_POST["action"])) { $action = $_POST["action"]; }
 //$action = $_GET["action"];
 
 $flag = 0;
@@ -89,7 +89,7 @@ if ($action == "users") {
 	include 'content/users.php';
 }
 
-if ($action == "editissues") {
+if ($action == "trackissues") {
 	if ($edit == "new") {
 		$last_id = $database->insert("issues", array(
 			"house" => "$id",
@@ -114,14 +114,14 @@ if ($action == "editissues") {
 		$reentry = "1";
 	}
 
-	include 'content/editissues.php';
+	include 'content/trackissues.php';
 }
 
-if ($action == "trackissues") {
+if ($action == "editissues") {
 
 	if ($edit == "new") {
-		$last_id = $database->insert("issuetypes", array(
-		"type" => "$issue",
+		$lastid=$database->insert("issuetypes", array(
+		"type" => "$issuetype",
 		"description" => "$description"
 		));
 
@@ -142,7 +142,7 @@ if ($action == "trackissues") {
 		$reentry = "0";
 	}
 
-	include 'content/trackissues.php';
+	include 'content/editissues.php';
 }
 
 if ($action == "houses") {

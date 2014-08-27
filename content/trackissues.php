@@ -34,7 +34,7 @@ foreach ($datas as $data) {
 	echo '<td>' . $data["issue"] . '</td>';
 	echo '<td>' . $data["date"] . '</td>';
 	echo '<td><form action="index.php" class="padded" method="post">';
-	echo '<input type="hidden" name="action" value="issue">';
+	echo '<input type="hidden" name="action" value="trackissues">';
 	echo '<input type="hidden" name="edit" value="edit">';
 	echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
 	echo '<button type="submit" name="edit" value="edit">Edit</button>';
@@ -62,9 +62,9 @@ echo '</div>';
 echo '<div class="body">';
 
 	echo '<form action="index.php" method="post" class="padded">';
-	echo '<input type="hidden" name="action" value="issue">';
+	echo '<input type="hidden" name="action" value="trackissues">';
 	echo '<input type="hidden" name="edit" value="new">';
-	echo 'Taloyhtio:<br>';
+	echo 'House:<br>';
 	echo '<select name="id">\n';
 		// house types dropdown
 		$datas = $database->select("houses", array( "id", "name" ));
@@ -111,7 +111,7 @@ if ($reentry == "1") {
 
 	foreach($datas as $data) { //fixme: there will be only one!
 		echo '<form action="index.php" class="padded" method="post">';
-		echo '<input type="hidden" name="action" value="issue">';
+		echo '<input type="hidden" name="action" value="trackissues">';
 		echo '<input type="hidden" name="edit" value="update">';
 		echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
 		echo '<p><span>ID:</span><span class="right">' . $data["issue_id"] . '</span></p><br>';
