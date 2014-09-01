@@ -86,7 +86,7 @@ echo '<div class="box-body">';
 	echo 'Issue Details:<br>';
 	echo '<textarea name="description" cols="36" rows="8"></textarea><br><br>';
 	echo '<input type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
-	echo '<a href="index.php?action=editissues" class="button right">RESET</a>';
+	echo '<a href="index.php?action=trackissues" class="button right">RESET</a>';
 	echo '</form>';
 
 	echo '</div></div>';
@@ -129,9 +129,9 @@ if ($reentry == "1") {
 		echo '</select></span></p><br>';
 		echo '<p><span>Issue:</span><span class="right"><input type="text" name="issue" value="' . $data["issue"] . '" size="44"></span></p><br>';
 		echo '<p>Description:</p>';
-		echo '<textarea cols="40" rows="8" name="description">' . $data["description"] . '</textarea><br><br>';
+		echo '<textarea cols="36" rows="8" name="description">' . $data["description"] . '</textarea><br><br>';
 		echo '<input type="submit" name="Edit &raquo;" value="update" maxlength="1024">';
-		echo '<a href="index.php?action=editissues" class="button right">RESET</a><br>';
+		echo '<a href="index.php?action=trackissues" class="button right">RESET</a><br>';
 		echo '</form>';
 	}
 
