@@ -1,6 +1,6 @@
 <?php
 
-require  'medoo.php';
+require_once 'medoo.php';
  
 $database = new medoo(array(
 	// required

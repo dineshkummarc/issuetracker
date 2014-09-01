@@ -1,12 +1,10 @@
 <?php
 
-echo '<div class="grid-container">';
-
-echo '<div class="grid-50">';
-
-if (!isset($reentry)) { $reentry = "0"; }
-
-if ($reentry == "1") {
+function updateIssueType() {
+	//include globals $database and $id
+	global $database;
+	global $id;
+	
 
         echo '<div class="padded box">';
         echo '<div class="box-header">';
@@ -35,8 +33,7 @@ if ($reentry == "1") {
         echo '</div></div>';
 }
 
-if ($reentry == "0") {
-
+function newIssueType() {
         echo '<div class="padded box">';
         echo '  <div class="box-header">';
         echo 'New Issue Type';
@@ -60,40 +57,66 @@ if ($reentry == "0") {
         echo '</div></div>';
 }
 
-//end column div
-echo '</div>';
+function issueTypeList() {
+	//include globals $database and $data
+	global $database;
 
-echo '<div class="grid-50">';
-echo '<div class="padded box">';
-echo '  <div class="box-header">';
-echo 'Issue Type List';
-echo '  </div>';
-echo '<div class="box-body">';
+	echo '<div class="padded box">';
+	echo '<div class="box-header">';
+	echo 'Issue Type List';
+	echo '</div>';
+	echo '<div class="box-body">';
 
-$datas = $database->select("issuetypes","*");
+	$datas = $database->select("issuetypes","*");
+	
+        echo '<table class="table horizontal-border">';
+        echo '<thead><tr><th>ID</th><th>Issue Type</th><th>Description</th><th></th></tr></thead>';
+        echo '<tbody>'; 
 
-	echo '<table class="table horizontal-border">';
-	echo '<thead><tr><th>ID</th><th>Issue Type</th><th>Description</th><th></th></tr></thead>';
-	echo '<tbody>'; 
-
-foreach($datas as $data) {
-        echo '<tr>';
-        echo '<td>' . $data["id"] . '</td>';
-	echo '<td>' . $data["type"] . '</td>';
-	echo '<td>' . $data["description"] . '</td>';
-        echo '<td><form action="index.php" class="padded" method="post">';
-        echo '<input type="hidden" name="action" value="editissues">';
-        echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
-        echo '<button type="submit" name="edit" value="edit">Edit</button>';
-	echo '</form></td>';
-        echo '</tr>';
-}
+	foreach($datas as $data) {
+	        echo '<tr>';
+	        echo '<td>' . $data["id"] . '</td>';
+	        echo '<td>' . $data["type"] . '</td>';
+	        echo '<td>' . $data["description"] . '</td>';
+	        echo '<td><form action="index.php" class="padded" method="post">';
+	        echo '<input type="hidden" name="action" value="editissues">';
+	        echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
+	        echo '<button type="submit" name="edit" value="edit">Edit</button>';
+	        echo '</form></td>';
+	        echo '</tr>';
+	}
 
         echo '</tbody>';
         echo '</table>';
 
-echo '</div></div>'; //end body, end cell
-echo '</div>'; // end col
+	echo '</div></div>'; //end box-body, end box
+}
+
+/*****************
+ * start of html *
+ *****************/
+
+if (!isset($reentry)) { $reentry = "0"; }
+
+echo '<div class="grid-container">';
+
+echo '<div class="grid-50">';
+
+if ($reentry == "1") {
+	updateIssueType();
+}
+
+if ($reentry == "0") {
+	newIssueType();
+}
+
+echo '</div>';
+
+echo '<div class="grid-50">';
+
+	issueTypeList();
+
+echo '</div>'; // end grid box
 
 echo '</div>'; // end grid container
 
