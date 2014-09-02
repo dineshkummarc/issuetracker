@@ -96,13 +96,19 @@ function newTrackIssue () {
 }
 
 function showTrackIssueList() {
-	global $database, $id;
+	global $database;
+	global $page;
+
+	$count=$database->count("issues");
+	$pages=$count/5;
 
 	// select issues left join houses, left join issuetypes
+	// LIMIT array(offset, rows)
 	//$datas=$database->select("issues", "*");
 	$datas=$database->select("issues",
 		array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
-		array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)")
+		array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
+                array("LIMIT" => array(($page*5)-5,5))
 		);
 
 	echo '<div class="padded box">';
@@ -133,6 +139,14 @@ function showTrackIssueList() {
 	
 	echo '</tbody>';
 	echo '</table>';
+
+$min = 0;
+$max = $pages+1;
+$start = $pages - 5;
+if ($start < 0) { $start = 1; }
+for ( ; $start <= $max ; $start++ ) {
+	echo '&nbsp<a href="index.php?action=trackissues&page=' . $start . '">Page ' . $start . '</a>';
+	}
 
 	echo '</div></div>'; // end body, end cell
 }
@@ -176,13 +190,13 @@ if (!isset($reentry)) { $reentry = "0"; }
 echo '<div class="grid-container">';
 
 // begin 2of3 wide col
-echo '<div class="grid-50">';
+echo '<div class="grid-66">';
 
 	showTrackIssueList();
 
 echo '</div>'; // end col
 
-echo '<div class="grid-50">'; // begin new column
+echo '<div class="grid-33">'; // begin new column
 
 //begin new/edit issue box
 

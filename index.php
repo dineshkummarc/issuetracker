@@ -9,8 +9,12 @@ if (isset($_GET["action"])) { $action = $_GET["action"]; }
 if (isset($_POST["action"])) { $action = $_POST["action"]; }
 //$action = $_GET["action"];
 
+if (isset($_GET["page"])) { $page = $_GET["page"]; }
+if (isset($_POST["page"])) { $page = $_POST["page"]; }
+
 $flag = 0;
 if (!isset($action)) { $action = "home"; }
+if (!isset($page)) { $page = "1"; }
 
 if ($action == "users") { $flag += 1; }
 if ($action == "editissues") { $flag += 1; }
