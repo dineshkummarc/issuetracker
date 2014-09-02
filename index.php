@@ -106,9 +106,8 @@ if ($action == "trackissues") {
         }
 
 	if ($edit == "update") {
-		$database->update("issues",
-			array( "issue" => "$issue", "issuetype" => "$issuetype", "description" => "$description"),
-			array( "id" => "$id" )
+		$database->insert("issuetracking",
+			array( "parent" => "$id", "item" => "$description")
 			);
 
 		$reentry = "1";

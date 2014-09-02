@@ -25,8 +25,8 @@ function editTrackIssue() {
                 echo '<input type="hidden" name="action" value="trackissues">';
                 echo '<input type="hidden" name="edit" value="update">';
                 echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
-                echo '<p><span>ID:</span><span class="right">' . $data["issue_id"] . '</span></p><br>';
-                echo '<p><span>House:</span><span class="right">' . $data["house_name"] . '</span></p><br>';
+                echo '<p><span>ID:</span><span class="right">' . $data["issue_id"] . '</span></p>';
+                echo '<p><span>House:</span><span class="right">' . $data["house_name"] . '</span></p>';
                 echo '<p><span>Issue Type and ID:</span><span class="right">';
                 echo '<select name="issuetype">';
 
@@ -37,8 +37,8 @@ function editTrackIssue() {
                         echo '>' . $dataitem["type"] . '</option>';
                         }
 
-                echo '</select></span></p><br>';
-                echo '<p><span>Issue:</span><span class="right"><input type="text" name="issue" value="' . $data["issue"] . '" size="44"></span></p><br>';
+                echo '</select></span></p>';
+                echo '<p><span>Issue:</span><span class="right"><input type="text" name="issue" value="' . $data["issue"] . '" size="44"></span></p>';
                 echo '<p>Description:</p>';
                 echo '<textarea cols="36" rows="8" name="description">' . $data["description"] . '</textarea><br><br>';
                 echo '<input type="submit" name="Edit &raquo;" value="update" maxlength="1024">';
@@ -137,6 +137,39 @@ function showTrackIssueList() {
 	echo '</div></div>'; // end body, end cell
 }
 
+function showTrackIssue() {
+        global $database, $id;
+
+        // select issues left join issuetracking where issues.id == issuetracking.parent
+        $datas=$database->select("issuetracking",
+                array("[>]issues" => array("parent" => "id")),
+                array("issuetracking.item(issue_item)","issuetracking.date(track_date)"),
+		array("issues.id" => $id)
+                );
+
+        echo '<div class="padded box">';
+        echo '<div class="box-header">';
+        echo 'Issue Tracking';
+        echo '</div>';
+        echo '<div class="box-body">';
+
+        echo '<table class="table"><thead><tr><th>Item Date</th><th>Item Data</th></tr></thead>';
+        echo '<tbody>';
+
+        foreach ($datas as $data) {
+                echo '<tr>';
+                echo '<td>' . $data["track_date"] . '</td>';
+                echo '<td>' . $data["issue_item"] . '</td>';
+                echo '</tr>';
+        }
+
+        echo '</tbody>';
+        echo '</table>';
+
+        echo '</div></div>'; // end body, end cell
+}
+
+
 if (!isset($reentry)) { $reentry = "0"; }
 
 // begin main column div
@@ -163,3 +196,10 @@ if ($reentry == "1") {
 
 echo '</div>'; //end column div
 echo '</div>'; //end main column div
+
+if ($reentry == "1") {
+echo '<div class="grid-container">';
+echo '<div class="grid-100">';
+	showTrackIssue();
+echo '</div></div>';
+}
