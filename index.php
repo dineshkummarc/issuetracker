@@ -4,17 +4,22 @@
 include 'include/mysql.php';
 
 // Read the form values
-//generics
+//get action
 if (isset($_GET["action"])) { $action = $_GET["action"]; }
 if (isset($_POST["action"])) { $action = $_POST["action"]; }
-//$action = $_GET["action"];
 
+//get page
 if (isset($_GET["page"])) { $page = $_GET["page"]; }
 if (isset($_POST["page"])) { $page = $_POST["page"]; }
+
+//get search
+if (isset($_GET["search"])) { $search = $_GET["search"]; }
+if (isset($_POST["search"])) { $search = $_POST["search"]; }
 
 $flag = 0;
 if (!isset($action)) { $action = "home"; }
 if (!isset($page)) { $page = "1"; }
+if (!isset($search)) { $search = "none"; }
 
 if ($action == "users") { $flag += 1; }
 if ($action == "editissues") { $flag += 1; }
@@ -116,6 +121,10 @@ if ($action == "trackissues") {
 
 		$reentry = "1";
 	}
+
+	if ($edit == "search") {
+                $reentry = "1";
+        }
 
 	include 'content/trackissues.php';
 }

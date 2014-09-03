@@ -53,7 +53,42 @@ function editTrackIssue() {
         echo '</div></div>'; // end body, end panel
 }
 
+function searchHouse() {
+	global $database;
 
+        $datas = $database->select("houses", array( "id", "name" ));
+
+        echo '<form action="index.php" method="post" class="padded">';
+        echo '<input type="hidden" name="action" value="trackissues">';
+        echo '<input type="hidden" name="edit" value="search">';
+        echo '<input type="hidden" name="search" value="house">';
+        echo '<select name="id">\n';
+        foreach($datas as $data) {
+          echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>\n';
+          }
+        echo '</select>';
+        echo '<input type="submit" name="search &raquo;" value="submit" maxlength="512">';
+        echo '</form>';
+
+}
+
+function searchIssue() {
+	global $database;
+
+        echo '<form action="index.php" method="post" class="padded">';
+        echo '<input type="hidden" name="action" value="trackissues">';
+        echo '<input type="hidden" name="edit" value="search">';
+        echo '<input type="hidden" name="search" value="issue">';
+        echo '<select name="issuetype"><br>';
+        // issue type dropdown
+        $datas = $database->select("issuetypes", array( "id", "type" ));
+        foreach($datas as $data) {
+          echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>';
+                }
+        echo '</select>';
+        echo '<input type="submit" name="search &raquo;" value="submit" maxlength="512">';
+	echo '</form>';
+}
 
 function newTrackIssue () {
 	global $database;
@@ -99,6 +134,9 @@ function showTrackIssueList() {
 	global $database;
 	global $page;
 
+if (!isset($search)) { $search = "none"; }
+
+if ($search == "none") {
 	$count=$database->count("issues");
 	$pages=$count/5;
 
@@ -149,6 +187,14 @@ for ( ; $start <= $max ; $start++ ) {
 	}
 
 	echo '</div></div>'; // end body, end cell
+} // end search is none
+if ($search == "house") {
+echo 'search by house';
+}
+if ($search == "issue") {
+echo 'search by issue';
+}
+
 }
 
 function showTrackIssue() {
@@ -188,6 +234,29 @@ if (!isset($reentry)) { $reentry = "0"; }
 
 // begin main column div
 echo '<div class="grid-container">';
+
+// begin search box, 100% wide
+echo '<div class="grid-50">';
+echo '<div class="padded box">';
+  echo '<div class="box-header">';
+  echo 'Search: by House';
+  echo '</div>';
+  echo '<div class="box-body">';
+	searchHouse();
+  echo '</div>';
+echo '</div>';
+echo '</div>';
+
+echo '<div class="grid-50">';
+echo '<div class="padded box">';
+  echo '<div class="box-header">';
+  echo 'Search: by Issue';
+  echo '</div>';
+  echo '<div class="box-body">';
+	searchIssue();
+  echo '</div>';
+echo '</div>';
+echo '</div>';
 
 // begin 2of3 wide col
 echo '<div class="grid-66">';
