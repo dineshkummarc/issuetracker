@@ -12,33 +12,43 @@ function editTrackIssue() {
         // select issues left join houses left join issuetypes
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
-                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issuetype(typeid)","issues.issue(issue)","issues.date(date)","issues.description(description)"),
+                array("houses.id(house_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.id(issue_id)","issues.issuetype(typeid)","issues.issue(issue)","issues.date(date)","issues.description(description)"),
                 array("issues.id" => "$id")
                 );
 
 //      $datas=$database->select("issues", "*", array( "id[=]" => "$id" ));
         $datait=$database->select("issuetypes", "*");
+        $dataho=$database->select("houses", "*");
 
 	if (is_array($datas)) {
         foreach($datas as $data) { //fixme: there will be only one!
-                echo '<form action="index.php" class="padded" method="post">';
+                echo '<form action="index.php?action=trackissues&id=' . $id . '" class="padded" method="post">';
                 echo '<input type="hidden" name="action" value="trackissues">';
                 echo '<input type="hidden" name="edit" value="update">';
                 echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
                 echo '<p><span>ID:</span><span class="right">' . $data["issue_id"] . '</span></p>';
-                echo '<p><span>House:</span><span class="right">' . $data["house_name"] . '</span></p>';
-                echo '<p><span>Issue Type and ID:</span><span class="right">';
+                echo '<p><span>House:</span><span class="right">';
+                echo '<select name="house">';
+
+                foreach ($dataho as $dataitem) {
+                        echo '<option value="' . $dataitem["id"] . '"';
+                        if ($data["house_id"] == $dataitem["id"]) { echo 'selected'; }
+                        echo '>' . $dataitem["name"] . '</option>';
+                        }
+
+                echo '</select></span></p>';
+                echo '<p><span>Issue Type:</span><span class="right">';
                 echo '<select name="issuetype">';
 
                 foreach ($datait as $dataitem) {
-                        echo '<option value="';
-                        echo $dataitem["id"] . '"';
+                        echo '<option value="' . $dataitem["id"] . '"';
                         if ($data["typeid"] == $dataitem["id"]) { echo 'selected'; }
                         echo '>' . $dataitem["type"] . '</option>';
                         }
 
                 echo '</select></span></p>';
-                echo '<p><span>Issue:</span><span class="right"><input type="text" name="issue" value="' . $data["issue"] . '" size="44"></span></p>';
+                echo '<p>Issue:</p>';
+		echo '<p><input name="issue" type="text" size="40" maxlength="128" value="' . $data["issue"] . '"></p>';
                 echo '<p>Description:</p>';
                 echo '<textarea cols="36" rows="8" name="description">' . $data["description"] . '</textarea><br><br>';
                 echo '<input type="submit" name="Edit &raquo;" value="update" maxlength="1024">';
@@ -53,6 +63,29 @@ function editTrackIssue() {
         echo '</div></div>'; // end body, end panel
 }
 
+function addIssueTracking() {
+        global $database, $id;
+
+        echo '<div class="padded box">';
+        echo '<div class="box-header">';
+        echo 'Add Issue Tracking';
+        echo '</div>';
+        echo '<div class="box-body">';
+
+                echo '<form action="index.php?action=trackissues&id=' . $id .'" class="padded" method="post">';
+                echo '<input type="hidden" name="action" value="trackissues">';
+                echo '<input type="hidden" name="edit" value="addtracking">';
+                echo '<input type="hidden" name="id" value="' . $id . '">';
+                echo '<p>Tracking Info:</p>';
+                echo '<textarea cols="36" rows="8" name="description">Enter Update Here</textarea><br><br>';
+                echo '<input type="submit" name="Edit &raquo;" value="update" maxlength="1024">';
+                echo '<a href="index.php?action=trackissues&id=' . $id . '" class="button right">RESET</a><br>';
+                echo '</form>';
+
+        echo '</div></div>'; // end body, end panel
+}
+
+
 function searchHouse() {
 	global $database;
 
@@ -62,7 +95,7 @@ function searchHouse() {
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="house">';
-        echo '<select name="id">\n';
+        echo '<select name="searchissuetype">\n';
         foreach($datas as $data) {
           echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>\n';
           }
@@ -79,8 +112,8 @@ function searchIssue() {
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="issue">';
-        echo '<select name="issuetype"><br>';
-        // issue type dropdown
+        echo '<select name="searchissuetype"><br>';
+        // search issue dropdown
         $datas = $database->select("issuetypes", array( "id", "type" ));
         foreach($datas as $data) {
           echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>';
@@ -133,8 +166,8 @@ function newTrackIssue () {
 function showTrackIssueList() {
 	global $database;
 	global $page;
-
-if (!isset($search)) { $search = "none"; }
+	global $search;
+	global $searchissuetype;
 
 if ($search == "none") {
 	$count=$database->count("issues");
@@ -189,10 +222,113 @@ for ( ; $start <= $max ; $start++ ) {
 	echo '</div></div>'; // end body, end cell
 } // end search is none
 if ($search == "house") {
-echo 'search by house';
+        $count=$database->count("issues");
+        $pages=$count/5;
+
+        $datas=$database->select("issues",
+                array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
+                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
+                array("houses.id" => $searchissuetype),
+                array("LIMIT" => array(($page*5)-5,5))
+                );
+
+        echo '<div class="padded box">';
+        echo '<div class="box-header">';
+        echo 'Searched Issue List (by house)';
+        echo '</div>';
+        echo '<div class="box-body">';
+// DEBUG
+//      echo '<p>' . $database->last_query() . '</p>';
+//      echo '<p>issue type is ' . $searchissuetype . '</p>';
+//      echo '<p>page is ' . $page . '</p>';
+// END DEBUG
+
+        echo '<table class="table"><thead><tr><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
+        echo '<tbody>';
+
+        foreach ($datas as $data) {
+                echo '<tr>';
+                echo '<td>' . $data["house_name"] . '</td>';
+                echo '<td>' . $data["issue_type"] . '</td>';
+                echo '<td>' . $data["issue"] . '</td>';
+                echo '<td>' . $data["date"] . '</td>';
+                echo '<td><form action="index.php?edit=search&search=house&action=trackissues&searchissuetype=' . $searchissuetype . '" class="padded" method="post">';
+                echo '<input type="hidden" name="action" value="trackissues">';
+                echo '<input type="hidden" name="edit" value="edit">';
+                echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
+                echo '<button type="submit" name="edit" value="edit">Edit</button>';
+                echo '</form>';
+                echo '</td>';
+                echo '</tr>';
+        }
+
+        echo '</tbody>';
+        echo '</table>';
+
+$min = 0;
+$max = $pages+1;
+$start = $pages - 5;
+if ($start < 0) { $start = 1; }
+for ( ; $start <= $max ; $start++ ) {
+        echo '&nbsp<a href="index.php?action=trackissues&page=' . $start . '">Page ' . $start . '</a>';
+        }
+
+        echo '</div></div>'; // end body, end cell
 }
+
 if ($search == "issue") {
-echo 'search by issue';
+        $count=$database->count("issues");
+        $pages=$count/5;
+
+        $datas=$database->select("issues",
+                array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
+                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
+		array("issuetypes.id" => $searchissuetype),
+                array("LIMIT" => array(($page*5)-5,5))
+                );
+
+        echo '<div class="padded box">';
+        echo '<div class="box-header">';
+        echo 'Searched Issue List (by Issue)';
+        echo '</div>';
+        echo '<div class="box-body">';
+// DEBUG
+//	echo '<p>' . $database->last_query() . '</p>';
+//	echo '<p>issue type is ' . $searchissuetype . '</p>';
+//	echo '<p>page is ' . $page . '</p>';
+// END DEBUG
+
+        echo '<table class="table"><thead><tr><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
+        echo '<tbody>';
+
+        foreach ($datas as $data) {
+                echo '<tr>';
+                echo '<td>' . $data["house_name"] . '</td>';
+                echo '<td>' . $data["issue_type"] . '</td>';
+                echo '<td>' . $data["issue"] . '</td>';
+                echo '<td>' . $data["date"] . '</td>';
+                echo '<td><form action="index.php?edit=search&search=issue&action=trackissues&searchissuetype=' . $searchissuetype . '" class="padded" method="post">';
+                echo '<input type="hidden" name="action" value="trackissues">';
+                echo '<input type="hidden" name="edit" value="edit">';
+                echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
+                echo '<button type="submit" name="edit" value="edit">Edit</button>';
+                echo '</form>';
+                echo '</td>';
+                echo '</tr>';
+        }
+                         
+        echo '</tbody>';
+        echo '</table>';
+
+$min = 0;
+$max = $pages+1;
+$start = $pages - 5;
+if ($start < 0) { $start = 1; }
+for ( ; $start <= $max ; $start++ ) {
+        echo '&nbsp<a href="index.php?action=trackissues&page=' . $start . '">Page ' . $start . '</a>';
+        }
+
+        echo '</div></div>'; // end body, end cell
 }
 
 }
@@ -258,14 +394,14 @@ echo '<div class="padded box">';
 echo '</div>';
 echo '</div>';
 
-// begin 2of3 wide col
-echo '<div class="grid-66">';
+// begin 3of3 wide col
+echo '<div class="grid-100">';
 
 	showTrackIssueList();
 
 echo '</div>'; // end col
 
-echo '<div class="grid-33">'; // begin new column
+echo '<div class="grid-50">'; // begin new column
 
 //begin new/edit issue box
 
@@ -278,6 +414,11 @@ if ($reentry == "1") {
 }
 
 echo '</div>'; //end column div
+
+echo '<div class="grid-50">';
+	addIssueTracking();
+echo '</div>';
+
 echo '</div>'; //end main column div
 
 if ($reentry == "1") {

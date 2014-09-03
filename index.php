@@ -36,13 +36,23 @@ else { $name = "none"; }
 if (isset($_POST['id'])){ $id= $_POST['id']; }
 else { $id = "none"; }
 
-//issue create or edit
+//issue(type) create or edit
 if (isset($_POST['issue'])){ $issue= $_POST['issue']; }
 else { $issue = "none"; }
 if (isset($_POST['description'])){ $description= $_POST['description']; }
 else { $description = "none"; }
 if (isset($_POST['issuetype'])){ $issuetype= $_POST['issuetype']; }
 else { $issuetype = "none"; }
+if (isset($_POST['house'])){ $house= $_POST['house']; }
+else { $house = "none"; }
+
+//DEBUG
+//echo '<p>house is ' . $house . '</p>';
+
+//search
+if (isset($_POST['searchissuetype'])){ $searchissuetype= $_POST['searchissuetype']; }
+if (isset($_GET['searchissuetype'])){ $searchissuetype = $_GET['searchissuetype']; }
+if (!isset($searchissuetype)) { $searchissuetype = "none"; }
 
 //house create
 if (isset($_POST['address1'])){ $address1= $_POST['address1']; }
@@ -114,13 +124,27 @@ if ($action == "trackissues") {
                 $reentry="1";
         }
 
-	if ($edit == "update") {
+	if ($edit == "addtracking") {
 		$database->insert("issuetracking",
 			array( "parent" => "$id", "item" => "$description")
 			);
 
 		$reentry = "1";
 	}
+
+        if ($edit == "update") {
+                $database->update("issues", array(
+                       "house" => "$house",
+                       "issuetype" => "$issuetype",
+                       "issue" => "$issue",
+                       "description" => "$description"
+		),
+                       array( "id" => "$id" )
+                );
+
+                $reentry = "0";
+        }
+
 
 	if ($edit == "search") {
                 $reentry = "1";
