@@ -170,17 +170,17 @@ function showTrackIssueList() {
 	global $searchissuetype;
 
 if ($search == "none") {
-	$count=$database->count("issues");
-	$pages=$count/5;
-
 	// select issues left join houses, left join issuetypes
 	// LIMIT array(offset, rows)
-	//$datas=$database->select("issues", "*");
 	$datas=$database->select("issues",
 		array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
 		array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
                 array("LIMIT" => array(($page*5)-5,5))
 		);
+
+        $count=count($datas);
+        $pages=$count/5;
+
 
 	echo '<div class="padded box">';
 	echo '<div class="box-header">';
@@ -222,15 +222,15 @@ for ( ; $start <= $max ; $start++ ) {
 	echo '</div></div>'; // end body, end cell
 } // end search is none
 if ($search == "house") {
-        $count=$database->count("issues");
-        $pages=$count/5;
-
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
                 array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
                 array("houses.id" => $searchissuetype),
                 array("LIMIT" => array(($page*5)-5,5))
                 );
+
+        $count=count($datas);
+        $pages=$count/5;
 
         echo '<div class="padded box">';
         echo '<div class="box-header">';
@@ -277,8 +277,6 @@ for ( ; $start <= $max ; $start++ ) {
 }
 
 if ($search == "issue") {
-        $count=$database->count("issues");
-        $pages=$count/5;
 
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
@@ -286,6 +284,10 @@ if ($search == "issue") {
 		array("issuetypes.id" => $searchissuetype),
                 array("LIMIT" => array(($page*5)-5,5))
                 );
+
+        $count=count($datas);
+        $pages=$count/5;
+
 
         echo '<div class="padded box">';
         echo '<div class="box-header">';
