@@ -58,8 +58,8 @@ function newIssueType() {
 }
 
 function issueTypeList() {
-	//include globals $database and $data
 	global $database;
+	global $page;
 
 	echo '<div class="padded box">';
 	echo '<div class="box-header">';
@@ -67,7 +67,10 @@ function issueTypeList() {
 	echo '</div>';
 	echo '<div class="box-body">';
 
-	$datas = $database->select("issuetypes","*");
+	$datas = $database->select("issuetypes", "*", array("LIMIT" => array(($page*5)-5,5)));
+
+        $count=count($datas);
+        $pages=$count/5;
 	
         echo '<table class="table horizontal-border">';
         echo '<thead><tr><th>ID</th><th>Issue Type</th><th>Description</th><th></th></tr></thead>';
@@ -78,7 +81,7 @@ function issueTypeList() {
 	        echo '<td>' . $data["id"] . '</td>';
 	        echo '<td>' . $data["type"] . '</td>';
 	        echo '<td>' . $data["description"] . '</td>';
-	        echo '<td><form action="index.php" class="padded" method="post">';
+	        echo '<td><form action="index.php?page=' . $page . '" class="padded" method="post">';
 	        echo '<input type="hidden" name="action" value="editissues">';
 	        echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
 	        echo '<button type="submit" name="edit" value="edit">Edit</button>';
@@ -88,6 +91,14 @@ function issueTypeList() {
 
         echo '</tbody>';
         echo '</table>';
+
+$min = 0;
+$max = $pages+1;
+$start = $pages - 5;
+if ($start < 0) { $start = 1; }
+for ( ; $start <= $max ; $start++ ) {
+        echo '&nbsp<a href="index.php?action=editissues&page=' . $start . '">Page ' . $start . '</a>';
+        }
 
 	echo '</div></div>'; //end box-body, end box
 }

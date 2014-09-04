@@ -2,6 +2,7 @@
 
 function showHouses() {
 	global $database;
+	global $page;
 
 	echo '<div class="padded box">';
 	echo '<div class="box-header">';
@@ -10,7 +11,19 @@ function showHouses() {
 	echo '<div class="box-body">';
 
 	// fetch all house data
-	$datas=$database->select("houses", array("name", "address1", "address2", "postcode", "town", "id"));
+	$datas=$database->select("houses",
+				array("name", "address1", "address2", "postcode", "town", "id"),
+				array("LIMIT" => array(($page*5)-5,5))
+				);
+
+	$count=count($datas);
+	$pages=$count/5;
+
+	//DEBUG
+//	echo '<p>pages is ' . $pages . '</p>';
+//	echo '<p>page is ' . $page . '</p>';
+//	echo '<p>count is ' . $count . '</p>';
+	//DEBUG END
 
 	echo '<table class="table horizontal-border">';
 	echo '<thead><tr><th>ID</th><th>Name</th><th>Address</th><th></th></tr></thead>';
@@ -40,7 +53,17 @@ function showHouses() {
 
 	echo '</tbody>';
 	echo '</table>';
+
+$min = 0;
+$max = $pages+1;
+$start = $pages - 5;
+if ($start < 0) { $start = 1; }
+for ( ; $start <= $max ; $start++ ) {
+        echo '&nbsp<a href="index.php?action=houses&page=' . $start . '">Page ' . $start . '</a>';
+        }
+
 	echo '</div></div>';
+
 }
 
 function newHouse() {
