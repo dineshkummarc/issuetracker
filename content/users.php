@@ -67,15 +67,15 @@ echo '</div>';
  * Start html *
  **************/
 
-echo '<div class="row">';
+echo '<div class="container-fluid">';
 
-echo '<div class="col-sm-6">';
-showUsers();
+echo '<div class="col-sm-3">';
+newUsers();
 echo '</div>'; //end body, box, grid
 
-echo '<div class="col-sm-6">';
-newUsers();
-echo '</div> <!-- end grid container -->';
+echo '<div class="col-sm-9">';
+showUsers();
+echo '</div>';
 
 echo '</div>';
 

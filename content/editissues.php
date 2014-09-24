@@ -109,9 +109,9 @@ for ( ; $start <= $max ; $start++ ) {
 
 if (!isset($reentry)) { $reentry = "0"; }
 
-echo '<div class="container">';
+echo '<div class="container-fluid">';
 echo '<div class="row">';
-echo '<div class="col-sm-6">';
+echo '<div class="col-sm-4">';
 
 if ($reentry == "1") {
 	updateIssueType();
@@ -123,7 +123,7 @@ if ($reentry == "0") {
 
 echo '</div>';
 
-echo '<div class="col-sm-6">';
+echo '<div class="col-sm-8">';
 
 	issueTypeList();
 

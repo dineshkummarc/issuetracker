@@ -406,7 +406,7 @@ if (!isset($reentry)) { $reentry = "0"; }
 echo '<div class="container-fluid">';
  echo '<div class="row">';
 
-  echo '<div class="col-md-3">';
+  echo '<div class="col-md-2">';
 
   //show search options
   echo '<div class="row-fluid">';
@@ -416,23 +416,35 @@ echo '<div class="container-fluid">';
   echo '<br>';
   echo '<p><a class="btn btn-info" href="index.php?action=trackissues">Reset</a></p>';
   echo '<br>';
-  echo '</div>'; //end row
-
-  //begin new/edit issue box
-  echo '<div class="row-fluid">';
-    if ($reentry == "0") { newTrackIssue(); }
-    if ($reentry == "1") { editTrackIssue(); }
-  echo '</div>'; //end row
+  echo '</div>'; //end row-fluid
 
   echo '</div>'; //end col
 
-  echo '<div class="col-md-9">';
+  echo '<div class="col-md-10">';
 
-  if ($reentry == "0") { showTrackIssueList(); }
+  if ($reentry == "0") {
+    echo '<div class="col-md-3">';
+    newTrackIssue();
+    echo '</div>'; //end col
+    echo '<div class="col-md-9">';
+    showTrackIssueList();
+    echo '</div>'; //end col
+    }
   if ($reentry == "1") {
-      addIssueTracking();
-      showTrackIssue();
-      }
+    echo '<div class="row">';
+    echo '<div class="col-md-3">';
+    editTrackIssue();
+    echo '</div>'; //end col
+    echo '<div class="col-md-9">';
+    addIssueTracking();
+    echo '</div>'; //end col
+    echo '</div>'; //end row
+    echo '<div class="row">';
+    echo '<div class="col-md-12">';
+    showTrackIssue();
+    echo '</div>'; //end col
+    echo '</div>'; //end row
+    }
 
   echo '</div>'; //end second col
  echo '</div>'; //end row

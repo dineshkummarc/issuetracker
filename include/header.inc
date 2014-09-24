@@ -49,7 +49,7 @@
                 <li <?php if ($action == "houses") echo 'class="active"'; ?> ><a href="index.php?action=houses">
                                 <i class="fa fa-gear"></i>&nbsp;House Admin</a></li>
                 <li <?php if ($action == "editissues") echo 'class="active"'; ?> ><a href="index.php?action=editissues">
-                                <i class="fa fa-gear"></i>&nbsp;Manage Issues</a></li>
+                                <i class="fa fa-gear"></i>&nbsp;Issue Admin</a></li>
                 <li <?php if ($action == "trackissues") echo 'class="active"'; ?> ><a href="index.php?action=trackissues">
                                 <i class="fa fa-gear"></i>&nbsp;Track Issues</a></li>
 

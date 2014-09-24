@@ -12,18 +12,18 @@ function showHouses() {
 
 	// fetch all house data
 	$datas=$database->select("houses",
-				array("name", "address1", "address2", "postcode", "town", "id"),
-				array("LIMIT" => array(($page*5)-5,5))
-				);
+		array("name", "address1", "address2", "postcode", "town", "id"),
+		array("LIMIT" => array(($page*5)-5,5))
+		);
 
 	$count=count($datas);
 	$pages=$count/5;
 
-	//DEBUG
-//	echo '<p>pages is ' . $pages . '</p>';
-//	echo '<p>page is ' . $page . '</p>';
-//	echo '<p>count is ' . $count . '</p>';
-	//DEBUG END
+//DEBUG
+//echo '<p>pages is ' . $pages . '</p>';
+//echo '<p>page is ' . $page . '</p>';
+//echo '<p>count is ' . $count . '</p>';
+//DEBUG END
 
 	echo '<table class="table horizontal-border">';
 	echo '<thead><tr><th>ID</th><th>Name</th><th>Address</th><th></th></tr></thead>';
@@ -43,9 +43,9 @@ function showHouses() {
 	        echo '<td><form action="index.php" class="padded" method="post">';
 	        echo '<input type="hidden" name="action" value="houses">';
 	        echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
-	//      echo '<button type="submit" name="edit" value="edit">Edit</button>';
-	//      echo '<button type="submit" name="edit" value="delete">Delete</button>';
-	        echo '<button type="submit" name="edit" value="show">Manage House</button>';
+	//      echo '<button class="btn btn-default" type="submit" name="edit" value="edit">Edit</button>';
+	//      echo '<button class="btn btn-default" type="submit" name="edit" value="delete">Delete</button>';
+	        echo '<button class="btn btn-default" type="submit" name="edit" value="show">Manage House</button>';
 	        echo '</form>';
 	        echo '</td>';
 	        echo '</tr>';
@@ -91,14 +91,14 @@ function newHouse() {
         echo '<span class="right"><input name="postcode" type="text" size="44" maxlength="32"></span>';
         echo '</p>';
         echo '<br><br>';
-        echo '<p><span class="left">Town:</span>';
+        echo '<p><span class="left">Town:</span><br>';
         echo '<span class="right"><input name="town" type="text" size="44" maxlength="32"></span>';
         echo '</p>';
         echo '<br><br>';
         echo '<input type="hidden" name="action" value="houses">';
         echo '<input type="hidden" name="edit" value="new">';
-        echo '<input type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
-        echo '<a href="index.php?action=houses" class="button right">RESET</a>';
+        echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
+        echo '<a href="index.php?action=houses" class="btn btn-default right">RESET</a>';
         echo '</form>';
 
         echo '</div></div>'; //end body, end panel
@@ -133,12 +133,12 @@ function updateHouse() {
         echo '<span class="right"><input name="postcode" type="text" size="44" maxlength="32" value="' . $postcode . '"></span>';
         echo '</p>';
         echo '<br><br>';
-        echo '<p><span class="left">Town:</span>';
+        echo '<p><span class="left">Town:</span><br>';
         echo '<span class="right"><input name="town" type="text" size="44" maxlength="32" value="' . $town . '"></span>';
         echo '</p>';
         echo '<br><br>';
-        echo '<input type="submit" name="Update &raquo;" value="submit" maxlength="1024">';
-        echo '<a href="index.php?action=houses" class="button right">RESET</a>';
+        echo '<input class="btn btn-default" type="submit" name="Update &raquo;" value="submit" maxlength="1024">';
+        echo '<a href="index.php?action=houses" class="btn btn-default right">RESET</a>';
         echo '</form>';
 
         echo '</div></div>'; //end panel-body, end box
@@ -182,38 +182,26 @@ if (!isset($reentry)) { $reentry = "0"; }
  * start html *
  **************/
 
-//echo '<div class="container">';
-
-echo '<div class="row">';
-
-echo '<div class="col-sm-3">';
-
-showHouses();
-
-echo '</div>'; // end column div
-
-// begin second column
-echo '<div class="col-sm-4">';
+echo '<div class="container-fluid">';
 
 if ($reentry == "0") {
-	newHouse();
-}
+  echo '<div class="col-md-3">';
+  newHouse();
+  echo '</div>'; // end column
+  echo '<div class="col-md-9">';
+  showHouses();
+  echo '</div>'; // end column
+  }
 
 if ($reentry == "1") {
-	updateHouse();
-}
+  echo '<div class="col-md-3">';
+  updateHouse();
+  echo '</div>'; // end column
+  echo '<div class="col-md-9">';
+  showHouseIssues();
+  echo '</div>'; // end column
+  }
 
-echo '</div>';
-
-// begin third column
-echo '<div class="col-sm-5">';
-
-if ($reentry == "1") {
-	showHouseIssues();
-}
-
-echo '</div>'; // end column
-echo '</div>'; // end row
-//echo '</div>'; // end container
+echo '</div>'; // end container
 
 ?>

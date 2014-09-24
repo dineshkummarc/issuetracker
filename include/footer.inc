@@ -2,7 +2,7 @@
 <div class="clear"></div>
 
 <div class="footer">
-<div class="container">
+<div class="container-fluid">
 <hr>
 <span class="text-muted">| IssueTracker | Copyright &copy; 2014 | Daniel Mayoss |</span>
 </div>
