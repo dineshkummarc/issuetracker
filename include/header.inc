@@ -15,9 +15,14 @@
 <!-- fontawesome etc -->
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-<!-- css tweaks -->
-<link rel="stylesheet" href="css/unsemantic-grid-responsive-no-ie7.css" type="text/css">
-<link rel="stylesheet" href="css/style.css" type="text/css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 <link rel="icon" href="icons/favicon.ico">
 
@@ -26,19 +31,44 @@
 <!-- page body -->
 <body>
 
-<div id="content">
+      <div class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Issuetracker</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li <?php if ($action == "users") echo 'class="active"'; ?> ><a href="index.php?action=users">
+                                <i class="fa fa-home"></i>&nbsp;User Admin</a></li>
+                <li <?php if ($action == "houses") echo 'class="active"'; ?> ><a href="index.php?action=houses">
+                                <i class="fa fa-gear"></i>&nbsp;House Admin</a></li>
+                <li <?php if ($action == "editissues") echo 'class="active"'; ?> ><a href="index.php?action=editissues">
+                                <i class="fa fa-gear"></i>&nbsp;Manage Issues</a></li>
+                <li <?php if ($action == "trackissues") echo 'class="active"'; ?> ><a href="index.php?action=trackissues">
+                                <i class="fa fa-gear"></i>&nbsp;Track Issues</a></li>
 
-<!-- top menu div -->
-<nav>
-	<ul>
-		<li><a class="button <?php if ($selected == "users") echo 'active'; ?>" href="index.php?action=users">
-				<i class="fa fa-home"></i>&nbsp;User Admin</a></li>
-		<li><a class="button <?php if ($selected == "houses") echo 'active'; ?>" a href="index.php?action=houses">
-				<i class="fa fa-gear"></i>&nbsp;House Admin</a></li>
-		<li><a class="button <?php if ($selected == "editissues") echo 'active'; ?>" a href="index.php?action=editissues">
-				<i class="fa fa-gear"></i>&nbsp;Manage Issues</a></li>
-		<li><a class="button <?php if ($selected == "trackissues") echo 'active'; ?>" a href="index.php?action=trackissues">
-				<i class="fa fa-gear"></i>&nbsp;Track Issues</a></li>
-	</ul>
-</nav>
+<!--          <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li> -->
+
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+
 

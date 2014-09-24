@@ -4,11 +4,11 @@ function showHouses() {
 	global $database;
 	global $page;
 
-	echo '<div class="padded box">';
-	echo '<div class="box-header">';
+	echo '<div class="panel panel-default">';
+	echo '<div class="panel-heading">';
 	echo 'Houses';
 	echo '</div>';
-	echo '<div class="box-body">';
+	echo '<div class="panel-body">';
 
 	// fetch all house data
 	$datas=$database->select("houses",
@@ -67,11 +67,11 @@ for ( ; $start <= $max ; $start++ ) {
 }
 
 function newHouse() {
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'New House';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
         // add new house form
         echo '<form action="index.php" method="post" class="padded">';
@@ -106,11 +106,11 @@ function newHouse() {
 
 function updateHouse() {
 	global $name, $address1, $address2, $postcode, $town, $id;
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'Update House';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
         // edit house form -->
         echo '<form action="index.php" method="post" class="padded">';
@@ -141,17 +141,17 @@ function updateHouse() {
         echo '<a href="index.php?action=houses" class="button right">RESET</a>';
         echo '</form>';
 
-        echo '</div></div>'; //end box-body, end box
+        echo '</div></div>'; //end panel-body, end box
 }
 
 function showHouseIssues() {
 	global $database, $id;
 
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'House Issues';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
         echo '<table><thead><tr><th></th><th></th><th></th></tr></thead>';
 
@@ -172,7 +172,7 @@ function showHouseIssues() {
         echo '</tbody>';
         echo '</table>';
 
-        echo '</div></div>'; // end box-body, end box
+        echo '</div></div>'; // end panel-body, end box
 }
 
 
@@ -182,18 +182,18 @@ if (!isset($reentry)) { $reentry = "0"; }
  * start html *
  **************/
 
-// begin main col
-echo '<div class="grid-container">';
+//echo '<div class="container">';
 
-// houses col
-echo '<div class="grid-50">';
+echo '<div class="row">';
+
+echo '<div class="col-sm-3">';
 
 showHouses();
 
 echo '</div>'; // end column div
 
 // begin second column
-echo '<div class="grid-50">';
+echo '<div class="col-sm-4">';
 
 if ($reentry == "0") {
 	newHouse();
@@ -206,14 +206,14 @@ if ($reentry == "1") {
 echo '</div>';
 
 // begin third column
-echo '<div class="grid-50">';
+echo '<div class="col-sm-5">';
 
 if ($reentry == "1") {
 	showHouseIssues();
 }
 
-echo '</div>'; // end grid-50
-
-echo '</div>'; // end container
+echo '</div>'; // end column
+echo '</div>'; // end row
+//echo '</div>'; // end container
 
 ?>

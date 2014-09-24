@@ -1,13 +1,13 @@
 <!-- footer div -->
 <div class="clear"></div>
-<div id="footer" class="padded">
-<div class="padded">
+
+<div class="footer">
+<div class="container">
 <hr>
-<span class="light">| IssueTracker | Copyright &copy; 2014 | Daniel Mayoss |</span>
+<span class="text-muted">| IssueTracker | Copyright &copy; 2014 | Daniel Mayoss |</span>
 </div>
 </div>
 
-</div> <!-- end content div -->
 </body>
 
 </html>

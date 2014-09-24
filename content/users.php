@@ -1,11 +1,11 @@
 <?php
 
 function newUsers() {
-echo '  <div class="padded box">';
-echo '          <div class="box-header">';
+echo '  <div class="panel panel-default">';
+echo '          <div class="panel-heading">';
 echo '          New User';
 echo '          </div>';
-echo '          <div class="box-body">';
+echo '          <div class="panel-body">';
 echo '                  <form action="index.php" method="post" class="padded">';
 echo '                  User Full Name:<br>';
 echo '                  <input name="name" type="text" size="44" maxlength="50" >';
@@ -31,11 +31,11 @@ function showUsers() {
 //fetch user data from issuetracker.users table -->
 $datas=$database->select("users",array("id", "username", "name", "admin", "superuser", "user"));
 
-echo '<div class="padded box">';
-        echo '<div class="box-header">';
+echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'Users';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
 echo '<table class="table table-striped">';
 echo '<thead><tr><th>ID</th><th>Username</th><th>Name</th><th>Site Admin</th><th>Superuser</th><th>Active</th></tr></thead>';
@@ -67,13 +67,13 @@ echo '</div>';
  * Start html *
  **************/
 
-echo '<div class="grid-container">';
+echo '<div class="row">';
 
-echo '<div class="grid-50">';
+echo '<div class="col-sm-6">';
 showUsers();
 echo '</div>'; //end body, box, grid
 
-echo '<div class="grid-50">';
+echo '<div class="col-sm-6">';
 newUsers();
 echo '</div> <!-- end grid container -->';
 

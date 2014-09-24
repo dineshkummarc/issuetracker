@@ -6,11 +6,11 @@ function updateIssueType() {
 	global $id;
 	
 
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'Update Issue Type';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
         $datas = $database->select("issuetypes","*",array( "id[=]" => $id ));
 
@@ -34,11 +34,11 @@ function updateIssueType() {
 }
 
 function newIssueType() {
-        echo '<div class="padded box">';
-        echo '  <div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '  <div class="panel-heading">';
         echo 'New Issue Type';
         echo '  </div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
         echo '<form action="index.php" method="post" class="padded">';
         echo '<input type="hidden" name="action" value="editissues">';
@@ -61,11 +61,11 @@ function issueTypeList() {
 	global $database;
 	global $page;
 
-	echo '<div class="padded box">';
-	echo '<div class="box-header">';
+	echo '<div class="panel panel-default">';
+	echo '<div class="panel-heading">';
 	echo 'Issue Type List';
 	echo '</div>';
-	echo '<div class="box-body">';
+	echo '<div class="panel-body">';
 
 	$datas = $database->select("issuetypes", "*", array("LIMIT" => array(($page*5)-5,5)));
 
@@ -109,9 +109,9 @@ for ( ; $start <= $max ; $start++ ) {
 
 if (!isset($reentry)) { $reentry = "0"; }
 
-echo '<div class="grid-container">';
-
-echo '<div class="grid-50">';
+echo '<div class="container">';
+echo '<div class="row">';
+echo '<div class="col-sm-6">';
 
 if ($reentry == "1") {
 	updateIssueType();
@@ -123,12 +123,12 @@ if ($reentry == "0") {
 
 echo '</div>';
 
-echo '<div class="grid-50">';
+echo '<div class="col-sm-6">';
 
 	issueTypeList();
 
 echo '</div>'; // end grid box
-
 echo '</div>'; // end grid container
+echo '</div>'; // end container
 
 ?>

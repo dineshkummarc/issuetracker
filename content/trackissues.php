@@ -3,11 +3,11 @@
 function editTrackIssue() {
 	global $database, $id;
 
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'Edit Issue';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
         // select issues left join houses left join issuetypes
         $datas=$database->select("issues",
@@ -66,11 +66,11 @@ function editTrackIssue() {
 function addIssueTracking() {
         global $database, $id;
 
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'Add Issue Tracking';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
                 echo '<form action="index.php?action=trackissues&id=' . $id .'" class="padded" method="post">';
                 echo '<input type="hidden" name="action" value="trackissues">';
@@ -86,39 +86,73 @@ function addIssueTracking() {
 }
 
 
+/*
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="inputEmail" class="control-label col-xs-2">Email</label>
+        <div class="col-xs-10">
+            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword" class="control-label col-xs-2">Password</label>
+        <div class="col-xs-10">
+            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+            <div class="checkbox">
+                <label><input type="checkbox"> Remember me</label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+    </div>
+</form>
+*/
+
 function searchHouse() {
 	global $database;
 
         $datas = $database->select("houses", array( "id", "name" ));
 
-        echo '<form action="index.php" method="post" class="padded">';
+        echo '<form action="index.php" method="post">';
+        echo '<div class="form-group">';
+	echo '<label for="searchissuetype">Search By House</label><br>';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="house">';
-        echo '<select name="searchissuetype">\n';
+        echo '<select name="searchissuetype">';
         foreach($datas as $data) {
-          echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>\n';
+          echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>';
           }
         echo '</select>';
+	echo '</div>';
         echo '<input type="submit" name="search &raquo;" value="submit" maxlength="512">';
         echo '</form>';
-
 }
 
 function searchIssue() {
 	global $database;
 
-        echo '<form action="index.php" method="post" class="padded">';
+        echo '<form action="index.php" method="post">';
+        echo '<div class="form-group">';
+	echo '<label for="searchissuetype">Search By Issue Type</label><br>';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="issue">';
-        echo '<select name="searchissuetype"><br>';
+        echo '<select name="searchissuetype">';
         // search issue dropdown
         $datas = $database->select("issuetypes", array( "id", "type" ));
         foreach($datas as $data) {
           echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>';
-                }
+          }
         echo '</select>';
+        echo '</div>';
         echo '<input type="submit" name="search &raquo;" value="submit" maxlength="512">';
 	echo '</form>';
 }
@@ -126,21 +160,21 @@ function searchIssue() {
 function newTrackIssue () {
 	global $database;
 
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'New Issue';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
         echo '<form action="index.php" method="post" class="padded">';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="new">';
         echo 'House:<br>';
-        echo '<select name="id">\n';
+        echo '<select name="id">';
                 // house types dropdown
                 $datas = $database->select("houses", array( "id", "name" ));
                 foreach($datas as $data) {
-                        echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>\n';
+                        echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>';
                 }
         echo '</select><br><br>';
         echo 'Issue Type:<br>';
@@ -181,12 +215,11 @@ if ($search == "none") {
         $count=count($datas);
         $pages=$count/5;
 
-
-	echo '<div class="padded box">';
-	echo '<div class="box-header">';
+	echo '<div class="panel panel-default">';
+	echo '<div class="panel-heading">';
 	echo 'Issue List';
 	echo '</div>';
-	echo '<div class="box-body">';
+	echo '<div class="panel-body">';
 
 	echo '<table class="table"><thead><tr><th>Issue</th><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
 	echo '<tbody>';
@@ -232,11 +265,11 @@ if ($search == "house") {
         $count=count($datas);
         $pages=$count/5;
 
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'Searched Issue List (by house)';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 // DEBUG
 //      echo '<p>' . $database->last_query() . '</p>';
 //      echo '<p>issue type is ' . $searchissuetype . '</p>';
@@ -288,12 +321,11 @@ if ($search == "issue") {
         $count=count($datas);
         $pages=$count/5;
 
-
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'Searched Issue List (by Issue)';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 // DEBUG
 //	echo '<p>' . $database->last_query() . '</p>';
 //	echo '<p>issue type is ' . $searchissuetype . '</p>';
@@ -345,11 +377,11 @@ function showTrackIssue() {
 		array("issues.id" => $id)
                 );
 
-        echo '<div class="padded box">';
-        echo '<div class="box-header">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
         echo 'Issue Tracking';
         echo '</div>';
-        echo '<div class="box-body">';
+        echo '<div class="panel-body">';
 
         echo '<table class="table"><thead><tr><th>Item Date</th><th>Item Data</th></tr></thead>';
         echo '<tbody>';
@@ -370,62 +402,38 @@ function showTrackIssue() {
 
 if (!isset($reentry)) { $reentry = "0"; }
 
-// begin main column div
-echo '<div class="grid-container">';
+// begin html
+echo '<div class="container-fluid">';
+ echo '<div class="row">';
 
-// begin search box, 100% wide
-echo '<div class="grid-50">';
-echo '<div class="padded box">';
-  echo '<div class="box-header">';
-  echo 'Search: by House';
-  echo '</div>';
-  echo '<div class="box-body">';
-	searchHouse();
-  echo '</div>';
-echo '</div>';
-echo '</div>';
+  echo '<div class="col-md-3">';
 
-echo '<div class="grid-50">';
-echo '<div class="padded box">';
-  echo '<div class="box-header">';
-  echo 'Search: by Issue';
-  echo '</div>';
-  echo '<div class="box-body">';
-	searchIssue();
-  echo '</div>';
-echo '</div>';
-echo '</div>';
+  //show search options
+  echo '<div class="row-fluid">';
+  searchHouse();
+  echo '<br>';
+  searchIssue();
+  echo '<br>';
+  echo '<p><a class="btn btn-info" href="index.php?action=trackissues">Reset</a></p>';
+  echo '<br>';
+  echo '</div>'; //end row
 
-// begin 3of3 wide col
-echo '<div class="grid-100">';
+  //begin new/edit issue box
+  echo '<div class="row-fluid">';
+    if ($reentry == "0") { newTrackIssue(); }
+    if ($reentry == "1") { editTrackIssue(); }
+  echo '</div>'; //end row
 
-	showTrackIssueList();
+  echo '</div>'; //end col
 
-echo '</div>'; // end col
+  echo '<div class="col-md-9">';
 
-echo '<div class="grid-50">'; // begin new column
+  if ($reentry == "0") { showTrackIssueList(); }
+  if ($reentry == "1") {
+      addIssueTracking();
+      showTrackIssue();
+      }
 
-//begin new/edit issue box
-
-if ($reentry == "0") {
-	newTrackIssue();
-}
-
-if ($reentry == "1") {
-	editTrackIssue();
-}
-
-echo '</div>'; //end column div
-
-echo '<div class="grid-50">';
-	addIssueTracking();
-echo '</div>';
-
-echo '</div>'; //end main column div
-
-if ($reentry == "1") {
-echo '<div class="grid-container">';
-echo '<div class="grid-100">';
-	showTrackIssue();
-echo '</div></div>';
-}
+  echo '</div>'; //end second col
+ echo '</div>'; //end row
+echo '</div>'; //end container-fluid
