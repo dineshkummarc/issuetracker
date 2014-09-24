@@ -3,12 +3,6 @@
 function editTrackIssue() {
 	global $database, $id;
 
-        echo '<div class="panel panel-default">';
-        echo '<div class="panel-heading">';
-        echo 'Edit Issue';
-        echo '</div>';
-        echo '<div class="panel-body">';
-
         // select issues left join houses left join issuetypes
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
@@ -20,7 +14,14 @@ function editTrackIssue() {
         $datait=$database->select("issuetypes", "*");
         $dataho=$database->select("houses", "*");
 
-	if (is_array($datas)) {
+	if (!empty($datas)) {
+
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
+        echo 'Edit Issue';
+        echo '</div>';
+        echo '<div class="panel-body">';
+
         foreach($datas as $data) { //fixme: there will be only one!
                 echo '<form action="index.php?action=trackissues&id=' . $id . '" class="padded" method="post">';
                 echo '<input type="hidden" name="action" value="trackissues">';
@@ -55,12 +56,15 @@ function editTrackIssue() {
                 echo '<a href="index.php?action=trackissues" class="button right">RESET</a><br>';
                 echo '</form>';
         }
-	}
-	else {
-		die("There was an error.");
-		}
 
         echo '</div></div>'; // end body, end panel
+
+	}
+	else { 
+		echo '<p>No Issues, enter new:</p>';
+		newTrackIssue();
+	}
+
 }
 
 function addIssueTracking() {
@@ -122,11 +126,11 @@ function searchHouse() {
 
         echo '<form action="index.php" method="post">';
         echo '<div class="form-group">';
-	echo '<label for="searchissuetype">Search By House</label><br>';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="house">';
         echo '<select name="searchissuetype">';
+	echo '<option value="">By House</option>';
         foreach($datas as $data) {
           echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>';
           }
@@ -141,11 +145,11 @@ function searchIssue() {
 
         echo '<form action="index.php" method="post">';
         echo '<div class="form-group">';
-	echo '<label for="searchissuetype">Search By Issue Type</label><br>';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="issue">';
         echo '<select name="searchissuetype">';
+	echo '<option value="">By Issue</option>';
         // search issue dropdown
         $datas = $database->select("issuetypes", array( "id", "type" ));
         foreach($datas as $data) {
@@ -410,6 +414,7 @@ echo '<div class="container-fluid">';
 
   //show search options
   echo '<div class="row-fluid">';
+  echo '<p>Search:</p>';
   searchHouse();
   echo '<br>';
   searchIssue();
