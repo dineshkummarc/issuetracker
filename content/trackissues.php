@@ -129,18 +129,18 @@ function searchHouse() {
         $datas = $database->select("houses", array( "id", "name" ));
 
         echo '<form action="index.php" method="post">';
-        echo '<div class="form-group">';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="house">';
+	echo '<p>';
         echo '<select name="searchissuetype">';
 	echo '<option value="">By House</option>';
         foreach($datas as $data) {
           echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>';
           }
         echo '</select>';
-	echo '</div>';
-        echo '<input type="submit" name="search &raquo;" value="submit" maxlength="512">';
+	echo '</p>';
+        echo '<p><input type="submit" name="search &raquo;" value="submit" maxlength="64"></p>';
         echo '</form>';
 }
 
@@ -148,10 +148,10 @@ function searchIssue() {
 	global $database;
 
         echo '<form action="index.php" method="post">';
-        echo '<div class="form-group">';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="issue">';
+	echo '<p>';
         echo '<select name="searchissuetype">';
 	echo '<option value="">By Issue</option>';
         // search issue dropdown
@@ -160,8 +160,8 @@ function searchIssue() {
           echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>';
           }
         echo '</select>';
-        echo '</div>';
-        echo '<input type="submit" name="search &raquo;" value="submit" maxlength="512">';
+	echo '</p>';
+        echo '<p><input type="submit" name="search &raquo;" value="submit" maxlength="64"></p>';
 	echo '</form>';
 }
 
@@ -441,29 +441,29 @@ echo '<div class="container-fluid">';
   echo '<div class="row-fluid">';
 
   if ($reentry == "0") {
-    echo '<div class="col-md-3">';
+    echo '<div class="col-md-4">';
     newTrackIssue();
     echo '</div>'; //end col
-    echo '<div class="col-md-9">';
+    echo '<div class="col-md-8">';
     showTrackIssueList();
     echo '</div>'; //end col
     }
 
   if ($reentry == "1") {
     if ($edit=="search") {
-        echo '<div class="col-md-3">';
+        echo '<div class="col-md-4">';
         newTrackIssue();
         echo '</div>'; //end col
-        echo '<div class="col-md-9">';
+        echo '<div class="col-md-8">';
         showTrackIssueList();
         echo '</div>'; //end col
         }
 
     if ($edit=="edit") {
-        echo '<div class="col-md-3">';
+        echo '<div class="col-md-4">';
         editTrackIssue();
         echo '</div>'; //end col
-        echo '<div class="col-md-9">';
+        echo '<div class="col-md-8">';
         addIssueTracking();
         echo '</div>'; //end col
         }

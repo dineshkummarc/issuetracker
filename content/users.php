@@ -69,11 +69,11 @@ echo '</div>';
 
 echo '<div class="container-fluid">';
 
-echo '<div class="col-sm-3">';
+echo '<div class="col-sm-4">';
 newUsers();
 echo '</div>'; //end body, box, grid
 
-echo '<div class="col-sm-9">';
+echo '<div class="col-sm-8">';
 showUsers();
 echo '</div>';
 

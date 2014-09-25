@@ -74,27 +74,22 @@ function newHouse() {
         echo '<div class="panel-body">';
 
         // add new house form
-        echo '<form action="index.php" method="post" class="padded">';
-        echo '<p><span class="left">House Name:</span>';
-        echo '<span class="right"><input name="name" type="text" size="44" maxlength="50" ></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<p><span class="left">Address1:</span>';
-        echo '<span class="right"><input name="address1" type="text" size="44" maxlength="50"></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<p><span class="left">Address2:</span>';
-        echo '<span class="right"><input name="address2" type="text" size="44" maxlength="32"></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<p><span class="left">Postcode:</span>';
-        echo '<span class="right"><input name="postcode" type="text" size="44" maxlength="32"></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<p><span class="left">Town:</span><br>';
-        echo '<span class="right"><input name="town" type="text" size="44" maxlength="32"></span>';
-        echo '</p>';
-        echo '<br><br>';
+        echo '<form action="index.php" method="post" class="form-vertical">';
+        echo '<p>House Name:</p>';
+        echo '<p><input name="name" type="text" size="44" maxlength="50" ></p>';
+        echo '<br>';
+        echo '<p>Address1:</p>';
+        echo '<p><input name="address1" type="text" size="44" maxlength="50"></p>';
+        echo '<br>';
+        echo '<p>Address2:</p>';
+        echo '<p><input name="address2" type="text" size="44" maxlength="32"></p>';
+        echo '<br>';
+        echo '<p>Postcode:</p>';
+        echo '<p><input name="postcode" type="text" size="44" maxlength="32"></p>';
+        echo '<br>';
+        echo '<p>Town:</p>';
+        echo '<p><input name="town" type="text" size="44" maxlength="32"></p>';
+        echo '<br>';
         echo '<input type="hidden" name="action" value="houses">';
         echo '<input type="hidden" name="edit" value="new">';
         echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
@@ -185,19 +180,19 @@ if (!isset($reentry)) { $reentry = "0"; }
 echo '<div class="container-fluid">';
 
 if ($reentry == "0") {
-  echo '<div class="col-md-3">';
+  echo '<div class="col-md-4">';
   newHouse();
   echo '</div>'; // end column
-  echo '<div class="col-md-9">';
+  echo '<div class="col-md-8">';
   showHouses();
   echo '</div>'; // end column
   }
 
 if ($reentry == "1") {
-  echo '<div class="col-md-3">';
+  echo '<div class="col-md-4">';
   updateHouse();
   echo '</div>'; // end column
-  echo '<div class="col-md-9">';
+  echo '<div class="col-md-8">';
   showHouseIssues();
   echo '</div>'; // end column
   }
