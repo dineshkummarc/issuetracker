@@ -34,6 +34,7 @@ if (isset($_POST['name'])) { $name= $_POST['name']; }
 else { $name = "none"; }
 
 if (isset($_POST['id'])){ $id= $_POST['id']; }
+elseif (isset($_GET['id'])){ $id= $_GET['id']; }
 else { $id = "none"; }
 
 //issue(type) create or edit
@@ -76,6 +77,7 @@ else { $user = "0"; }
 
 //house/user edit
 if (isset($_POST['edit'])){ $edit= $_POST['edit']; }
+elseif (isset($_GET['edit'])){ $edit= $_GET['edit']; }
 else { $edit = "none"; }
 
 // if (isset($_POST['action'])){ $action= $_POST['action']; }

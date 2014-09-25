@@ -133,7 +133,8 @@ function searchHouse() {
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="house">';
 	echo '<p>';
-        echo '<select name="searchissuetype">';
+//        echo '<select name="searchissuetype">';
+        echo '<select name="id">';
 	echo '<option value="">By House</option>';
         foreach($datas as $data) {
           echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>';
@@ -152,7 +153,8 @@ function searchIssue() {
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="issue">';
 	echo '<p>';
-        echo '<select name="searchissuetype">';
+//        echo '<select name="searchissuetype">';
+        echo '<select name="id">';
 	echo '<option value="">By Issue</option>';
         // search issue dropdown
         $datas = $database->select("issuetypes", array( "id", "type" ));
@@ -214,16 +216,18 @@ function newTrackIssue () {
 
 function showTrackIssueList() {
 	global $database;
+	global $searchissuetype;
 	global $page;
 	global $search;
-	global $searchissuetype;
+	global $edit;
+	global $id;
 
 if ($search == "none") {
 	// select issues left join houses, left join issuetypes
 	// LIMIT array(offset, rows)
 	$datas=$database->select("issues",
 		array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
-		array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
+		array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)"),
                 array("LIMIT" => array(($page*5)-5,5))
 		);
 
@@ -239,7 +243,7 @@ if ($search == "none") {
 	foreach ($datas as $data) {
 		echo '<tr>';
 		echo '<td>' . $data["issue_id"] . '</td>';
-		echo '<td>' . $data["house_name"] . '</td>';
+		echo '<td><a href="index.php?action=trackissues&search=house&id=' . $data["house_id"] . '">' . $data["house_name"] . '</a></td>';
 		echo '<td>' . $data["issue_type"] . '</td>';
 		echo '<td>' . $data["issue"] . '</td>';
 		echo '<td>' . $data["date"] . '</td>';
@@ -274,11 +278,13 @@ if ($search == "none") {
 
 	echo '</div></div>'; // end body, end cell
 } // end search is none
+
 if ($search == "house") {
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
                 array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
-                array("houses.id" => $searchissuetype),
+//                array("houses.id" => $searchissuetype),
+                array("houses.id" => $id),
                 array("LIMIT" => array(($page*5)-5,5))
                 );
 
@@ -294,6 +300,7 @@ if ($search == "house") {
 //      echo '<p>' . $database->last_query() . '</p>';
 //      echo '<p>issue type is ' . $searchissuetype . '</p>';
 //      echo '<p>page is ' . $page . '</p>';
+//      echo "<p>id is $id, edit is $edit, search is $search</p>";
 // END DEBUG
 
         echo '<table class="table"><thead><tr><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
@@ -334,7 +341,8 @@ if ($search == "issue") {
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
                 array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
-		array("issuetypes.id" => $searchissuetype),
+//		array("issuetypes.id" => $searchissuetype),
+		array("issuetypes.id" => $id),
                 array("LIMIT" => array(($page*5)-5,5))
                 );
 
@@ -472,15 +480,28 @@ echo '<div class="container-fluid">';
         addIssueTracking();
         echo '</div>'; //end col
         }
+
+    if ($edit=="addtracking") {
+        echo '<div class="col-md-4">';
+        editTrackIssue();
+        echo '</div>'; //end col
+        echo '<div class="col-md-8">';
+        addIssueTracking();
+        echo '</div>'; //end col
+        }
     }
 
     echo '</div>'; //end row
 
-    echo '<div class="row-fluid">';
-    echo '<div class="col-md-12">';
-    showTrackIssue();
-    echo '</div>'; //end col
-    echo '</div>'; //end row
+  if ($reentry == "1") {
+      if ($edit != "search") {
+      echo '<div class="row-fluid">';
+      echo '<div class="col-md-12">';
+      showTrackIssue();
+      echo '</div>'; //end col
+      echo '</div>'; //end row
+      }
+    }
 
   echo '</div>'; //end second col
  echo '</div>'; //end row
