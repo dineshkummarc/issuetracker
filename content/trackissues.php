@@ -438,6 +438,8 @@ echo '<div class="container-fluid">';
 
   echo '<div class="col-md-10">';
 
+  echo '<div class="row-fluid">';
+
   if ($reentry == "0") {
     echo '<div class="col-md-3">';
     newTrackIssue();
@@ -446,28 +448,34 @@ echo '<div class="container-fluid">';
     showTrackIssueList();
     echo '</div>'; //end col
     }
-  if ($reentry == "1") {
-    echo '<div class="row">';
-    echo '<div class="col-md-3">';
 
+  if ($reentry == "1") {
     if ($edit=="search") {
+        echo '<div class="col-md-3">';
         newTrackIssue();
+        echo '</div>'; //end col
+        echo '<div class="col-md-9">';
         showTrackIssueList();
+        echo '</div>'; //end col
         }
 
     if ($edit=="edit") {
+        echo '<div class="col-md-3">';
         editTrackIssue();
+        echo '</div>'; //end col
+        echo '<div class="col-md-9">';
         addIssueTracking();
+        echo '</div>'; //end col
         }
+    }
 
     echo '</div>'; //end row
-    echo '</div>'; //end row
-    echo '<div class="row">';
+
+    echo '<div class="row-fluid">';
     echo '<div class="col-md-12">';
     showTrackIssue();
     echo '</div>'; //end col
     echo '</div>'; //end row
-    }
 
   echo '</div>'; //end second col
  echo '</div>'; //end row
