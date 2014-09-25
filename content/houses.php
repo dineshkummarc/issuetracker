@@ -16,9 +16,6 @@ function showHouses() {
 		array("LIMIT" => array(($page*5)-5,5))
 		);
 
-	$count=count($datas);
-	$pages=$count/5;
-
 //DEBUG
 //echo '<p>pages is ' . $pages . '</p>';
 //echo '<p>page is ' . $page . '</p>';
@@ -54,13 +51,21 @@ function showHouses() {
 	echo '</tbody>';
 	echo '</table>';
 
-$min = 0;
-$max = $pages+1;
-$start = $pages - 5;
-if ($start < 0) { $start = 1; }
-for ( ; $start <= $max ; $start++ ) {
-        echo '&nbsp<a href="index.php?action=houses&page=' . $start . '">Page ' . $start . '</a>';
-        }
+        // fetch count of all rows in houses
+        $count = $database->count("houses");
+                // optional: $where: array("column" => "value")
+
+        $pages=$count/5;
+
+        $min = 0;
+        $max = $pages;
+        //$start = $pages - 5;
+        $start = 1;
+        if ($start < 0) { $start = 1; }
+        for ( ; $start <= $max ; $start++ ) {
+                echo '&nbsp<a href="index.php?action=houses&page=' . $start . '">Page ' . $start . '</a>';
+                }
+
 
 	echo '</div></div>';
 

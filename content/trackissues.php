@@ -227,9 +227,6 @@ if ($search == "none") {
                 array("LIMIT" => array(($page*5)-5,5))
 		);
 
-        $count=count($datas);
-        $pages=$count/5;
-
 	echo '<div class="panel panel-default">';
 	echo '<div class="panel-heading">';
 	echo 'Issue List';
@@ -259,13 +256,21 @@ if ($search == "none") {
 	echo '</tbody>';
 	echo '</table>';
 
-$min = 0;
-$max = $pages+1;
-$start = $pages - 5;
-if ($start < 0) { $start = 1; }
-for ( ; $start <= $max ; $start++ ) {
-	echo '&nbsp<a href="index.php?action=trackissues&page=' . $start . '">Page ' . $start . '</a>';
-	}
+        // fetch count of all rows in issues
+        $count = $database->count("issues");
+                // optional: $where: array("column" => "value")
+
+        $pages=$count/5;
+
+        $min = 0;
+        $max = $pages;
+        //$start = $pages - 5;
+        $start = 1;
+        if ($start < 0) { $start = 1; }
+        for ( ; $start <= $max ; $start++ ) {
+                echo '&nbsp<a href="index.php?action=trackissues&page=' . $start . '">Page ' . $start . '</a>';
+                }
+
 
 	echo '</div></div>'; // end body, end cell
 } // end search is none

@@ -69,9 +69,6 @@ function issueTypeList() {
 
 	$datas = $database->select("issuetypes", "*", array("LIMIT" => array(($page*5)-5,5)));
 
-        $count=count($datas);
-        $pages=$count/5;
-	
         echo '<table class="table horizontal-border">';
         echo '<thead><tr><th>ID</th><th>Issue Type</th><th>Description</th><th></th></tr></thead>';
         echo '<tbody>'; 
@@ -92,13 +89,20 @@ function issueTypeList() {
         echo '</tbody>';
         echo '</table>';
 
-$min = 0;
-$max = $pages+1;
-$start = $pages - 5;
-if ($start < 0) { $start = 1; }
-for ( ; $start <= $max ; $start++ ) {
-        echo '&nbsp<a href="index.php?action=editissues&page=' . $start . '">Page ' . $start . '</a>';
-        }
+        // fetch count of all rows in issuetypes
+        $count = $database->count("issuetypes");
+                // optional: $where: array("column" => "value")
+
+        $pages=$count/5;
+
+	$min = 0;
+	$max = $pages;
+	//$start = $pages - 5;
+	$start = 1;
+	if ($start < 0) { $start = 1; }
+	for ( ; $start <= $max ; $start++ ) {
+	        echo '&nbsp<a href="index.php?action=editissues&page=' . $start . '">Page ' . $start . '</a>';
+	        }
 
 	echo '</div></div>'; //end box-body, end box
 }
