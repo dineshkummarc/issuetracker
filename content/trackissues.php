@@ -225,133 +225,45 @@ function showTrackIssueList() {
 if ($search == "none") {
 	// select issues left join houses, left join issuetypes
 	// LIMIT array(offset, rows)
+        $count=$database->count("issues");                                                                                                                                                                                                                                                                
 	$datas=$database->select("issues",
 		array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
 		array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)"),
                 array("LIMIT" => array(($page*5)-5,5))
 		);
-
-	echo '<div class="panel panel-default">';
-	echo '<div class="panel-heading">';
-	echo 'Issue List';
-	echo '</div>';
-	echo '<div class="panel-body">';
-
-	echo '<table class="table"><thead><tr><th>Issue</th><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
-	echo '<tbody>';
-
-	foreach ($datas as $data) {
-		echo '<tr>';
-		echo '<td>' . $data["issue_id"] . '</td>';
-		echo '<td><a href="index.php?action=trackissues&search=house&id=' . $data["house_id"] . '">' . $data["house_name"] . '</a></td>';
-		echo '<td>' . $data["issue_type"] . '</td>';
-		echo '<td>' . $data["issue"] . '</td>';
-		echo '<td>' . $data["date"] . '</td>';
-		echo '<td><form action="index.php" class="padded" method="post">';
-		echo '<input type="hidden" name="action" value="trackissues">';
-		echo '<input type="hidden" name="edit" value="edit">';
-		echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
-		echo '<button type="submit" name="edit" value="edit">Edit</button>';
-		echo '</form>';
-		echo '</td>';
-		echo '</tr>';
 	}
-	
-	echo '</tbody>';
-	echo '</table>';
-
-        // fetch count of all rows in issues
-        $count = $database->count("issues");
-                // optional: $where: array("column" => "value")
-
-        $pages=$count/5;
-
-        $min = 0;
-        $max = $pages;
-        //$start = $pages - 5;
-        $start = 1;
-        if ($start < 0) { $start = 1; }
-        for ( ; $start <= $max ; $start++ ) {
-                echo '&nbsp<a href="index.php?action=trackissues&page=' . $start . '">Page ' . $start . '</a>';
-                }
-
-
-	echo '</div></div>'; // end body, end cell
-} // end search is none
 
 if ($search == "house") {
+        $count=$database->count("issues",
+                array("house" => $id)
+                );
+
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
-                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
-//                array("houses.id" => $searchissuetype),
+                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)"),
+//array("houses.id" => $searchissuetype),
                 array("houses.id" => $id),
                 array("LIMIT" => array(($page*5)-5,5))
                 );
-
-        $count=count($datas);
-        $pages=$count/5;
-
-        echo '<div class="panel panel-default">';
-        echo '<div class="panel-heading">';
-        echo 'Searched Issue List (by house)';
-        echo '</div>';
-        echo '<div class="panel-body">';
-// DEBUG
-//      echo '<p>' . $database->last_query() . '</p>';
-//      echo '<p>issue type is ' . $searchissuetype . '</p>';
-//      echo '<p>page is ' . $page . '</p>';
-//      echo "<p>id is $id, edit is $edit, search is $search</p>";
-// END DEBUG
-
-        echo '<table class="table"><thead><tr><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
-        echo '<tbody>';
-
-        foreach ($datas as $data) {
-                echo '<tr>';
-                echo '<td>' . $data["house_name"] . '</td>';
-                echo '<td>' . $data["issue_type"] . '</td>';
-                echo '<td>' . $data["issue"] . '</td>';
-                echo '<td>' . $data["date"] . '</td>';
-                echo '<td><form action="index.php?edit=search&search=house&action=trackissues&searchissuetype=' . $searchissuetype . '" class="padded" method="post">';
-                echo '<input type="hidden" name="action" value="trackissues">';
-                echo '<input type="hidden" name="edit" value="edit">';
-                echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
-                echo '<button type="submit" name="edit" value="edit">Edit</button>';
-                echo '</form>';
-                echo '</td>';
-                echo '</tr>';
-        }
-
-        echo '</tbody>';
-        echo '</table>';
-
-$min = 0;
-$max = $pages+1;
-$start = $pages - 5;
-if ($start < 0) { $start = 1; }
-for ( ; $start <= $max ; $start++ ) {
-        echo '&nbsp<a href="index.php?action=trackissues&page=' . $start . '">Page ' . $start . '</a>';
-        }
-
-        echo '</div></div>'; // end body, end cell
-}
+	}
 
 if ($search == "issue") {
+	$count=$database->count("issues",
+                array("issuetype" => $id)
+                );
 
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
-                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)"),
-//		array("issuetypes.id" => $searchissuetype),
+                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)"),
+//array("issuetypes.id" => $searchissuetype),
 		array("issuetypes.id" => $id),
                 array("LIMIT" => array(($page*5)-5,5))
                 );
-
-        $count=count($datas);
-        $pages=$count/5;
+	}
 
         echo '<div class="panel panel-default">';
         echo '<div class="panel-heading">';
-        echo 'Searched Issue List (by Issue)';
+        echo "Issue List (search by $search)";
         echo '</div>';
         echo '<div class="panel-body">';
 // DEBUG
@@ -364,12 +276,23 @@ if ($search == "issue") {
         echo '<tbody>';
 
         foreach ($datas as $data) {
+
+// this should all be in the POST !!
+// except for maybe $page
+    $url  = "action=$action&";
+    $url .= "search=$search&";
+    $url .= "id=$id&";
+    $url .= "edit=$edit&"; //should always be edit=search
+    $url .= "page=$page";
+
+//    echo "<a href=\"index.php?$url\">Page $start</a>";
+
                 echo '<tr>';
                 echo '<td>' . $data["house_name"] . '</td>';
                 echo '<td>' . $data["issue_type"] . '</td>';
                 echo '<td>' . $data["issue"] . '</td>';
                 echo '<td>' . $data["date"] . '</td>';
-                echo '<td><form action="index.php?edit=search&search=issue&action=trackissues&searchissuetype=' . $searchissuetype . '" class="padded" method="post">';
+                echo "<td><form action=\"index.php?$url\" class=\"padded\" method=\"post\">";
                 echo '<input type="hidden" name="action" value="trackissues">';
                 echo '<input type="hidden" name="edit" value="edit">';
                 echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
@@ -382,17 +305,34 @@ if ($search == "issue") {
         echo '</tbody>';
         echo '</table>';
 
-$min = 0;
-$max = $pages+1;
-$start = $pages - 5;
-if ($start < 0) { $start = 1; }
-for ( ; $start <= $max ; $start++ ) {
-        echo '&nbsp<a href="index.php?action=trackissues&page=' . $start . '">Page ' . $start . '</a>';
-        }
+paginate($count);
 
-        echo '</div></div>'; // end body, end cell
 }
 
+function paginate($count) {
+  global $action, $search, $id, $page;
+
+  if ($count < 5) { $count = 5; }
+
+  $pages=$count/5;
+  if ((($count % 5) > 0) AND ($count > 5)) { $pages += 1; }
+
+  $min = 0;
+  $max = $pages;
+  $start = $page - 5;
+  //$start = 1;
+  if ($start < 0) { $start = 1; }
+  for ( ; $start <= $max ; $start++ ) {
+
+    $url = "action=$action&";
+    $url .= "search=$search&";
+    $url .= "id=$id&";
+//  $url .= "edit=$edit&";
+    $url .= "page=$start";
+
+    echo "<a href=\"index.php?$url\">Page $start</a>";
+    }
+//  echo "page is $page, pages is $pages, count is $count";
 }
 
 function showTrackIssue() {
@@ -426,7 +366,6 @@ function showTrackIssue() {
 
         echo '</div></div>'; // end body, end cell
 }
-
 
 if (!isset($reentry)) { $reentry = "0"; }
 
