@@ -3,6 +3,10 @@
 function editTrackIssue() {
 	global $database, $id;
 
+/* if $edit is search, then newTrackIssue()
+   else if $edit is edit, then editTrackIssue
+ */
+
         // select issues left join houses left join issuetypes
         $datas=$database->select("issues",
                 array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
@@ -163,6 +167,13 @@ function searchIssue() {
 
 function newTrackIssue () {
 	global $database;
+//	global $action;
+//	global $edit;
+//	global $id;
+
+//  echo '<input type="hidden" name="action" value="trackissues">';
+//  echo '<input type="hidden" name="edit" value="edit">';
+//  echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
 
         echo '<div class="panel panel-default">';
         echo '<div class="panel-heading">';
@@ -438,11 +449,18 @@ echo '<div class="container-fluid">';
   if ($reentry == "1") {
     echo '<div class="row">';
     echo '<div class="col-md-3">';
-    editTrackIssue();
-    echo '</div>'; //end col
-    echo '<div class="col-md-9">';
-    addIssueTracking();
-    echo '</div>'; //end col
+
+    if ($edit=="search") {
+        newTrackIssue();
+        showTrackIssueList();
+        }
+
+    if ($edit=="edit") {
+        editTrackIssue();
+        addIssueTracking();
+        }
+
+    echo '</div>'; //end row
     echo '</div>'; //end row
     echo '<div class="row">';
     echo '<div class="col-md-12">';
