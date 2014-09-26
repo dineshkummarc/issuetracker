@@ -16,13 +16,10 @@
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
 
 <link rel="icon" href="icons/favicon.ico">
 
@@ -44,15 +41,20 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Tasks <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
                 <li <?php if ($action == "users") echo 'class="active"'; ?> ><a href="index.php?action=users">
                                 <i class="fa fa-home"></i>&nbsp;User Admin</a></li>
                 <li <?php if ($action == "houses") echo 'class="active"'; ?> ><a href="index.php?action=houses">
                                 <i class="fa fa-gear"></i>&nbsp;House Admin</a></li>
-                <li <?php if ($action == "editissues") echo 'class="active"'; ?> ><a href="index.php?action=editissues">
+                <li <?php if ($action == "issues") echo 'class="active"'; ?> ><a href="index.php?action=issues">
                                 <i class="fa fa-gear"></i>&nbsp;Issue Admin</a></li>
+
+                </ul>
+              </li>
                 <li <?php if ($action == "trackissues") echo 'class="active"'; ?> ><a href="index.php?action=trackissues">
                                 <i class="fa fa-gear"></i>&nbsp;Track Issues</a></li>
-
 <!--          <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">

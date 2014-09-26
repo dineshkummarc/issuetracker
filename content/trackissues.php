@@ -1,5 +1,10 @@
 <?php
 
+// this is needed in searchHouse, searchIssue and newIssue
+$datahouse = $database->select("houses", array( "id", "name" ));
+$dataissue = $database->select("issuetypes", array( "id", "type" ));
+$datastatus = $database->select("status", array( "id", "status" ));
+
 function editTrackIssue() {
 	global $database, $id;
 
@@ -14,9 +19,9 @@ function editTrackIssue() {
                 array("issues.id" => "$id")
                 );
 
-//      $datas=$database->select("issues", "*", array( "id[=]" => "$id" ));
-        $datait=$database->select("issuetypes", "*");
-        $dataho=$database->select("houses", "*");
+// calling these two once, just before html
+//        $datahouse = $database->select("houses", array( "id", "name" ));
+//        $dataissue = $database->select("issuetypes", array( "id", "type" ));
 
 	if (!empty($datas)) {
 
@@ -35,7 +40,7 @@ function editTrackIssue() {
                 echo '<p><span>House:</span><span class="pull-right">';
                 echo '<select name="house">';
 
-                foreach ($dataho as $dataitem) {
+                foreach ($datahouse as $dataitem) {
                         echo '<option value="' . $dataitem["id"] . '"';
                         if ($data["house_id"] == $dataitem["id"]) { echo 'selected'; }
                         echo '>' . $dataitem["name"] . '</option>';
@@ -45,7 +50,7 @@ function editTrackIssue() {
                 echo '<p><span>Issue Type:</span><span class="pull-right">';
                 echo '<select name="issuetype">';
 
-                foreach ($datait as $dataitem) {
+                foreach ($dataissue as $dataitem) {
                         echo '<option value="' . $dataitem["id"] . '"';
                         if ($data["typeid"] == $dataitem["id"]) { echo 'selected'; }
                         echo '>' . $dataitem["type"] . '</option>';
@@ -94,43 +99,63 @@ function addIssueTracking() {
 }
 
 
+// $dataissue populated at top
 function searchHouse() {
 	global $database;
+	global $datahouse;
 
-        $datas = $database->select("houses", array( "id", "name" ));
-
+	echo '<p>';
         echo '<form action="index.php" method="post">';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="house">';
         echo '<select name="id">';
-	echo '<option value="">By House</option>';
-        foreach($datas as $data) {
-          echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>';
-          }
+	echo '<option value="">-- By House --</option>';
+        foreach($datahouse as $data) { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
         echo '</select>';
         echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
         echo '</form>';
+	echo '</p>';
 }
 
+// $dataissue populated at top
 function searchIssue() {
 	global $database;
+	global $dataissue;
 
+	echo '<p>';
         echo '<form action="index.php" method="post">';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="issue">';
         echo '<select name="id">';
-	echo '<option value="">By Issue</option>';
-        // search issue dropdown
-        $datas = $database->select("issuetypes", array( "id", "type" ));
-        foreach($datas as $data) {
-          echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>';
-          }
+	echo '<option value="">-- By Issue --</option>';
+        foreach($dataissue as $data) { echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>'; }
         echo '</select>';
         echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
 	echo '</form>';
+	echo '</p>';
 }
+
+// $dataissue populated at top
+function searchStatus() {
+        global $datastatus;
+        global $dataissue;
+
+	echo '<p>';
+        echo '<form action="index.php" method="post">';
+        echo '<input type="hidden" name="action" value="trackissues">';
+        echo '<input type="hidden" name="edit" value="search">';
+        echo '<input type="hidden" name="search" value="status">';
+        echo '<select name="id">';
+        echo '<option value="">-- By Status --</option>';
+        foreach($datastatus as $data) { echo '<option value="' . $data["id"] . '">' . $data["status"] . '</option>'; }
+        echo '</select>';
+        echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
+        echo '</form>';
+	echo '</p>';
+}
+
 
 function newTrackIssue () {
 	global $database;
@@ -190,11 +215,12 @@ function newTrackIssue () {
 
 function showTrackIssueList() {
 	global $database;
-	global $searchissuetype;
+//	global $searchissuetype;
 	global $page;
 	global $search;
 	global $edit;
 	global $id;
+	global $action;
 
 	$limit = 5;
 	$offset = ($page*5) - $limit;
@@ -236,6 +262,21 @@ if ($search == "issue") {
 
 	}
 
+if ($search == "status") {
+
+        $count=$database->count("issues",
+                array("issuetype" => $id)
+                );
+
+        $datas=$database->select("issues",
+                array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id")),
+                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)"),
+                array("issuetypes.status" => $id,"LIMIT" => array($offset,$limit))
+                );
+  
+        }
+
+
         echo '<div class="panel panel-default">';
         echo '<div class="panel-heading">';
         echo "Issue List (search by $search)";
@@ -260,7 +301,7 @@ if ($search == "issue") {
 // except for maybe $page
     $url  = "action=$action&";
     $url .= "search=$search&";
-    $url .= "searchissuetype=$searchissuetype&";
+//    $url .= "searchissuetype=$searchissuetype&";
     $url .= "id=$id&";
     $url .= "edit=$edit&"; //should always be edit=search
     $url .= "page=$page";
@@ -304,8 +345,9 @@ echo '<div class="container-fluid">';
   echo '<br>';
   searchIssue();
   echo '<br>';
-  echo '<p><a class="btn btn-primary" href="index.php?action=trackissues">Reset</a></p>';
+  searchStatus();
   echo '<br>';
+  echo '<p><a class="btn btn-primary" href="index.php?action=trackissues">Reset</a></p>';
   echo '</div>'; //end row-fluid
 
   echo '</div>'; //end col

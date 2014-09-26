@@ -16,7 +16,7 @@ function updateIssueType() {
 
         foreach ($datas as $data) {
                 echo '<form action="index.php" method="post" class="padded">';
-                echo '<input type="hidden" name="action" value="editissues">';
+                echo '<input type="hidden" name="action" value="issues">';
                 echo '<input type="hidden" name="edit" value="update">';
                 echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
 
@@ -26,7 +26,7 @@ function updateIssueType() {
                 echo 'Issue Long Description:<br>';
                 echo '<textarea name="description" cols="40" rows="8">' . $data["description"] . '</textarea><br><br>';
                 echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="Update" maxlength="1024">';
-                echo '<a class="btn btn-primary pull-right" href="index.php?action=editissues">Reset</a>';
+                echo '<a class="btn btn-primary pull-right" href="index.php?action=issues">Reset</a>';
                 echo '</form>';  
         }
 
@@ -41,7 +41,7 @@ function newIssueType() {
         echo '<div class="panel-body">';
 
         echo '<form action="index.php" method="post" class="padded">';
-        echo '<input type="hidden" name="action" value="editissues">';
+        echo '<input type="hidden" name="action" value="issues">';
         echo '<input type="hidden" name="edit" value="new">';
 
         // issue types dropdown
@@ -51,7 +51,7 @@ function newIssueType() {
         echo 'Issue Long Description:<br>';
         echo '<textarea name="description" cols="40" rows="8"></textarea><br><br>';
         echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="New" maxlength="1024">';
-        echo '<a class="btn btn-primary pull-right" href="index.php?action=editissues">Reset</a>';
+        echo '<a class="btn btn-primary pull-right" href="index.php?action=issues">Reset</a>';
         echo '</form>';
 
         echo '</div></div>';
@@ -79,7 +79,7 @@ function issueTypeList() {
 	        echo '<td>' . $data["type"] . '</td>';
 	        echo '<td>' . $data["description"] . '</td>';
 	        echo '<td><form action="index.php?page=' . $page . '" class="padded" method="post">';
-	        echo '<input type="hidden" name="action" value="editissues">';
+	        echo '<input type="hidden" name="action" value="issues">';
 	        echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
 	        echo '<button class="btn btn-default" type="submit" name="edit" value="edit">Edit</button>';
 	        echo '</form></td>';
