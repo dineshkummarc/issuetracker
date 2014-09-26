@@ -25,8 +25,8 @@ function updateIssueType() {
                 echo '<br><br>'; 
                 echo 'Issue Long Description:<br>';
                 echo '<textarea name="description" cols="40" rows="8">' . $data["description"] . '</textarea><br><br>';
-                echo '<input type="submit" name="Add &raquo;" value="Update" maxlength="1024">';
-                echo '<a class="button right" href="index.php?action=editissues">RESET</a>';
+                echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="Update" maxlength="1024">';
+                echo '<a class="btn btn-primary pull-right" href="index.php?action=editissues">Reset</a>';
                 echo '</form>';  
         }
 
@@ -50,8 +50,8 @@ function newIssueType() {
         echo '<br><br>';
         echo 'Issue Long Description:<br>';
         echo '<textarea name="description" cols="40" rows="8"></textarea><br><br>';
-        echo '<input type="submit" name="Add &raquo;" value="New" maxlength="1024">';
-        echo '<a class="button right" href="index.php?action=editissues">RESET</a>';
+        echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="New" maxlength="1024">';
+        echo '<a class="btn btn-primary pull-right" href="index.php?action=editissues">Reset</a>';
         echo '</form>';
 
         echo '</div></div>';
@@ -81,7 +81,7 @@ function issueTypeList() {
 	        echo '<td><form action="index.php?page=' . $page . '" class="padded" method="post">';
 	        echo '<input type="hidden" name="action" value="editissues">';
 	        echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
-	        echo '<button type="submit" name="edit" value="edit">Edit</button>';
+	        echo '<button class="btn btn-default" type="submit" name="edit" value="edit">Edit</button>';
 	        echo '</form></td>';
 	        echo '</tr>';
 	}
@@ -93,16 +93,7 @@ function issueTypeList() {
         $count = $database->count("issuetypes");
                 // optional: $where: array("column" => "value")
 
-        $pages=$count/5;
-
-	$min = 0;
-	$max = $pages;
-	//$start = $pages - 5;
-	$start = 1;
-	if ($start < 0) { $start = 1; }
-	for ( ; $start <= $max ; $start++ ) {
-	        echo '&nbsp<a href="index.php?action=editissues&page=' . $start . '">Page ' . $start . '</a>';
-	        }
+	paginate($count);
 
 	echo '</div></div>'; //end box-body, end box
 }

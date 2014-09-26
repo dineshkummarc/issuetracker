@@ -61,18 +61,9 @@ echo '</tbody></table>';
 
         // fetch count of all rows in users
         $count = $database->count("users");
-                // optional: $where: array("column" => "value")
+	
+	paginate($count);
 
-        $pages=$count/5;
-
-        $min = 0;
-        $max = $pages;
-        //$start = $pages - 5;
-        $start = 1;
-        if ($start < 0) { $start = 1; }
-        for ( ; $start <= $max ; $start++ ) {
-                echo '&nbsp<a href="index.php?action=users&page=' . $start . '">Page ' . $start . '</a>';
-                }
 
 echo '</div>';
 echo '</div>';

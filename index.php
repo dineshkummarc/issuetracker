@@ -1,7 +1,8 @@
 <?php
 
 // add mysql.php, this starts medoo()
-include 'include/mysql.php';
+require_once 'include/mysql.php';
+require_once 'include/functions.php';
 
 // Read the form values
 //get action

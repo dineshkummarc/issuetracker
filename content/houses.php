@@ -20,6 +20,7 @@ function showHouses() {
 //echo '<p>pages is ' . $pages . '</p>';
 //echo '<p>page is ' . $page . '</p>';
 //echo '<p>count is ' . $count . '</p>';
+//echo '<p>' . $database->last_query() . '</p>';
 //DEBUG END
 
 	echo '<table class="table horizontal-border">';
@@ -53,19 +54,8 @@ function showHouses() {
 
         // fetch count of all rows in houses
         $count = $database->count("houses");
-                // optional: $where: array("column" => "value")
 
-        $pages=$count/5;
-
-        $min = 0;
-        $max = $pages;
-        //$start = $pages - 5;
-        $start = 1;
-        if ($start < 0) { $start = 1; }
-        for ( ; $start <= $max ; $start++ ) {
-                echo '&nbsp<a href="index.php?action=houses&page=' . $start . '">Page ' . $start . '</a>';
-                }
-
+        paginate($count);
 
 	echo '</div></div>';
 
@@ -98,7 +88,7 @@ function newHouse() {
         echo '<input type="hidden" name="action" value="houses">';
         echo '<input type="hidden" name="edit" value="new">';
         echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
-        echo '<a href="index.php?action=houses" class="btn btn-default right">RESET</a>';
+        echo '<a href="index.php?action=houses" class="btn btn-primary pull-right">Reset</a>';
         echo '</form>';
 
         echo '</div></div>'; //end body, end panel
@@ -118,27 +108,27 @@ function updateHouse() {
         echo '<input type="hidden" name="edit" value="update">';
         echo '<input type="hidden" name="id" value="' . $id . '">';
         echo '<p><span class="left">House Name:</span>';
-        echo '<span class="right"><input name="name" type="text" size="44" maxlength="50" value="' . $name . '"></span>';
+        echo '<span class="pull-right"><input name="name" type="text" size="44" maxlength="50" value="' . $name . '"></span>';
         echo '</p>';
         echo '<br><br>';
         echo '<p><span class="left">Address1:</span>';
-        echo '<span class="right"><input name="address1" type="text" size="44" maxlength="50" value="' . $address1 . '"></span>';
+        echo '<span class="pull-right"><input name="address1" type="text" size="44" maxlength="50" value="' . $address1 . '"></span>';
         echo '</p>';
         echo '<br><br>';
         echo '<p><span class="left">Address2:</span>';
-        echo '<span class="right"><input name="address2" type="text" size="44" maxlength="32" value="' . $address2 . '"></span>';
+        echo '<span class="pull-right"><input name="address2" type="text" size="44" maxlength="32" value="' . $address2 . '"></span>';
         echo '</p>';
         echo '<br><br>';
         echo '<p><span class="left">Postcode:</span>';
-        echo '<span class="right"><input name="postcode" type="text" size="44" maxlength="32" value="' . $postcode . '"></span>';
+        echo '<span class="pull-right"><input name="postcode" type="text" size="44" maxlength="32" value="' . $postcode . '"></span>';
         echo '</p>';
         echo '<br><br>';
         echo '<p><span class="left">Town:</span><br>';
-        echo '<span class="right"><input name="town" type="text" size="44" maxlength="32" value="' . $town . '"></span>';
+        echo '<span class="pull-right"><input name="town" type="text" size="44" maxlength="32" value="' . $town . '"></span>';
         echo '</p>';
         echo '<br><br>';
         echo '<input class="btn btn-default" type="submit" name="Update &raquo;" value="submit" maxlength="1024">';
-        echo '<a href="index.php?action=houses" class="btn btn-default right">RESET</a>';
+        echo '<a href="index.php?action=houses" class="btn btn-primary pull-right">Reset</a>';
         echo '</form>';
 
         echo '</div></div>'; //end panel-body, end box
