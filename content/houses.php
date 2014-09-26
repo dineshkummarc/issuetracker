@@ -23,7 +23,7 @@ function showHouses() {
 //echo '<p>' . $database->last_query() . '</p>';
 //DEBUG END
 
-	echo '<table class="table horizontal-border">';
+	echo '<table class="table table-striped">';
 	echo '<thead><tr><th>ID</th><th>Name</th><th>Address</th><th></th></tr></thead>';
 	echo '<tbody>';
 

@@ -136,7 +136,11 @@ function newTrackIssue () {
 	global $database;
 //	global $action;
 //	global $edit;
-//	global $id;
+	global $id;
+	global $search;
+
+        $datahouse = $database->select("houses", array( "id", "name" ));
+        $dataissue = $database->select("issuetypes", array( "id", "type" ));
 
 //  echo '<input type="hidden" name="action" value="trackissues">';
 //  echo '<input type="hidden" name="edit" value="edit">';
@@ -154,18 +158,23 @@ function newTrackIssue () {
         echo 'House:<br>';
         echo '<select name="id">';
                 // house types dropdown
-                $datas = $database->select("houses", array( "id", "name" ));
-                foreach($datas as $data) {
-                        echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>';
-                }
+		if ($search == "house") {
+                    foreach($datahouse as $data) {
+                        if ($data["id"] == $id) { echo '<option selected value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
+			else { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
+			}
+               	}
+		else {
+		    echo '<option selected value="">-- select house --</option>';
+		    foreach($datahouse as $data) { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
+		}
+
         echo '</select><br><br>';
         echo 'Issue Type:<br>';
         echo '<select name="issuetype"><br>';
+	echo '<option selected value="">-- select issue type --</option>';
                 // issue type dropdown
-                $datas = $database->select("issuetypes", array( "id", "type" ));
-                foreach($datas as $data) {
-                        echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>';
-                }
+                foreach($dataissue as $data) { echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>'; }
         echo '</select><br><br>';
         echo 'Short Description:<br>';
         echo '<input name="issue" type="text" size="40" maxlength="128" >';
@@ -242,7 +251,7 @@ if ($search == "issue") {
 //	echo '<p>search is ' . $search . '</p>';
 // END DEBUG
 
-        echo '<table class="table"><thead><tr><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
+        echo '<table class="table table-striped"><thead><tr><th>House</th><th>Issue Type</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
         echo '<tbody>';
 
         foreach ($datas as $data) {

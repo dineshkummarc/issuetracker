@@ -69,7 +69,7 @@ function issueTypeList() {
 
 	$datas = $database->select("issuetypes", "*", array("LIMIT" => array(($page*5)-5,5)));
 
-        echo '<table class="table horizontal-border">';
+        echo '<table class="table table-striped">';
         echo '<thead><tr><th>ID</th><th>Issue Type</th><th>Description</th><th></th></tr></thead>';
         echo '<tbody>'; 
 

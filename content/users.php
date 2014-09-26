@@ -19,7 +19,7 @@ echo '                        <input type="checkbox" name="user" value="user">&n
 echo '                        <br><br>';
 echo '                  <input type="hidden" name="action" value="users">';
 echo '                  <input type="hidden" name="edit" value="new">';
-echo '                  <input type="submit" name="new" value="submit" maxlength="1024">';
+echo '                  <input class="btn btn-default" type="submit" name="new" value="submit" maxlength="1024">';
 echo '                  </form>';
 echo '          </div>';
 echo '  </div>';
@@ -63,7 +63,6 @@ echo '</tbody></table>';
         $count = $database->count("users");
 	
 	paginate($count);
-
 
 echo '</div>';
 echo '</div>';
