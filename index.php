@@ -25,7 +25,12 @@ else { $search = "none"; }
 //get id
 if (isset($_POST['id'])){ $id= $_POST['id']; }
 elseif (isset($_GET['id'])){ $id= $_GET['id']; }
-else { $id = "none"; }
+else { $id = "0"; }
+
+//get status
+if (isset($_POST['status'])){ $status = $_POST['status']; }
+elseif (isset($_GET['status'])){ $status = $_GET['status']; }
+else { $status = "0"; }
 
 //house/user edit
 if (isset($_POST['edit'])){ $edit= $_POST['edit']; }
@@ -166,8 +171,13 @@ if ($action == "trackissues") {
                         "house" => "$id",
                         "issue" => "$issue",
                         "issuetype" => "$issuetype",
+                        "status" => "$status",
                         "description" => "$description"
                         ));
+
+		//DEBUG
+		//echo "<p>status is $status</p>";
+		//DEBUG END
 
                 $reentry = "0";
         }
@@ -189,11 +199,16 @@ if ($action == "trackissues") {
                        "house" => "$house",
                        "issuetype" => "$issuetype",
                        "issue" => "$issue",
+                       "status" => "$status",
                        "description" => "$description"
                 ),
                        array( "id" => "$id" )
                 );
 
+		//DEBUG
+		//echo "<p>status is $status</p>";
+		//DEBUG END
+		
                 $reentry = "0";
         }
 
