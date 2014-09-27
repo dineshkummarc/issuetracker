@@ -337,11 +337,11 @@ echo '<div class="container-fluid">';
   echo '</div>'; //end row-fluid
 
   //DEBUG
-  echo "<p>action is $action</p>";
-  echo "<p>edit is $edit</p>";
-  echo "<p>id is $id</p>";
-  echo "<p>status is $status</p>";
-  echo "<p>search is $search</p>";
+  //echo "<p>action is $action</p>";
+  //echo "<p>edit is $edit</p>";
+  //echo "<p>id is $id</p>";
+  //echo "<p>status is $status</p>";
+  //echo "<p>search is $search</p>";
   //DEBUG END
 
   echo '</div>'; //end col
