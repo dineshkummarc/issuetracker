@@ -68,6 +68,21 @@ echo '</div>';
 echo '</div>';
 }
 
+/********************************
+ * if edit is set, do something *
+ ********************************/
+
+if ($edit == "new") {
+  $last_id = $database->insert("users", array(
+             "name" => "$name",
+             "username" => "$username",
+             "admin" => "$admin",
+             "superuser" => "$superuser",
+             "user" => "$user"
+             ));
+}
+
+
 /**************
  * Start html *
  **************/

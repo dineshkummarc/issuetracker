@@ -58,7 +58,6 @@ function showHouses() {
         paginate($count);
 
 	echo '</div></div>';
-
 }
 
 function newHouse() {
@@ -95,43 +94,49 @@ function newHouse() {
 }
 
 function updateHouse() {
-	global $name, $address1, $address2, $postcode, $town, $id;
-        echo '<div class="panel panel-default">';
-        echo '<div class="panel-heading">';
-        echo 'Update House';
-        echo '</div>';
-        echo '<div class="panel-body">';
+  global $database, $id;
 
-        // edit house form -->
-        echo '<form action="index.php" method="post" class="padded">';
-        echo '<input type="hidden" name="action" value="houses">';
-        echo '<input type="hidden" name="edit" value="update">';
-        echo '<input type="hidden" name="id" value="' . $id . '">';
-        echo '<p><span class="left">House Name:</span>';
-        echo '<span class="pull-right"><input name="name" type="text" size="44" maxlength="50" value="' . $name . '"></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<p><span class="left">Address1:</span>';
-        echo '<span class="pull-right"><input name="address1" type="text" size="44" maxlength="50" value="' . $address1 . '"></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<p><span class="left">Address2:</span>';
-        echo '<span class="pull-right"><input name="address2" type="text" size="44" maxlength="32" value="' . $address2 . '"></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<p><span class="left">Postcode:</span>';
-        echo '<span class="pull-right"><input name="postcode" type="text" size="44" maxlength="32" value="' . $postcode . '"></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<p><span class="left">Town:</span><br>';
-        echo '<span class="pull-right"><input name="town" type="text" size="44" maxlength="32" value="' . $town . '"></span>';
-        echo '</p>';
-        echo '<br><br>';
-        echo '<input class="btn btn-default" type="submit" name="Update &raquo;" value="submit" maxlength="1024">';
-        echo '<a href="index.php?action=houses" class="btn btn-primary pull-right">Reset</a>';
-        echo '</form>';
+  $data=$database->get("houses",
+    array("id", "name", "address1", "address2", "postcode", "town", "description", "active"),
+    array("houses.id" => $id)
+    );
 
-        echo '</div></div>'; //end panel-body, end box
+  echo '<div class="panel panel-default">';
+  echo '<div class="panel-heading">';
+  echo 'Update House';
+  echo '</div>';
+  echo '<div class="panel-body">';
+
+  // edit house form -->
+  echo '<form action="index.php" method="post" class="padded">';
+  echo '<input type="hidden" name="action" value="houses">';
+  echo '<input type="hidden" name="edit" value="update">';
+  echo '<input type="hidden" name="id" value="' . $id . '">';
+  echo '<p><span class="left">House Name:</span>';
+  echo '<span class="pull-right"><input name="name" type="text" size="44" maxlength="50" value="' . $data["name"] . '"></span>';
+  echo '</p>';
+  echo '<br><br>';
+  echo '<p><span class="left">Address1:</span>';
+  echo '<span class="pull-right"><input name="address1" type="text" size="44" maxlength="50" value="' . $data["address1"] . '"></span>';
+  echo '</p>';
+  echo '<br><br>';
+  echo '<p><span class="left">Address2:</span>';
+  echo '<span class="pull-right"><input name="address2" type="text" size="44" maxlength="32" value="' . $data["address2"] . '"></span>';
+  echo '</p>';
+  echo '<br><br>';
+  echo '<p><span class="left">Postcode:</span>';
+  echo '<span class="pull-right"><input name="postcode" type="text" size="44" maxlength="32" value="' . $data["postcode"] . '"></span>';
+  echo '</p>';
+  echo '<br><br>';
+  echo '<p><span class="left">Town:</span><br>';
+  echo '<span class="pull-right"><input name="town" type="text" size="44" maxlength="32" value="' . $data["town"] . '"></span>';
+  echo '</p>';
+  echo '<br><br>';
+  echo '<input class="btn btn-default" type="submit" name="Update &raquo;" value="submit" maxlength="1024">';
+  echo '<a href="index.php?action=houses" class="btn btn-primary pull-right">Reset</a>';
+  echo '</form>';
+
+  echo '</div></div>'; //end panel-body, end box
 }
 
 function showHouseIssues() {
@@ -165,8 +170,45 @@ function showHouseIssues() {
         echo '</div></div>'; // end panel-body, end box
 }
 
+function showHouse() {
+  global $database, $id;
+  $datas=$database->select("houses",
+    array("id", "name", "address1", "address2", "postcode", "town", "description", "active"),
+    array("houses.id" => $id)
+    );
+}
 
 if (!isset($reentry)) { $reentry = "0"; }
+
+/****************************
+ * if edit is set, do stuff *
+ ****************************/
+if ($edit == "show") {
+  $reentry = "1";
+}
+
+if ($edit == "new") {
+  $last_id = $database->insert("houses", array(
+    "name" => "$name",
+    "address1" => "$address1",
+    "address2" => "$address2",
+    "postcode" => "$postcode",
+    "town" => "$town"));
+}
+
+if ($edit == "update") {
+  $database->update("houses", array(
+    "name" => $name,
+    "address1" => $address1,
+    "address2" => $address2,
+    "postcode" => $postcode,
+    "town" => $town),
+    array( "id[=]" => $id ));
+}
+
+if ($edit == "delete") {
+   $database->delete("houses", array( "AND" => array( "id" => "$id" ) ));
+}
 
 /**************
  * start html *
@@ -181,7 +223,7 @@ if ($reentry == "0") {
   echo '<div class="col-md-8">';
   showHouses();
   echo '</div>'; // end column
-  }
+}
 
 if ($reentry == "1") {
   echo '<div class="col-md-4">';
@@ -190,7 +232,7 @@ if ($reentry == "1") {
   echo '<div class="col-md-8">';
   showHouseIssues();
   echo '</div>'; // end column
-  }
+}
 
 echo '</div>'; // end container
 

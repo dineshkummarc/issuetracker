@@ -249,70 +249,62 @@ if ($search == "issue") {
 	}
 
 if ($search == "status") {
+  $count=$database->count("issues", array("status" => $id) );
 
-        $count=$database->count("issues",
-                array("status" => $id)
-                );
+  $datas=$database->select("issues",
+    array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("issues.status" => $id,"LIMIT" => array($offset,$limit))
+    );
+  }
 
-        $datas=$database->select("issues",
-                array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
-                array("issues.status" => $id,"LIMIT" => array($offset,$limit))
-                );
-  
-        }
+  echo '<div class="panel panel-default">';
+  echo '<div class="panel-heading">';
+  echo "Issue List (search by $search)";
+  echo '</div>';
+  echo '<div class="panel-body">';
 
-        echo '<div class="panel panel-default">';
-        echo '<div class="panel-heading">';
-        echo "Issue List (search by $search)";
-        echo '</div>';
-        echo '<div class="panel-body">';
+  // DEBUG
+  //echo '<p>' . $database->last_query() . '</p>';
+  //echo '<p>issue type is ' . $searchissuetype . '</p>';
+  //echo '<p>offset is ' . $offset . '</p>';
+  //echo '<p>limit is ' . $limit . '</p>';
+  //echo '<p>page is ' . $page . '</p>';
+  //echo '<p>search is ' . $search . '</p>';
+  // END DEBUG
 
-// DEBUG
-//	echo '<p>' . $database->last_query() . '</p>';
-//	echo '<p>issue type is ' . $searchissuetype . '</p>';
-//	echo '<p>offset is ' . $offset . '</p>';
-//	echo '<p>limit is ' . $limit . '</p>';
-//	echo '<p>page is ' . $page . '</p>';
-//	echo '<p>search is ' . $search . '</p>';
-// END DEBUG
+  echo '<table class="table table-striped"><thead><tr><th>House</th><th>Issue Type</th><th>Status</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
+  echo '<tbody>';
 
-        echo '<table class="table table-striped"><thead><tr><th>House</th><th>Issue Type</th><th>Status</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
-        echo '<tbody>';
-
-        foreach ($datas as $data) {
-
-// this should all be in the POST !!
-// except for maybe $page
+  foreach ($datas as $data) {
+    // this should all be in the POST !!
+    // except for maybe $page
     $url  = "action=$action&";
     $url .= "search=$search&";
-//    $url .= "searchissuetype=$searchissuetype&";
     $url .= "id=$id&";
     $url .= "edit=$edit&"; //should always be edit=search
     $url .= "page=$page";
-
-//    echo "<a href=\"index.php?$url\">Page $start</a>";
-
-                echo '<tr>';
-                echo '<td>' . $data["house_name"] . '</td>';
-                echo '<td>' . $data["issue_type"] . '</td>';
-                echo '<td>' . $data["status"] . '</td>';
-                echo '<td>' . $data["issue"] . '</td>';
-                echo '<td>' . $data["date"] . '</td>';
-                echo "<td><form action=\"index.php?$url\" class=\"padded\" method=\"post\">";
-                echo '<input type="hidden" name="action" value="trackissues">';
-                echo '<input type="hidden" name="edit" value="edit">';
-                echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
-                echo '<button class="btn btn-default" type="submit" name="edit" value="edit">Edit</button>';
-                echo '</form>';
-                echo '</td>';
-                echo '</tr>';
-        }
+    
+    echo '<tr>';
+    echo '<td>' . $data["house_name"] . '</td>';
+    echo '<td>' . $data["issue_type"] . '</td>';
+    echo '<td>' . $data["status"] . '</td>';
+    echo '<td>' . $data["issue"] . '</td>';
+    echo '<td>' . $data["date"] . '</td>';
+    echo "<td><form action=\"index.php?$url\" class=\"padded\" method=\"post\">";
+    echo '<input type="hidden" name="action" value="trackissues">';
+    echo '<input type="hidden" name="edit" value="edit">';
+    echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
+    echo '<button class="btn btn-default" type="submit" name="edit" value="edit">Edit</button>';
+    echo '</form>';
+    echo '</td>';
+    echo '</tr>';
+  }
                          
-        echo '</tbody>';
-        echo '</table>';
+   echo '</tbody>';
+   echo '</table>';
 
-paginate($count);
+   paginate($count);
 
 }
 

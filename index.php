@@ -59,7 +59,9 @@ else { $issuetype = "none"; }
 if (isset($_POST['house'])){ $house= $_POST['house']; }
 else { $house = "none"; }
 
-//house create
+//house create/update
+if (isset($_POST['name'])){ $name= $_POST['name']; }
+else { $address1 = "none"; }
 if (isset($_POST['address1'])){ $address1= $_POST['address1']; }
 else { $address1 = "none"; }
 if (isset($_POST['address2'])){ $address2= $_POST['address2']; }
@@ -81,88 +83,20 @@ else { $user = "0"; }
 
 include 'include/header.inc';
 
+if ($action == "home") { include 'content/home.php'; }
+
 //admin actions
 
 if ($action == "users") {
-
-	if ($edit == "new") {
-		$last_id = $database->insert("users", array(
-		"name" => "$name",
-		"username" => "$username",
-		"admin" => "$admin",
-		"superuser" => "$superuser",
-		"user" => "$user"
-		));
-
-		$reentry = "1";
-	}
-
-	include 'admin/users.php';
+  include 'admin/users.php';
 }
 
 if ($action == "issues") {
-
-	if ($edit == "new") {
-		$lastid=$database->insert("issuetypes", array(
-		"type" => "$issuetype",
-		"description" => "$description"
-		));
-
-		$reentry = "0";
-	}
-
-	if ($edit == "edit") {
-		$reentry = "1";
-	}
-
-
-	if ($edit == "update") {
-		$database->update("issuetypes",
-			array("type" => "$issuetype", "description" => "$description"),
-			array( "id" => "$id" )
-			);
-
-		$reentry = "0";
-	}
-
-	include 'admin/issues.php';
+  include 'admin/issues.php';
 }
 
 if ($action == "houses") {
-
-	if ($edit == "new") {
-		$last_id = $database->insert("houses", array(
-		"name" => "$name",
-		"address1" => "$address1",
-		"address2" => "$address2",
-		"postcode" => "$postcode",
-		"town" => "$town"
-		));
-
-		$reentry="0";
-	}
-
-	if ($edit == "update") {
-
-		$database->update("houses", array(
-			"name" => $name,
-			"address1" => $address1,
-			"address2" => $address2,
-			"postcode" => $postcode,
-			"town" => $town),
-			array( "id[=]" => $id )
-		);
-
-		$reentry = "0";
-	}
-
-	if ($edit == "delete") {
-		$database->delete("houses", array( "AND" => array( "id" => "$id" ) ));
-		$reentry = "0";
-	}
-
-	include 'admin/houses.php';
-
+  include 'admin/houses.php';
 }
 
 if ($action == "trackissues") {

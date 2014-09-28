@@ -45,11 +45,11 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Tasks <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                 <li <?php if ($action == "users") echo 'class="active"'; ?> ><a href="index.php?action=users">
-                                <i class="fa fa-home"></i>&nbsp;User Admin</a></li>
+                                <i class="fa fa-users"></i>&nbsp;User Admin</a></li>
                 <li <?php if ($action == "houses") echo 'class="active"'; ?> ><a href="index.php?action=houses">
-                                <i class="fa fa-gear"></i>&nbsp;House Admin</a></li>
+                                <i class="fa fa-home"></i>&nbsp;House Admin</a></li>
                 <li <?php if ($action == "issues") echo 'class="active"'; ?> ><a href="index.php?action=issues">
-                                <i class="fa fa-gear"></i>&nbsp;Issue Admin</a></li>
+                                <i class="fa fa-folder-open"></i>&nbsp;Issue Admin</a></li>
 
                 </ul>
               </li>
