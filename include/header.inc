@@ -47,14 +47,14 @@
                 <li <?php if ($action == "users") echo 'class="active"'; ?> ><a href="index.php?action=users">
                                 <i class="fa fa-users"></i>&nbsp;User Admin</a></li>
                 <li <?php if ($action == "houses") echo 'class="active"'; ?> ><a href="index.php?action=houses">
-                                <i class="fa fa-home"></i>&nbsp;House Admin</a></li>
+                                <i class="fa fa-building"></i>&nbsp;House Admin</a></li>
                 <li <?php if ($action == "issues") echo 'class="active"'; ?> ><a href="index.php?action=issues">
-                                <i class="fa fa-folder-open"></i>&nbsp;Issue Admin</a></li>
+                                <i class="fa fa-folder-open"></i>&nbsp;Issue Type Admin</a></li>
 
                 </ul>
               </li>
                 <li <?php if ($action == "trackissues") echo 'class="active"'; ?> ><a href="index.php?action=trackissues">
-                                <i class="fa fa-gear"></i>&nbsp;Track Issues</a></li>
+                                <i class="fa fa-check-square"></i>&nbsp;Track Issues</a></li>
 <!--          <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">

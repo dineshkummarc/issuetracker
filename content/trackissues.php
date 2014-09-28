@@ -48,7 +48,13 @@ function editIssue () {
 
   if ($edit == "edit") {
     $datatrack=$database->get("issues",
-      array("issues.house(house_id)","issues.issuetype(issuetype_id)","issues.id(issue_id)","issues.issue(issue)","issues.date(date)","issues.description(description)","issues.status(status_id)"),
+      array("issues.house(house_id)",
+            "issues.issuetype(issuetype_id)",
+            "issues.id(issue_id)",
+            "issues.issue(issue)",
+            "issues.date(date)",
+            "issues.description(description)",
+            "issues.status(status_id)"),
       array("issues.id" => "$id")
       );
 
@@ -305,10 +311,38 @@ if ($search == "status") {
    echo '</table>';
 
    paginate($count);
-
 }
 
-if (!isset($reentry)) { $reentry = "0"; }
+if ($edit == "new") {
+  $last_id = $database->insert("issues", array(
+             "house" => "$id",
+             "issue" => "$issue",
+             "issuetype" => "$issuetype",
+             "status" => "$status",
+             "description" => "$description"));
+
+  //DEBUG
+  //echo "<p>status is $status</p>";
+  //DEBUG END
+}
+
+if ($edit == "addtracking") {
+  $database->insert("issuetracking", array( "parent" => "$id", "item" => "$description"));
+}
+
+if ($edit == "update") {
+  $database->update("issues", array(
+      "house" => "$house",
+      "issuetype" => "$issuetype",
+      "issue" => "$issue",
+      "status" => "$status",
+      "description" => "$description"),
+    array( "id" => "$id" ));
+
+  //DEBUG
+  //echo "<p>status is $status</p>";
+  //DEBUG END
+}
 
 // begin html
 echo '<div class="container-fluid">';
@@ -337,12 +371,46 @@ echo '<div class="container-fluid">';
   //DEBUG END
 
   echo '</div>'; //end col
-
   echo '<div class="col-md-10">';
-
   echo '<div class="row-fluid">';
 
-  if ($reentry == "0") {
+  if ($edit=="search") {
+    echo '<div class="col-md-4">';
+    editIssue();
+    echo '</div>'; //end col
+    echo '<div class="col-md-8">';
+    showTrackIssueList();
+    echo '</div>'; //end col
+  }
+  elseif ($edit=="edit") {
+    echo '<div class="col-md-4">';
+    editIssue();
+    echo '</div>'; //end col
+    echo '<div class="col-md-8">';
+    addIssueTracking();
+    echo '</div>'; //end col
+
+    echo '<div class="row-fluid">';
+    echo '<div class="col-md-12">';
+    showIssueTracking();
+    echo '</div>'; //end col
+    echo '</div>'; //end row
+  }
+  elseif ($edit=="addtracking") {
+    echo '<div class="col-md-4">';
+    editIssue();
+    echo '</div>'; //end col
+    echo '<div class="col-md-8">';
+    addIssueTracking();
+    echo '</div>'; //end col
+
+    echo '<div class="row-fluid">';
+    echo '<div class="col-md-12">';
+    showIssueTracking();
+    echo '</div>'; //end col
+    echo '</div>'; //end row
+  }
+  else {
     echo '<div class="col-md-4">';
     editIssue();
     echo '</div>'; //end col
@@ -351,46 +419,7 @@ echo '<div class="container-fluid">';
     echo '</div>'; //end col
     }
 
-  if ($reentry == "1") {
-    if ($edit=="search") {
-        echo '<div class="col-md-4">';
-        editIssue();
-        echo '</div>'; //end col
-        echo '<div class="col-md-8">';
-        showTrackIssueList();
-        echo '</div>'; //end col
-        }
-
-    if ($edit=="edit") {
-        echo '<div class="col-md-4">';
-        editIssue();
-        echo '</div>'; //end col
-        echo '<div class="col-md-8">';
-        addIssueTracking();
-        echo '</div>'; //end col
-        }
-
-    if ($edit=="addtracking") {
-        echo '<div class="col-md-4">';
-        editIssue();
-        echo '</div>'; //end col
-        echo '<div class="col-md-8">';
-        addIssueTracking();
-        echo '</div>'; //end col
-        }
-    }
-
-    echo '</div>'; //end row
-
-  if ($reentry == "1") {
-      if ($edit != "search") {
-      echo '<div class="row-fluid">';
-      echo '<div class="col-md-12">';
-      showIssueTracking();
-      echo '</div>'; //end col
-      echo '</div>'; //end row
-      }
-    }
+  echo '</div>'; //end row
 
   echo '</div>'; //end second col
  echo '</div>'; //end row
