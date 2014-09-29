@@ -37,18 +37,6 @@ if (isset($_POST['edit'])){ $edit= $_POST['edit']; }
 elseif (isset($_GET['edit'])){ $edit= $_GET['edit']; }
 else { $edit = "none"; }
 
-$flag = 0;
-
-//admin actions
-if ($action == "users")  { $flag += 1; }
-if ($action == "issues") { $flag += 1; }
-if ($action == "houses") { $flag += 1; }
-
-//user actions
-if ($action == "trackissues") { $flag += 1; }
-
-if ($flag < 1) { $action = "home"; }
-
 //issue(type) create or edit
 if (isset($_POST['issue'])){ $issue= $_POST['issue']; }
 else { $issue = "none"; }
@@ -57,6 +45,8 @@ else { $description = "none"; }
 if (isset($_POST['issuetype'])){ $issuetype= $_POST['issuetype']; }
 else { $issuetype = "none"; }
 if (isset($_POST['house'])){ $house= $_POST['house']; }
+else { $house = "none"; }
+if (isset($_POST['parent'])){ $parent= $_POST['parent']; }
 else { $house = "none"; }
 
 //house create/update
@@ -83,76 +73,14 @@ else { $user = "0"; }
 
 include 'include/header.inc';
 
-if ($action == "home") { include 'content/home.php'; }
-
 //admin actions
-
-if ($action == "users") {
-  include 'admin/users.php';
-}
-
-if ($action == "issues") {
-  include 'admin/issues.php';
-}
-
-if ($action == "houses") {
-  include 'admin/houses.php';
-}
-
-if ($action == "trackissues") {
-        if ($edit == "new") {
-                $last_id = $database->insert("issues", array(
-                        "house" => "$id",
-                        "issue" => "$issue",
-                        "issuetype" => "$issuetype",
-                        "status" => "$status",
-                        "description" => "$description"
-                        ));
-
-		//DEBUG
-		//echo "<p>status is $status</p>";
-		//DEBUG END
-
-                $reentry = "0";
-        }
-
-        if ($edit == "edit") {
-                $reentry="1";
-        }
-
-        if ($edit == "addtracking") {
-                $database->insert("issuetracking",
-                        array( "parent" => "$id", "item" => "$description")
-                        );
-
-                $reentry = "1";
-        }
-
-        if ($edit == "update") {
-                $database->update("issues", array(
-                       "house" => "$house",
-                       "issuetype" => "$issuetype",
-                       "issue" => "$issue",
-                       "status" => "$status",
-                       "description" => "$description"
-                ),
-                       array( "id" => "$id" )
-                );
-
-		//DEBUG
-		//echo "<p>status is $status</p>";
-		//DEBUG END
-		
-                $reentry = "0";
-        }
-
-
-        if ($edit == "search") {
-                $reentry = "1";
-        }
-
-        include 'content/trackissues.php';
-}
+if ($action == "users") { include 'admin/users.php'; }
+elseif ($action == "issues") { include 'admin/issues.php'; }
+elseif ($action == "houses") { include 'admin/houses.php'; }
+//user actions
+elseif ($action == "trackissues") { include 'content/trackissues.php'; }
+//default actions
+else { include 'content/home.php'; }
 
 
 include 'include/footer.inc';
