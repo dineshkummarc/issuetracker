@@ -47,7 +47,7 @@ else { $issuetype = "none"; }
 if (isset($_POST['house'])){ $house= $_POST['house']; }
 else { $house = "none"; }
 if (isset($_POST['parent'])){ $parent= $_POST['parent']; }
-else { $house = "none"; }
+else { $parent = "none"; }
 
 //house create/update
 if (isset($_POST['name'])){ $name= $_POST['name']; }

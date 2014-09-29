@@ -279,7 +279,7 @@ if ($search == "status") {
   //echo '<p>search is ' . $search . '</p>';
   // END DEBUG
 
-  echo '<table class="table table-striped"><thead><tr><th>House</th><th>Issue Type</th><th>Status</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
+  echo '<table class="table table-striped"><thead><tr><th>ID</th><th>House</th><th>Issue Type</th><th>Status</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
   echo '<tbody>';
 
   foreach ($datas as $data) {
@@ -292,6 +292,7 @@ if ($search == "status") {
     $url .= "page=$page";
     
     echo '<tr>';
+    echo '<td>' . $data["issue_id"] . '</td>';
     echo '<td>' . $data["house_name"] . '</td>';
     echo '<td>' . $data["issue_type"] . '</td>';
     echo '<td>' . $data["status"] . '</td>';
