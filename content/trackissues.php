@@ -156,43 +156,43 @@ function addIssueTracking() {
 }
 
 function searchHouse() {
-	global $datahouse;
+  global $datahouse;
 
-	echo '<p>';
+  echo '<p>';
         echo '<form action="index.php" method="post">';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="house">';
         echo '<select name="id">';
-	echo '<option value="">-- By House --</option>';
+  echo '<option value="">-- By House --</option>';
         foreach($datahouse as $data) { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
         echo '</select>';
         echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
         echo '</form>';
-	echo '</p>';
+  echo '</p>';
 }
 
 function searchIssue() {
-	global $dataissue;
+  global $dataissue;
 
-	echo '<p>';
+  echo '<p>';
         echo '<form action="index.php" method="post">';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="issue">';
         echo '<select name="id">';
-	echo '<option value="">-- By Issue --</option>';
+  echo '<option value="">-- By Issue --</option>';
         foreach($dataissue as $data) { echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>'; }
         echo '</select>';
         echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
-	echo '</form>';
-	echo '</p>';
+  echo '</form>';
+  echo '</p>';
 }
 
 function searchStatus() {
         global $datastatus;
 
-	echo '<p>';
+  echo '<p>';
         echo '<form action="index.php" method="post">';
         echo '<input type="hidden" name="action" value="trackissues">';
         echo '<input type="hidden" name="edit" value="search">';
@@ -203,66 +203,60 @@ function searchStatus() {
         echo '</select>';
         echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
         echo '</form>';
-	echo '</p>';
+  echo '</p>';
 }
 
 function showTrackIssueList() {
-	global $database;
-	global $page;
-	global $search;
-	global $edit;
-	global $id;
-	global $action;
+  global $database;
+  global $page;
+  global $search;
+  global $edit;
+  global $id;
+  global $action;
 
-	$limit = 5;
-	$offset = ($page*5) - $limit;
+  $limit = 5;
+  $offset = ($page*5) - $limit;
 
 if ($search == "none") {
-	// select issues left join houses, left join issuetypes
-	// LIMIT array(offset, rows)
-        $count=$database->count("issues");                                                                                                                                                                                                                                                                
-	$datas=$database->select("issues",
-		array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-		array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
-                array("LIMIT" => array($offset,$limit))
-		);
-	}
+  // select issues left join houses, left join issuetypes, right join status
+  // LIMIT array(offset, rows)
+  $count=$database->count("issues");                                                                                                                                                                                                                                                                
+  $datas=$database->select("issues",
+    array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("LIMIT" => array($offset,$limit))
+    );
+}
 
 if ($search == "house") {
-        $count=$database->count("issues",
-                array("house" => $id)
-                );
+  $count=$database->count("issues", array("house" => $id));
 
-        $datas=$database->select("issues",
-                array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
-                array("houses.id" => $id,"LIMIT" => array($offset,$limit))
-                );
-	}
+  $datas=$database->select("issues",
+    array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("houses.id" => $id,"LIMIT" => array($offset,$limit))
+    );
+}
 
 if ($search == "issue") {
+  $count=$database->count("issues", array("issuetype" => $id));
 
-	$count=$database->count("issues",
-                array("issuetype" => $id)
-                );
-
-        $datas=$database->select("issues",
-                array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-                array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
-                array("issuetypes.id" => $id,"LIMIT" => array($offset,$limit))
-                );
-
-	}
+  $datas=$database->select("issues",
+    array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("issuetypes.id" => $id,"LIMIT" => array($offset,$limit))
+    );
+}
 
 if ($search == "status") {
-  $count=$database->count("issues", array("status" => $id) );
+  $count=$database->count("issues", array("status" => $id));
 
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
     array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
     array("issues.status" => $id,"LIMIT" => array($offset,$limit))
     );
-  }
+}
 
   echo '<div class="panel panel-default">';
   echo '<div class="panel-heading">';
@@ -327,9 +321,7 @@ if ($edit == "new") {
   //DEBUG END
 }
 
-if ($edit == "addtracking") {
-  $database->insert("issuetracking", array( "parent" => "$id", "item" => "$description"));
-}
+if ($edit == "addtracking") { $database->insert("issuetracking", array( "parent" => "$id", "item" => "$description")); }
 
 if ($edit == "update") {
   $database->update("issues", array(
