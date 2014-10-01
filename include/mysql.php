@@ -5,7 +5,7 @@ require_once 'medoo.php';
 $database = new medoo(array(
 	// required
 	'database_type' => 'mysql',
-	'database_name' => 'issuetracker',
+	'database_name' => 'issues',
 	'server' => 'localhost',
 	'username' => 'issuetracker',
 	'password' => 'password',
