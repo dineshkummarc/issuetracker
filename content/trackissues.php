@@ -156,34 +156,40 @@ function search() {
   global $datastatus;
   $issuetree = buildTree($dataissue);
 
-  echo '<p>';
   echo '<form action="index.php" method="post">';
   echo '<input type="hidden" name="action" value="trackissues">';
   echo '<input type="hidden" name="edit" value="search">';
   echo '<input type="hidden" name="search" value="multi">';
 
   //house
+  echo '<p>';
   echo '<select name="house">';
   echo '<option value="">-- By House --</option>';
   foreach($datahouse as $data) { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
   echo '</select>';
+  echo '</p>';
 
   //issue
+  echo '<p>';
   echo '<select name="issue">';
   echo '<option value="">-- By Issue --</option>';
   printTreeDropDown($issuetree);
   echo '</select>';
+  echo '</p>';
 
   //status
+  echo '<p>';
   echo '<select name="status">';
   echo '<option value="">-- By Status --</option>';
   foreach($datastatus as $data) { echo '<option value="' . $data["id"] . '">' . $data["status"] . '</option>'; }
   echo '</select>';
+  echo '</p>';
 
-  echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
+  echo '<p>';
+  echo '<input class="btn btn-default pull-left" type="submit" name="search &raquo;" value="search &raquo;" maxlength="64">';
+  echo '</p>';
 
   echo '</form>';
-  echo '</p>';
 }
 
 function searchHouse() {
@@ -246,9 +252,30 @@ function showTrackIssueList() {
   global $edit;
   global $id;
   global $action;
+  global $house, $issue, $status;
 
   $limit = 5;
   $offset = ($page*5) - $limit;
+
+if ($search == "multi") {
+  // select issues left join houses, left join issuetypes, right join status
+  // LIMIT array(offset, rows)
+  $count=$database->count("issues");
+
+  //if (!$house) { $house = "*"; }
+  //if (!$issue) { $issue = "*"; }
+  //if (!$status) { $status = "*"; }
+
+  $datas=$database->select("issues",
+    array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issue","issues.status" => "$status"))),array("LIMIT" => array($offset,$limit))
+    );
+
+  //DEBUG
+  //echo $database->last_query();
+  //DEBUG END
+} 
 
 if ($search == "none") {
   // select issues left join houses, left join issuetypes, right join status
@@ -267,7 +294,7 @@ if ($search == "house") {
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
     array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
-    array("houses.id" => $id,"LIMIT" => array($offset,$limit))
+    array("issues.house" => $id,"LIMIT" => array($offset,$limit))
     );
 }
 
@@ -304,6 +331,10 @@ if ($search == "status") {
   //echo '<p>limit is ' . $limit . '</p>';
   //echo '<p>page is ' . $page . '</p>';
   //echo '<p>search is ' . $search . '</p>';
+  //echo '<p>house is ' . $house . '</p>';
+  //echo '<p>issue is ' . $issue . '</p>';
+  //echo '<p>status is ' . $status . '</p>';
+  //echo "array is " . print_r($datas);
   // END DEBUG
 
   echo '<table class="table table-striped"><thead><tr><th>ID</th><th>House</th><th>Issue Type</th><th>Status</th><th>Issue</th><th>Date</th><th></th></tr></thead>';
@@ -393,6 +424,7 @@ echo '<div class="container-fluid">';
   echo '<div class="col-md-2">';
 
   //show search options
+/*
   echo '<div class="row-fluid">';
   echo '<p>Search:</p>';
   searchHouse();
@@ -403,10 +435,13 @@ echo '<div class="container-fluid">';
   echo '<br>';
   echo '<p><a class="btn btn-primary" href="index.php?action=trackissues">Reset</a></p>';
   echo '</div>'; //end row-fluid
+*/
 
   //multisearch
   echo '<div class="row-fluid">';
+  echo '<p>Search:</p>';
   search();
+  echo '<p><a class="btn btn-primary pull-right" href="index.php?action=trackissues">Reset</a></p>';
   echo '</div>'; //end row-fluid
 
   //DEBUG

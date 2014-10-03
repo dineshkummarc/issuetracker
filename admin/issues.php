@@ -37,6 +37,7 @@ function checkForChild($id) {
 
 function updateIssueType() {
   global $database, $id, $dataparent;
+  $datatree=buildTree($dataparent);
 
   //TODO: specify columns here
   $data = $database->get("issuetypes", array( "id", "type", "description", "parent"), array( "id[=]" => $id ));
@@ -63,13 +64,14 @@ function updateIssueType() {
   echo 'Parent:<br>';
   echo '<select name="parent">\n';
   echo '<option value="0">-- none --</option>';
-  foreach($dataparent as $datap) {
-    if ($data["id"] != $datap["id"]) {
-      echo '<option value="' . $datap["id"] . '"';
-      if ($data["parent"] == $datap["id"]) { echo "selected"; }
-      echo '>' . $datap["type"] . '</option>\n';
-    }
-  }
+//  foreach($dataparent as $datap) {
+//    if ($data["id"] != $datap["id"]) {
+//      echo '<option value="' . $datap["id"] . '"';
+//      if ($data["parent"] == $datap["id"]) { echo "selected"; }
+//      echo '>' . $datap["type"] . '</option>\n';
+//    }
+//  }
+  printTreeDropDown($datatree);
   echo '</select><br><br>';
 
   echo 'Short Description:<br>';
@@ -103,6 +105,7 @@ function updateIssueType() {
 
 function newIssueType() {
   global $dataparent;
+  $issuetree = buildTree($dataparent);
 
   echo '<div class="panel panel-default">';
   echo '  <div class="panel-heading">';
@@ -118,13 +121,14 @@ function newIssueType() {
   echo 'Parent:<br>';
   echo '<select name="parent">\n';
   echo '<option value="0">-- none --</option>';
-  foreach($dataparent as $datap) {
-    if ($data["id"] != $datap["id"]) {
-      echo '<option value="' . $datap["id"] . '"';
-      if ($data["id"] == $datap["id"]) { echo "selected"; }
-      echo '>' . $datap["type"] . '</option>\n';
-    }
-  }
+//  foreach($dataparent as $datap) {
+//    if ($data["id"] != $datap["id"]) {
+//      echo '<option value="' . $datap["id"] . '"';
+//      if ($data["id"] == $datap["id"]) { echo "selected"; }
+//      echo '>' . $datap["type"] . '</option>\n';
+//    }
+//  }
+  printTreeDropDown($issuetree);
   echo '</select><br><br>';
 
   echo 'Issue Short Description:<br>';
@@ -222,14 +226,14 @@ if ($edit == "update") {
   //echo "parent is $parent, desc is $description, type is $issuetype, id is $id";
   //DEBUG END
 
-  if (checkForChild($id) < 1) {
+  if ((checkForChild($id) < 1) XOR ($id == $parent)) {
     $database->update("issuetypes",
       array("type" => "$issuetype", "description" => "$description","parent" => "$parent"),
       array( "id" => "$id" ));
   }
   else {
     echo '<div class="alert alert-warning" role="alert">';
-    echo "  <strong>Error:</strong> ID $id is used as parent, recursive ID parent/child relationships are not allowed.";
+    echo "  <strong>Error:</strong> ID $id : recursive ID parent/child relationships are not allowed.";
     echo '</div>';
   }
 }

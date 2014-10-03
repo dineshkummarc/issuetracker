@@ -43,7 +43,7 @@ function buildTree(array $data, $parent = 0) {
 
 function printTree($tree, $r = 0, $p = null) {
   foreach ($tree as $i => $t) {
-    $dash = ($t['parent'] == 0) ? '' : str_repeat('&nbsp;&nbsp', $r) .' ';
+    $dash = ($t['parent'] == 0) ? '' : str_repeat('--', $r) .' ';
     //printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
     printf("%s%s<br>\n", $dash, $t['type']);
     if ($t['parent'] == $p) {
@@ -57,9 +57,14 @@ function printTree($tree, $r = 0, $p = null) {
 }
 
 function printTreeDropDown($tree, $r = 0, $p = null) {
+  global $id;
+
   foreach ($tree as $i => $t) {
     $dash = ($t['parent'] == 0) ? '' : str_repeat('--', $r) .' ';
-    printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
+    echo "\t<option ";
+    if ($id == $t['id']) { echo "selected"; }
+//    printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
+    printf(" value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
     if ($t['parent'] == $p) {
       // reset $r
       $r = 0;
