@@ -26,5 +26,51 @@ function paginate($count) {
   }
 }
 
+function buildTree(array $data, $parent = 0) {
+  $tree = array();
+  foreach ($data as $d) {
+    if ($d['parent'] == $parent) {
+      $children = buildTree($data, $d['id']);
+      // set a trivial key
+      if (!empty($children)) {
+        $d['_children'] = $children;
+      }
+      $tree[] = $d;
+    }
+  }
+  return $tree;
+}
+
+function printTree($tree, $r = 0, $p = null) {
+  foreach ($tree as $i => $t) {
+    $dash = ($t['parent'] == 0) ? '' : str_repeat('&nbsp;&nbsp', $r) .' ';
+    //printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
+    printf("%s%s<br>\n", $dash, $t['type']);
+    if ($t['parent'] == $p) {
+      // reset $r
+      $r = 0;
+    }
+    if (isset($t['_children'])) {
+      printTree($t['_children'], ++$r, $t['parent']);
+    }
+  }
+}
+
+function printTreeDropDown($tree, $r = 0, $p = null) {
+  foreach ($tree as $i => $t) {
+    $dash = ($t['parent'] == 0) ? '' : str_repeat('--', $r) .' ';
+    printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
+    if ($t['parent'] == $p) {
+      // reset $r
+      $r = 0;
+    }
+    if (isset($t['_children'])) {
+      printTreeDropDown($t['_children'], ++$r, $t['parent']);
+    }
+  }
+}
+
+
+
 ?>
 
