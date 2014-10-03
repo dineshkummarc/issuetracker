@@ -375,33 +375,25 @@ echo '<div class="container-fluid">';
     showTrackIssueList();
     echo '</div>'; //end col
   }
-  elseif ($edit=="edit") {
+  elseif (($edit=="addtracking") OR ($edit=="edit")) {
     echo '<div class="col-md-4">';
     editIssue();
     echo '</div>'; //end col
     echo '<div class="col-md-8">';
+
+    echo '<div class="row-fluid">';
+    echo '<div class="col-md-12">';
     addIssueTracking();
-    echo '</div>'; //end col
+    echo '</div>'; //end col(12)
+    echo '</div>'; //end row
 
     echo '<div class="row-fluid">';
     echo '<div class="col-md-12">';
     showIssueTracking();
     echo '</div>'; //end col
     echo '</div>'; //end row
-  }
-  elseif ($edit=="addtracking") {
-    echo '<div class="col-md-4">';
-    editIssue();
-    echo '</div>'; //end col
-    echo '<div class="col-md-8">';
-    addIssueTracking();
-    echo '</div>'; //end col
 
-    echo '<div class="row-fluid">';
-    echo '<div class="col-md-12">';
-    showIssueTracking();
-    echo '</div>'; //end col
-    echo '</div>'; //end row
+    echo '</div>'; //end col(8)
   }
   else {
     echo '<div class="col-md-4">';

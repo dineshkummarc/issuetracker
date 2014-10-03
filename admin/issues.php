@@ -1,18 +1,60 @@
 <?php
 
-function checkForChild($parent, $child) {
-  global $database;
+//moved until after database inserts
+//$dataparent = $database->select("issuetypes", array( "id", "type", "parent" ));
 
-  $count = $database->count("issuetypes", array("parent" => "$parent"));
-  return $count;
-  //if id is used as a parent, return number of rows
-
-  // so if id = 1,
-
+function buildTree(Array $data, $parent = 0) {
+  $tree = array();
+  foreach ($data as $d) {
+    if ($d['parent'] == $parent) {
+      $children = buildTree($data, $d['id']);
+      // set a trivial key
+      if (!empty($children)) {
+        $d['_children'] = $children;
+      }
+      $tree[] = $d;
+    }
+  }
+  return $tree;
 }
 
-//needed by ...everything
-$dataparent = $database->select("issuetypes", array( "id", "type", "parent" ));
+function printTree($tree, $r = 0, $p = null) {
+  foreach ($tree as $i => $t) {
+    $dash = ($t['parent'] == 0) ? '' : str_repeat('&nbsp;&nbsp', $r) .' ';
+    //printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
+    printf("%s%s<br>\n", $dash, $t['type']);
+    if ($t['parent'] == $p) {
+      // reset $r
+      $r = 0;
+    }
+    if (isset($t['_children'])) {
+      printTree($t['_children'], ++$r, $t['parent']);
+    }
+  }
+}
+
+function issueTree() {
+  global $dataparent;
+
+  $tree = buildTree($dataparent);
+  // print_r($tree);
+
+  echo '<div class="panel panel-default">';
+  echo '<div class="panel-heading">Issue Tree</div>';
+
+  echo '<div class="panel-body">';
+  printTree($tree);
+  echo '</div></div>';
+}
+
+function checkForChild($id) {
+  global $database;
+
+  $count = $database->count("issuetypes", array("parent" => "$id"));
+  return $count;
+  //return number of rows where $id is parent. If greater than 0,
+  //don't set $parent in calling function
+}
 
 function updateIssueType() {
   global $database, $id, $dataparent;
@@ -77,9 +119,7 @@ function updateIssueType() {
   } 
 
   echo '</tbody></table>';
-
   echo '</div></div>';
-
 }
 
 function newIssueType() {
@@ -123,6 +163,7 @@ function newIssueType() {
 function issueTypeList() {
   global $database;
   global $page;
+  global $dataparent;
 
   $limit = 5;
   $offset = ($page*5) - $limit;
@@ -155,7 +196,17 @@ function issueTypeList() {
     echo '<td>' . $data["id"] . '</td>';
     echo '<td>' . $data["type"] . '</td>';
     echo '<td>' . $data["description"] . '</td>';
-    echo '<td>' . $data["parent"] . '</td>';
+    //changing ID to TYPE
+    echo '<td>';
+    foreach ($dataparent as $data2) {
+      //DEBUG
+      //echo "data2.type is " . $data2['type'];
+      //DEBUG END
+
+      if ($data['parent'] == $data2['id'] ) { echo $data2['type']; } 
+    }
+    echo '</td>';
+
     echo '<td><form action="index.php?page=' . $page . '" class="padded" method="post">';
     echo '<input type="hidden" name="action" value="issues">';
     echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
@@ -192,10 +243,19 @@ if ($edit == "update") {
   //echo "parent is $parent, desc is $description, type is $issuetype, id is $id";
   //DEBUG END
 
-  $database->update("issuetypes",
-    array("type" => "$issuetype", "description" => "$description","parent" => "$parent"),
-    array( "id" => "$id" ));
+  if (checkForChild($id) < 1) {
+    $database->update("issuetypes",
+      array("type" => "$issuetype", "description" => "$description","parent" => "$parent"),
+      array( "id" => "$id" ));
+  }
+  else {
+    echo '<div class="alert alert-warning" role="alert">';
+    echo "  <strong>Error:</strong> ID $id is used as parent, recursive ID parent/child relationships are not allowed.";
+    echo '</div>';
+  }
 }
+
+$dataparent = $database->select("issuetypes", array( "id", "type", "parent" ));
 
 /*****************
  * start of html *
@@ -211,6 +271,7 @@ echo '</div>';
 
 echo '<div class="col-sm-8">';
 issueTypeList();
+issueTree();
 echo '</div>';
 
 echo '</div>';
