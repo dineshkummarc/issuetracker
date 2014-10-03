@@ -1,10 +1,5 @@
 <?php
 
-// this is needed in searchHouse, searchIssue and newIssue
-$datahouse = $database->select("houses", array( "id", "name" ));
-$dataissue = $database->select("issuetypes", array( "id", "type", "parent" ));
-$datastatus = $database->select("status", array( "id", "status" ));
-
 function showIssueTracking() {
   global $database, $id;
 
@@ -37,7 +32,7 @@ function showIssueTracking() {
   echo '</div></div>'; // end body, end cell
 }
 
-function editIssue () {
+function editIssue() {
   global $database;
   global $id, $edit, $status, $search, $action;
   global $datahouse, $dataissue, $datastatus;
@@ -134,25 +129,61 @@ function editIssue () {
 }
 
 function addIssueTracking() {
-        global $database, $id;
+  global $database, $id;
 
-        echo '<div class="panel panel-default">';
-        echo '<div class="panel-heading">';
-        echo 'Add Issue Tracking';
-        echo '</div>';
-        echo '<div class="panel-body">';
+  echo '<div class="panel panel-default">';
+  echo '<div class="panel-heading">';
+  echo 'Add Issue Tracking';
+  echo '</div>';
+  echo '<div class="panel-body">';
 
-                echo '<form action="index.php?action=trackissues&id=' . $id .'" class="padded" method="post">';
-                echo '<input type="hidden" name="action" value="trackissues">';
-                echo '<input type="hidden" name="edit" value="addtracking">';
-                echo '<input type="hidden" name="id" value="' . $id . '">';
-                echo '<p>Tracking Info:</p>';
-                echo '<textarea cols="36" rows="8" name="description">Enter Update Here</textarea><br><br>';
-                echo '<input class="btn btn-default" type="submit" name="Edit &raquo;" value="update" maxlength="1024">';
-                echo '<a href="index.php?action=trackissues&id=' . $id . '" class="btn btn-primary pull-right">Reset</a><br>';
-                echo '</form>';
+  echo '<form action="index.php?action=trackissues&id=' . $id .'" class="padded" method="post">';
+  echo '<input type="hidden" name="action" value="trackissues">';
+  echo '<input type="hidden" name="edit" value="addtracking">';
+  echo '<input type="hidden" name="id" value="' . $id . '">';
+  echo '<p>Tracking Info:</p>';
+  echo '<textarea cols="36" rows="8" name="description">Enter Update Here</textarea><br><br>';
+  echo '<input class="btn btn-default" type="submit" name="Edit &raquo;" value="update" maxlength="1024">';
+  echo '<a href="index.php?action=trackissues&id=' . $id . '" class="btn btn-primary pull-right">Reset</a><br>';
+  echo '</form>';
 
-        echo '</div></div>'; // end body, end panel
+  echo '</div></div>'; // end body, end panel
+}
+
+function search() {
+  global $datahouse;
+  global $dataissue;
+  global $datastatus;
+  $issuetree = buildTree($dataissue);
+
+  echo '<p>';
+  echo '<form action="index.php" method="post">';
+  echo '<input type="hidden" name="action" value="trackissues">';
+  echo '<input type="hidden" name="edit" value="search">';
+  echo '<input type="hidden" name="search" value="multi">';
+
+  //house
+  echo '<select name="house">';
+  echo '<option value="">-- By House --</option>';
+  foreach($datahouse as $data) { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
+  echo '</select>';
+
+  //issue
+  echo '<select name="issue">';
+  echo '<option value="">-- By Issue --</option>';
+  printTreeDropDown($issuetree);
+  echo '</select>';
+
+  //status
+  echo '<select name="status">';
+  echo '<option value="">-- By Status --</option>';
+  foreach($datastatus as $data) { echo '<option value="' . $data["id"] . '">' . $data["status"] . '</option>'; }
+  echo '</select>';
+
+  echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
+
+  echo '</form>';
+  echo '</p>';
 }
 
 function searchHouse() {
@@ -164,7 +195,7 @@ function searchHouse() {
         echo '<input type="hidden" name="edit" value="search">';
         echo '<input type="hidden" name="search" value="house">';
         echo '<select name="id">';
-  echo '<option value="">-- By House --</option>';
+        echo '<option value="">-- By House --</option>';
         foreach($datahouse as $data) { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
         echo '</select>';
         echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
@@ -323,6 +354,10 @@ if ($edit == "new") {
   //DEBUG END
 }
 
+/***************************
+ * post to DB if necessary *
+ ***************************/
+
 if ($edit == "addtracking") { $database->insert("issuetracking", array( "parent" => "$id", "item" => "$description")); }
 
 if ($edit == "update") {
@@ -339,7 +374,19 @@ if ($edit == "update") {
   //DEBUG END
 }
 
-// begin html
+/******************************
+ * fetch from DB if necessary *
+ ******************************/
+
+// this is needed in searchHouse, searchIssue and newIssue
+$datahouse = $database->select("houses", array( "id", "name" ));
+$dataissue = $database->select("issuetypes", array( "id", "type", "parent" ));
+$datastatus = $database->select("status", array( "id", "status" ));
+
+/**************
+ * begin html *
+ **************/
+
 echo '<div class="container-fluid">';
  echo '<div class="row">';
 
@@ -355,6 +402,11 @@ echo '<div class="container-fluid">';
   searchStatus();
   echo '<br>';
   echo '<p><a class="btn btn-primary" href="index.php?action=trackissues">Reset</a></p>';
+  echo '</div>'; //end row-fluid
+
+  //multisearch
+  echo '<div class="row-fluid">';
+  search();
   echo '</div>'; //end row-fluid
 
   //DEBUG
