@@ -57,13 +57,17 @@ function printTree($tree, $r = 0, $p = null) {
 }
 
 function printTreeDropDown($tree, $r = 0, $p = null) {
-  global $id;
+  global $id, $action, $issue, $parent, $issuetype;
 
   foreach ($tree as $i => $t) {
     $dash = ($t['parent'] == 0) ? '' : str_repeat('--', $r) .' ';
+    echo "<!-- action is $action, id is $id, parent is $parent, issuetype is $issuetype -->";
     echo "\t<option ";
-    if ($id == $t['id']) { echo "selected"; }
-//    printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
+
+    if (($action == "issues") AND ($parent == $t['id'])) { echo "selected"; }
+    elseif (($action == "trackissues") AND ($parent == $t['parent'])) { echo "selected"; }
+
+    //printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
     printf(" value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
     if ($t['parent'] == $p) {
       // reset $r

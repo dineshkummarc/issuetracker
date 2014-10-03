@@ -193,6 +193,7 @@ function issueTypeList() {
     echo '<td><form action="index.php?page=' . $page . '" class="padded" method="post">';
     echo '<input type="hidden" name="action" value="issues">';
     echo '<input type="hidden" name="id" value="' . $data["id"] . '">';
+    echo '<input type="hidden" name="parent" value="' . $data["parent"] . '">';
     echo '<button class="btn btn-default" type="submit" name="edit" value="edit">Edit</button>';
     echo '</form></td>';
     echo '</tr>';

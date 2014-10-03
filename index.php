@@ -22,15 +22,15 @@ if (isset($_POST["search"])) { $search = $_POST["search"]; }
 elseif (isset($_GET["search"])) { $search = $_GET["search"]; }
 else { $search = "none"; }
 
-//get id
+//get id (or leave null)
 if (isset($_POST['id'])){ $id= $_POST['id']; }
 elseif (isset($_GET['id'])){ $id= $_GET['id']; }
-else { $id = "0"; }
+else { $id = ""; }
 
-//get status
+//get status (or leave null)
 if (isset($_POST['status'])){ $status = $_POST['status']; }
 elseif (isset($_GET['status'])){ $status = $_GET['status']; }
-else { $status = "0"; }
+else { $status = ""; }
 
 //house/user edit
 if (isset($_POST['edit'])){ $edit= $_POST['edit']; }

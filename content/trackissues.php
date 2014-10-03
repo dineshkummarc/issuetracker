@@ -34,7 +34,8 @@ function showIssueTracking() {
 
 function editIssue() {
   global $database;
-  global $id, $edit, $status, $search, $action;
+  global $edit, $status, $search, $action;
+  global $id, $parent;
   global $datahouse, $dataissue, $datastatus;
 
   if (!$id) { $id = 0; }
@@ -92,11 +93,17 @@ function editIssue() {
   // issue type dropdown
   echo 'Issue Type:<br>';
   echo '<select name="issuetype"><br>';
-  foreach($dataissue as $data) {
-    echo '<option value="' . $data["id"] . '"';
-    if (($edit == "edit") AND ($data["id"] == $datatrack["issuetype_id"])) { echo "selected"; }
-    echo '>' . $data["type"] . '</option>\n';
-  }
+
+//  foreach($dataissue as $data) {
+//    echo '<option value="' . $data["id"] . '"';
+//    if (($edit == "edit") AND ($data["id"] == $datatrack["issuetype_id"])) { echo "selected"; }
+//    echo '>' . $data["type"] . '</option>\n';
+//  }
+
+  global $dataissue;
+  $issuetree = buildTree($dataissue);
+
+  printTreeDropDown($issuetree);
   echo '</select><br><br>';
 
   // status type dropdown
@@ -143,7 +150,7 @@ function addIssueTracking() {
   echo '<input type="hidden" name="id" value="' . $id . '">';
   echo '<p>Tracking Info:</p>';
   echo '<textarea cols="36" rows="8" name="description">Enter Update Here</textarea><br><br>';
-  echo '<input class="btn btn-default" type="submit" name="Edit &raquo;" value="update" maxlength="1024">';
+  echo '<input class="btn btn-default" type="submit" name="Edit &raquo;" value="Edit &raquo;" maxlength="1024">';
   echo '<a href="index.php?action=trackissues&id=' . $id . '" class="btn btn-primary pull-right">Reset</a><br>';
   echo '</form>';
 
@@ -268,13 +275,9 @@ if ($search == "multi") {
 
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
     array("AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issue","issues.status" => "$status"))),array("LIMIT" => array($offset,$limit))
     );
-
-  //DEBUG
-  //echo $database->last_query();
-  //DEBUG END
 } 
 
 if ($search == "none") {
@@ -283,7 +286,7 @@ if ($search == "none") {
   $count=$database->count("issues");                                                                                                                                                                                                                                                                
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
     array("LIMIT" => array($offset,$limit))
     );
 }
@@ -293,7 +296,7 @@ if ($search == "house") {
 
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
     array("issues.house" => $id,"LIMIT" => array($offset,$limit))
     );
 }
@@ -303,7 +306,7 @@ if ($search == "issue") {
 
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
     array("issuetypes.id" => $id,"LIMIT" => array($offset,$limit))
     );
 }
@@ -313,7 +316,7 @@ if ($search == "status") {
 
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)"),
+    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
     array("issues.status" => $id,"LIMIT" => array($offset,$limit))
     );
 }
@@ -360,6 +363,7 @@ if ($search == "status") {
     echo '<input type="hidden" name="action" value="trackissues">';
     echo '<input type="hidden" name="edit" value="edit">';
     echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
+    echo '<input type="hidden" name="parent" value="' . $data["issue_parent"] . '">';
     echo '<button class="btn btn-default" type="submit" name="edit" value="edit">Edit</button>';
     echo '</form>';
     echo '</td>';
@@ -368,6 +372,12 @@ if ($search == "status") {
                          
    echo '</tbody>';
    echo '</table>';
+
+   //DEBUG
+   //echo "<p>search is $search</p>";
+   //echo "<p>parent is $parent</p>";
+   //echo "<p>data.issue_parent is " . $data["issue_parent"] . "</p>";
+   //DEBUG END
 
    paginate($count);
 }
@@ -498,3 +508,21 @@ echo '<div class="container-fluid">';
   echo '</div>'; //end second col
  echo '</div>'; //end row
 echo '</div>'; //end container-fluid
+
+// DEBUG
+echo '<div class="container">'; //end container-fluid
+  //echo '<p>' . $database->last_query() . '</p>';
+  //echo '<p>issue type is ' . $searchissuetype . '</p>';
+  //echo '<p>offset is ' . $offset . '</p>';
+  //echo '<p>limit is ' . $limit . '</p>';
+  //echo '<p>page is ' . $page . '</p>';
+  //echo '<p>search is ' . $search . '</p>';
+  //echo '<p>house is ' . $house . '</p>';
+  //echo '<p>id is ' . $id . '</p>';
+  //echo '<p>issue is ' . $issue . '</p>';
+  //echo '<p>status is ' . $status . '</p>';
+  //echo '<p>action is ' . $action . '</p>';
+  //echo '<p>parent is ' . $parent . '</p>';
+  //echo "array is " . print_r($datas);
+echo '</div>'; //end container-fluid
+// DEBUG END
