@@ -70,7 +70,5 @@ function printTreeDropDown($tree, $r = 0, $p = null) {
   }
 }
 
-
-
 ?>
 
