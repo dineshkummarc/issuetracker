@@ -98,7 +98,7 @@ function editIssue() {
   echo '</select><br><br>';
 
   //DEBUG
-  echo "<p>datatrack.issuetype_id was " . $datatrack['issuetype_id'] . "</p>";
+  //echo "<p>datatrack.issuetype_id was " . $datatrack['issuetype_id'] . "</p>";
   //DEBUG END
 
   // status type dropdown
