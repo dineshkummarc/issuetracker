@@ -36,6 +36,7 @@ function issueDropDown($id = 0) {
 
 function paginate($count) {
   global $action, $search, $id, $page, $edit;
+  global $house, $issuetype, $status;
 
   if ($count > 5) {
 
@@ -49,11 +50,15 @@ function paginate($count) {
     //if ($start < 0) { $start = 1; }
     for ( $start = 1 ; $start <= $max ; $start++ ) {
   
-      $url = "action=$action&";
-      $url .= "search=$search&";
-      $url .= "id=$id&";
-  //  $url .= "edit=$edit&";
-      $url .= "page=$start";
+      $url="";
+      if ($action)    { $url  = "action=$action&"; }
+      if ($search)    { $url .= "search=$search&"; }
+      if ($id)        { $url .= "id=$id&"; }
+      if ($page)      { $url .= "page=$start&"; }
+      if ($edit)      { $url .= "edit=$edit&"; }
+      if ($house)     { $url .= "house=$house&"; }
+      if ($issuetype) { $url .= "issuetype=$issuetype&"; }
+      if ($status)    { $url .= "status=$status"; }
   
       echo "<a class=\"btn btn-info\" href=\"index.php?$url\">$start</a>&nbsp";
     }

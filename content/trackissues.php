@@ -1,5 +1,9 @@
 <?php
 
+//setup globals
+//if (!$action) { $action = "trackissues"; }
+//if (!$id) { $id = 0; }
+
 function showIssueTracking() {
   global $database, $id;
 
@@ -34,11 +38,11 @@ function showIssueTracking() {
 
 function editIssue() {
   global $database;
-  global $edit, $status, $search, $action;
   global $id;
+  //global $edit, $status, $search, $action;
+  global $edit, $action;
   global $datahouse, $dataissue, $datastatus;
-
-  if (!$id) { $id = 0; }
+  //global $house, $issue, $status
 
   //if edit is edit, then id is issue.id
 
@@ -93,7 +97,7 @@ function editIssue() {
   // issue type dropdown
   echo 'Issue Type:<br>';
   echo '<select name="issuetype"><br>';
-  echo '<option value=""> -- Issue -- </option>';
+  echo '<option value=""> -- Issue Type -- </option>';
   issueDropDown($datatrack['issuetype_id']);
   echo '</select><br><br>';
 
@@ -168,7 +172,7 @@ function search() {
   //issue
   echo '<p>';
   echo '<select name="issue">';
-  echo '<option value="">-- By Issue --</option>';
+  echo '<option value="">-- By Issue Type --</option>';
   issueDropDown();
   echo '</select>';
   echo '</p>';
@@ -190,12 +194,10 @@ function search() {
 
 function showTrackIssueList() {
   global $database;
+  global $id;
   global $page;
   global $search;
-  global $edit;
-  global $id;
-  global $action;
-  global $house, $issue, $status;
+  global $house, $issuetype, $status;
 
   $limit = 5;
   $offset = ($page*5) - $limit;
@@ -203,7 +205,7 @@ function showTrackIssueList() {
 if ($search == "multi") {
   // select issues left join houses, left join issuetypes, right join status
   // LIMIT array(offset, rows)
-  $count=$database->count("issues");
+  $count=$database->count("issues",array("AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issuetype","issues.status" => "$status"))));
 
   //if (!$house) { $house = "*"; }
   //if (!$issue) { $issue = "*"; }
@@ -212,13 +214,16 @@ if ($search == "multi") {
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
     array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
-    array("AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issue","issues.status" => "$status"))),array("LIMIT" => array($offset,$limit))
+    array(
+          "AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issuetype","issues.status" => "$status")),
+          "LIMIT" => array($offset,$limit),
+         )
     );
 } 
-
-if ($search == "none") {
+else {
   // select issues left join houses, left join issuetypes, right join status
   // LIMIT array(offset, rows)
+  // note: LIMIT is part of WHERE
   $count=$database->count("issues");                                                                                                                                                                                                                                                                
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
@@ -236,7 +241,7 @@ if ($search == "none") {
 
   // DEBUG
   //echo '<p>' . $database->last_query() . '</p>';
-  //echo '<p>issue type is ' . $searchissuetype . '</p>';
+  //echo '<p>issuetype is ' . $issuetype . '</p>';
   //echo '<p>offset is ' . $offset . '</p>';
   //echo '<p>limit is ' . $limit . '</p>';
   //echo '<p>page is ' . $page . '</p>';
@@ -253,7 +258,7 @@ if ($search == "none") {
   foreach ($datas as $data) {
     // this should all be in the POST !!
     // except for maybe $page
-    $url  = "action=$action&";
+    $url  = "action=$action&"; //should always be action=trackissues
     $url .= "search=$search&";
     $url .= "id=$id&";
     $url .= "edit=$edit&"; //should always be edit=search
@@ -266,7 +271,7 @@ if ($search == "none") {
     echo '<td>' . $data["status"] . '</td>';
     echo '<td>' . $data["issue"] . '</td>';
     echo '<td>' . $data["date"] . '</td>';
-    echo "<td><form action=\"index.php?$url\" class=\"padded\" method=\"post\">";
+    echo "<td><form action=\"index.php?$url\" method=\"post\">";
     echo '<input type="hidden" name="action" value="trackissues">';
     echo '<input type="hidden" name="edit" value="edit">';
     echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
@@ -340,20 +345,6 @@ echo '<div class="container-fluid">';
  echo '<div class="row">';
 
   echo '<div class="col-md-2">';
-
-  //show search options
-/*
-  echo '<div class="row-fluid">';
-  echo '<p>Search:</p>';
-  searchHouse();
-  echo '<br>';
-  searchIssue();
-  echo '<br>';
-  searchStatus();
-  echo '<br>';
-  echo '<p><a class="btn btn-primary" href="index.php?action=trackissues">Reset</a></p>';
-  echo '</div>'; //end row-fluid
-*/
 
   //multisearch
   echo '<div class="row-fluid">';
