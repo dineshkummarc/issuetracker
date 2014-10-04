@@ -1,43 +1,8 @@
 <?php
 
-//moved until after database inserts
-//$dataparent = $database->select("issuetypes", array( "id", "type", "parent" ));
-
-/* in functions.php
-
-function buildTree(Array $data, $parent = 0)
-  return $tree;
-
-function printTree($tree, $r = 0, $p = null)
-
-*/
-
-function issueTree() {
-  global $dataparent;
-
-  $tree = buildTree($dataparent);
-  // print_r($tree);
-
-  echo '<div class="panel panel-default">';
-  echo '<div class="panel-heading">Issue Tree</div>';
-
-  echo '<div class="panel-body">';
-  printTree($tree);
-  echo '</div></div>';
-}
-
-function checkForChild($id) {
-  global $database;
-
-  $count = $database->count("issuetypes", array("parent" => "$id"));
-  return $count;
-  //return number of rows where $id is parent. If greater than 0,
-  //don't set $parent in calling function
-}
-
 function updateIssueType() {
-  global $database, $id, $dataparent;
-  $datatree=buildTree($dataparent);
+  global $database, $id, $dataissue;
+  $datatree=buildTree($dataissue);
 
   //TODO: specify columns here
   $data = $database->get("issuetypes", array( "id", "type", "description", "parent"), array( "id[=]" => $id ));
@@ -64,20 +29,13 @@ function updateIssueType() {
   echo 'Parent:<br>';
   echo '<select name="parent">\n';
   echo '<option value="0">-- none --</option>';
-//  foreach($dataparent as $datap) {
-//    if ($data["id"] != $datap["id"]) {
-//      echo '<option value="' . $datap["id"] . '"';
-//      if ($data["parent"] == $datap["id"]) { echo "selected"; }
-//      echo '>' . $datap["type"] . '</option>\n';
-//    }
-//  }
-  printTreeDropDown($datatree);
+  issueDropDown($data['parent']);
   echo '</select><br><br>';
 
-  echo 'Short Description:<br>';
+  echo 'Issue:<br>';
   echo '<input name="issuetype" type="text" size="40" maxlength="128" value="' . $data["type"] . '">';
   echo '<br><br>'; 
-  echo 'Long Description:<br>';
+  echo 'Description:<br>';
   echo '<textarea name="description" cols="40" rows="8">' . $data["description"] . '</textarea><br><br>';
   echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="Update" maxlength="1024">';
   echo '<a class="btn btn-primary pull-right" href="index.php?action=issues">Reset</a>';
@@ -95,7 +53,7 @@ function updateIssueType() {
   echo '<thead><tr><th>ID</th><th>Issue Type</th><th>Description</th></tr></thead>';
   echo '<tbody>';
 
-  foreach($dataparent as $datap) {
+  foreach($dataissue as $datap) {
     if ($data["id"] == $datap["parent"]) { echo "<tr><td>" . $datap['id'] . "</td><td>" . $datap['type'] . "</td><td>" . $datap['description'] . "</td></tr>"; }
   } 
 
@@ -104,9 +62,6 @@ function updateIssueType() {
 }
 
 function newIssueType() {
-  global $dataparent;
-  $issuetree = buildTree($dataparent);
-
   echo '<div class="panel panel-default">';
   echo '  <div class="panel-heading">';
   echo 'New Issue Type';
@@ -121,20 +76,13 @@ function newIssueType() {
   echo 'Parent:<br>';
   echo '<select name="parent">\n';
   echo '<option value="0">-- none --</option>';
-//  foreach($dataparent as $datap) {
-//    if ($data["id"] != $datap["id"]) {
-//      echo '<option value="' . $datap["id"] . '"';
-//      if ($data["id"] == $datap["id"]) { echo "selected"; }
-//      echo '>' . $datap["type"] . '</option>\n';
-//    }
-//  }
-  printTreeDropDown($issuetree);
+  issueDropDown();
   echo '</select><br><br>';
 
-  echo 'Issue Short Description:<br>';
+  echo 'Issue:<br>';
   echo '<input name="issuetype" type="text" size="40" maxlength="128" >';
   echo '<br><br>';
-  echo 'Issue Long Description:<br>';
+  echo 'Issue Description:<br>';
   echo '<textarea name="description" cols="40" rows="8"></textarea><br><br>';
   echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="New" maxlength="1024">';
   echo '<a class="btn btn-primary pull-right" href="index.php?action=issues">Reset</a>';
@@ -146,7 +94,7 @@ function newIssueType() {
 function issueTypeList() {
   global $database;
   global $page;
-  global $dataparent;
+  global $dataissue;
 
   $limit = 5;
   $offset = ($page*5) - $limit;
@@ -171,7 +119,7 @@ function issueTypeList() {
   echo '<div class="panel-body">';
 
   echo '<table class="table table-striped">';
-  echo '<thead><tr><th>ID</th><th>Issue Type</th><th>Description</th><th>Parent ID</th></tr></thead>';
+  echo '<thead><tr><th>ID</th><th>Issue Type</th><th>Description</th><th>Parent</th></tr></thead>';
   echo '<tbody>'; 
 
   foreach($datas as $data) {
@@ -181,7 +129,7 @@ function issueTypeList() {
     echo '<td>' . $data["description"] . '</td>';
     //changing ID to TYPE
     echo '<td>';
-    foreach ($dataparent as $data2) {
+    foreach ($dataissue as $data2) {
       //DEBUG
       //echo "data2.type is " . $data2['type'];
       //DEBUG END
@@ -240,7 +188,7 @@ if ($edit == "update") {
 }
 
 /* grab globals (after DB access!) */
-$dataparent = $database->select("issuetypes", array( "id", "type", "parent" ));
+$dataissue = $database->select("issuetypes", array( "id", "type", "parent", "description" ));
 
 /*****************
  * start of html *
@@ -256,9 +204,11 @@ echo '</div>';
 
 echo '<div class="col-sm-8">';
 issueTypeList();
-issueTree();
-echo '</div>';
 
+$tree = buildTree($dataissue);
+printTree($tree);
+
+echo '</div>';
 echo '</div>';
 echo '</div>';
 

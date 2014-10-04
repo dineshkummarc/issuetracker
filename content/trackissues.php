@@ -62,6 +62,7 @@ function editIssue() {
     //echo "sizeof is " . sizeof($datatrack);
 
   }
+  else { $datatrack = array("house_id" => "", "issuetype_id" => "", "issue_id" => "", "issue" => "", "date" => "", "description" => "", "status_id" => ""); }
 
   echo '<div class="panel panel-default">';
   echo '<div class="panel-heading">';
@@ -83,37 +84,22 @@ function editIssue() {
   // house list dropdown
   echo 'House:<br>';
   echo '<select name="house">\n';
-  foreach($datahouse as $data) {
-    echo '<option value="' . $data["id"] . '"';
-    if (($edit == "edit") AND ($data["id"] == $datatrack["house_id"])) { echo "selected"; }
-    echo '>' . $data["name"] . '</option>\n';
-  }
+  echo '<option value=""> -- House -- </option>';
+  houseDropDown($datatrack['house_id']);
   echo '</select><br><br>';
 
   // issue type dropdown
   echo 'Issue Type:<br>';
   echo '<select name="issuetype"><br>';
-
-//  foreach($dataissue as $data) {
-//    echo '<option value="' . $data["id"] . '"';
-//    if (($edit == "edit") AND ($data["id"] == $datatrack["issuetype_id"])) { echo "selected"; }
-//    echo '>' . $data["type"] . '</option>\n';
-//  }
-
-  global $dataissue;
-  $issuetree = buildTree($dataissue);
-
-  printTreeDropDown($issuetree);
+  echo '<option value=""> -- Issue -- </option>';
+  issueDropDown($datatrack['parent']);
   echo '</select><br><br>';
 
   // status type dropdown
   echo 'Status Type:<br>';
   echo '<select name="status"><br>';
-  foreach($datastatus as $data) {
-    echo '<option value="' . $data["id"] . '"';
-    if (($edit == "edit") AND ($data["id"] == $datatrack["status_id"])) { echo "selected"; }
-    echo '>' . $data["status"] . '</option>\n';
-  }
+  echo '<option value=""> -- Status -- </option>';
+  statusDropDown($datatrack['status_id']);
   echo '</select><br><br>';
 
   //issue - short desc
@@ -158,10 +144,7 @@ function addIssueTracking() {
 }
 
 function search() {
-  global $datahouse;
-  global $dataissue;
-  global $datastatus;
-  $issuetree = buildTree($dataissue);
+  global $datahouse, $dataissue, $datastatus;
 
   echo '<form action="index.php" method="post">';
   echo '<input type="hidden" name="action" value="trackissues">';
@@ -172,7 +155,7 @@ function search() {
   echo '<p>';
   echo '<select name="house">';
   echo '<option value="">-- By House --</option>';
-  foreach($datahouse as $data) { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
+  houseDropDown();
   echo '</select>';
   echo '</p>';
 
@@ -180,7 +163,7 @@ function search() {
   echo '<p>';
   echo '<select name="issue">';
   echo '<option value="">-- By Issue --</option>';
-  printTreeDropDown($issuetree);
+  issueDropDown();
   echo '</select>';
   echo '</p>';
 
@@ -188,7 +171,7 @@ function search() {
   echo '<p>';
   echo '<select name="status">';
   echo '<option value="">-- By Status --</option>';
-  foreach($datastatus as $data) { echo '<option value="' . $data["id"] . '">' . $data["status"] . '</option>'; }
+  statusDropDown();
   echo '</select>';
   echo '</p>';
 

@@ -1,5 +1,39 @@
 <?php
 
+// dropdowns require these
+
+//$datahouse = $database->select("houses", array( "id", "name" ));
+//$dataissue = $database->select("issuetypes", array( "id", "type", "parent" ));
+//$datastatus = $database->select("status", array( "id", "status" ));
+
+//TODO: merge dropdowns into one, call by array, check by id
+function statusDropDown($id = 0) {
+  global $datastatus, $edit;
+
+  foreach($datastatus as $data) {                                                                                                                                                                                                                                                 
+    echo '<option value="' . $data["id"] . '"';                                                                                                                                                                                                                                   
+    if (($edit == "edit") AND ($data["id"] == $id)) { echo "selected"; }                                                                                                                                                                                      
+    echo '>' . $data["status"] . '</option>\n';                                                                                                                                                                                                                                   
+  }
+}
+
+function houseDropDown($id = 0) {
+  global $datahouse, $edit;
+
+  foreach($datahouse as $data) {
+    echo '<option value="' . $data["id"] . '"';
+    if (($edit == "edit") AND ($data["id"] == $id)) { echo "selected"; }
+    echo '>' . $data["name"] . '</option>\n';
+  }
+}
+
+function issueDropDown($id = 0) {
+  //$id is the id you want to check against (ie the parent)
+  global $dataissue;
+  $issuetree = buildTree($dataissue);
+  printTreeDropDown($id, $issuetree);
+}
+
 function paginate($count) {
   global $action, $search, $id, $page, $edit;
 
@@ -56,16 +90,20 @@ function printTree($tree, $r = 0, $p = null) {
   }
 }
 
-function printTreeDropDown($tree, $r = 0, $p = null) {
-  global $id, $action, $issue, $parent, $issuetype;
+function printTreeDropDown($id, $tree, $r = 0, $p = null) {
+  global $action;
 
   foreach ($tree as $i => $t) {
     $dash = ($t['parent'] == 0) ? '' : str_repeat('--', $r) .' ';
-    echo "<!-- action is $action, id is $id, parent is $parent, issuetype is $issuetype -->";
+
+    echo "<!-- id is $id, t.id is " . $t['parent'] . "-->";
+
     echo "\t<option ";
 
-    if (($action == "issues") AND ($parent == $t['id'])) { echo "selected"; }
-    elseif (($action == "trackissues") AND ($parent == $t['parent'])) { echo "selected"; }
+    if ($id) {
+      if (($action == "issues") AND ($id == $t['id'])) { echo "selected"; }
+      elseif (($action == "trackissues") AND ($id == $t['parent'])) { echo "selected"; }
+    }
 
     //printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
     printf(" value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
@@ -74,10 +112,18 @@ function printTreeDropDown($tree, $r = 0, $p = null) {
       $r = 0;
     }
     if (isset($t['_children'])) {
-      printTreeDropDown($t['_children'], ++$r, $t['parent']);
+      printTreeDropDown($id, $t['_children'], ++$r, $t['parent']);
     }
   }
 }
 
-?>
+function checkForChild($id) {
+  global $database;
 
+  $count = $database->count("issuetypes", array("parent" => "$id"));
+  return $count;
+  //return number of rows where $id is parent. If greater than 0,
+  //don't set $parent in calling function
+}
+
+?>
