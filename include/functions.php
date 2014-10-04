@@ -101,7 +101,7 @@ function printTreeDropDown($id, $tree, $r = 0, $p = null) {
   foreach ($tree as $i => $t) {
     $dash = ($t['parent'] == 0) ? '' : str_repeat('--', $r) .' ';
 
-    echo "<!-- id is $id, t.parent is " . $t['parent'] . "-->";
+//    echo "<!-- id is $id, t.parent is " . $t['parent'] . "-->";
 
     echo "\t<option ";
 
