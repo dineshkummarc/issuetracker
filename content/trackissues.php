@@ -35,7 +35,7 @@ function showIssueTracking() {
 function editIssue() {
   global $database;
   global $edit, $status, $search, $action;
-  global $id, $parent;
+  global $id;
   global $datahouse, $dataissue, $datastatus;
 
   if (!$id) { $id = 0; }
@@ -54,12 +54,14 @@ function editIssue() {
       array("issues.id" => "$id")
       );
 
+    //DEBUG
     //echo $database->last_query();
     //print_r(array_values($datatrack));
     //echo 'datatrack.house_id is ' . $datatrack["house_id"];
     //echo $datatrack;
     //echo 'id is ' . $id;
     //echo "sizeof is " . sizeof($datatrack);
+    //DEBUG END
 
   }
   else { $datatrack = array("house_id" => "", "issuetype_id" => "", "issue_id" => "", "issue" => "", "date" => "", "description" => "", "status_id" => ""); }
@@ -92,7 +94,7 @@ function editIssue() {
   echo 'Issue Type:<br>';
   echo '<select name="issuetype"><br>';
   echo '<option value=""> -- Issue -- </option>';
-  issueDropDown($datatrack['parent']);
+  issueDropDown($datatrack['issue_id']);
   echo '</select><br><br>';
 
   // status type dropdown
@@ -346,7 +348,6 @@ if ($search == "status") {
     echo '<input type="hidden" name="action" value="trackissues">';
     echo '<input type="hidden" name="edit" value="edit">';
     echo '<input type="hidden" name="id" value="' . $data["issue_id"] . '">';
-    echo '<input type="hidden" name="parent" value="' . $data["issue_parent"] . '">';
     echo '<button class="btn btn-default" type="submit" name="edit" value="edit">Edit</button>';
     echo '</form>';
     echo '</td>';
