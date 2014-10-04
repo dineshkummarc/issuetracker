@@ -94,8 +94,12 @@ function editIssue() {
   echo 'Issue Type:<br>';
   echo '<select name="issuetype"><br>';
   echo '<option value=""> -- Issue -- </option>';
-  issueDropDown($datatrack['issue_id']);
+  issueDropDown($datatrack['issuetype_id']);
   echo '</select><br><br>';
+
+  //DEBUG
+  echo "<p>datatrack.issuetype_id was " . $datatrack['issuetype_id'] . "</p>";
+  //DEBUG END
 
   // status type dropdown
   echo 'Status Type:<br>';
@@ -146,7 +150,7 @@ function addIssueTracking() {
 }
 
 function search() {
-  global $datahouse, $dataissue, $datastatus;
+  //global $datahouse, $dataissue, $datastatus;
 
   echo '<form action="index.php" method="post">';
   echo '<input type="hidden" name="action" value="trackissues">';
@@ -182,59 +186,6 @@ function search() {
   echo '</p>';
 
   echo '</form>';
-}
-
-function searchHouse() {
-  global $datahouse;
-
-  echo '<p>';
-        echo '<form action="index.php" method="post">';
-        echo '<input type="hidden" name="action" value="trackissues">';
-        echo '<input type="hidden" name="edit" value="search">';
-        echo '<input type="hidden" name="search" value="house">';
-        echo '<select name="id">';
-        echo '<option value="">-- By House --</option>';
-        foreach($datahouse as $data) { echo '<option value="' . $data["id"] . '">' . $data["name"] . '</option>'; }
-        echo '</select>';
-        echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
-        echo '</form>';
-  echo '</p>';
-}
-
-function searchIssue() {
-  global $dataissue;
-  $issuetree = buildTree($dataissue);
-
-  echo '<p>';
-        echo '<form action="index.php" method="post">';
-        echo '<input type="hidden" name="action" value="trackissues">';
-        echo '<input type="hidden" name="edit" value="search">';
-        echo '<input type="hidden" name="search" value="issue">';
-        echo '<select name="id">';
-        echo '<option value="">-- By Issue --</option>';
-//        foreach($dataissue as $data) { echo '<option value="' . $data["id"] . '">' . $data["type"] . '</option>'; }
-        printTreeDropDown($issuetree);
-        echo '</select>';
-        echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
-  echo '</form>';
-  echo '</p>';
-}
-
-function searchStatus() {
-        global $datastatus;
-
-  echo '<p>';
-        echo '<form action="index.php" method="post">';
-        echo '<input type="hidden" name="action" value="trackissues">';
-        echo '<input type="hidden" name="edit" value="search">';
-        echo '<input type="hidden" name="search" value="status">';
-        echo '<select name="id">';
-        echo '<option value="">-- By Status --</option>';
-        foreach($datastatus as $data) { echo '<option value="' . $data["id"] . '">' . $data["status"] . '</option>'; }
-        echo '</select>';
-        echo '<input class="btn btn-default pull-right" type="submit" name="search &raquo;" value="submit" maxlength="64">';
-        echo '</form>';
-  echo '</p>';
 }
 
 function showTrackIssueList() {
@@ -276,39 +227,10 @@ if ($search == "none") {
     );
 }
 
-if ($search == "house") {
-  $count=$database->count("issues", array("house" => $id));
-
-  $datas=$database->select("issues",
-    array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
-    array("issues.house" => $id,"LIMIT" => array($offset,$limit))
-    );
-}
-
-if ($search == "issue") {
-  $count=$database->count("issues", array("issuetype" => $id));
-
-  $datas=$database->select("issues",
-    array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
-    array("issuetypes.id" => $id,"LIMIT" => array($offset,$limit))
-    );
-}
-
-if ($search == "status") {
-  $count=$database->count("issues", array("status" => $id));
-
-  $datas=$database->select("issues",
-    array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
-    array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
-    array("issues.status" => $id,"LIMIT" => array($offset,$limit))
-    );
-}
-
   echo '<div class="panel panel-default">';
   echo '<div class="panel-heading">';
-  echo "Issue List (search by $search)";
+  echo "Issue List";
+  if ($search == "multi") { echo " Search : House ID is \"$house\", Issue ID is \"$issue\", Status ID is \"$status\""; }
   echo '</div>';
   echo '<div class="panel-body">';
 
@@ -368,7 +290,7 @@ if ($search == "status") {
 
 if ($edit == "new") {
   $last_id = $database->insert("issues", array(
-             "house" => "$id",
+             "house" => "$house",
              "issue" => "$issue",
              "issuetype" => "$issuetype",
              "status" => "$status",
@@ -376,6 +298,8 @@ if ($edit == "new") {
 
   //DEBUG
   //echo "<p>status is $status</p>";
+  //echo "<p>issuetype is $issuetype</p>";
+  //echo "<p>house is $house</p>";
   //DEBUG END
 }
 
@@ -403,7 +327,7 @@ if ($edit == "update") {
  * fetch from DB if necessary *
  ******************************/
 
-// this is needed in searchHouse, searchIssue and newIssue
+// these are required by the dropdowns
 $datahouse = $database->select("houses", array( "id", "name" ));
 $dataissue = $database->select("issuetypes", array( "id", "type", "parent" ));
 $datastatus = $database->select("status", array( "id", "status" ));

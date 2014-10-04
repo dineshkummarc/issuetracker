@@ -96,14 +96,16 @@ function printTreeDropDown($id, $tree, $r = 0, $p = null) {
   foreach ($tree as $i => $t) {
     $dash = ($t['parent'] == 0) ? '' : str_repeat('--', $r) .' ';
 
-    echo "<!-- id is $id, t.id is " . $t['parent'] . "-->";
+    echo "<!-- id is $id, t.parent is " . $t['parent'] . "-->";
 
     echo "\t<option ";
 
-    if ($id) {
-      if (($action == "issues") AND ($id == $t['id'])) { echo "selected"; }
-      elseif (($action == "trackissues") AND ($id == $t['parent'])) { echo "selected"; }
-    }
+//    if ($id) {
+//      if (($action == "issues") AND ($id == $t['id'])) { echo "selected"; }
+//      elseif (($action == "trackissues") AND ($id == $t['id'])) { echo "selected"; }
+//    }
+
+    if ($id) { if ($id == $t['id']) { echo "selected"; }}
 
     //printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
     printf(" value='%d'>%s%s</option>\n", $t['id'], $dash, $t['type']);
