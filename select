@@ -1,0 +1,15 @@
+  $datas=$database->select("issuetracking",
+    $datatrack=$database->get("issues",
+    //echo $database->last_query();
+  $count=$database->count("issues");
+  $datas=$database->select("issues",
+  $count=$database->count("issues");                                                                                                                                                                                                                                                                
+  $datas=$database->select("issues",
+  //echo '<p>' . $database->last_query() . '</p>';
+  $last_id = $database->insert("issues", array(
+if ($edit == "addtracking") { $database->insert("issuetracking", array( "parent" => "$id", "item" => "$description")); }
+  $database->update("issues", array(
+$datahouse = $database->select("houses", array( "id", "name" ));
+$dataissue = $database->select("issuetypes", array( "id", "type", "parent" ));
+$datastatus = $database->select("status", array( "id", "status" ));
+  //echo '<p>' . $database->last_query() . '</p>';
