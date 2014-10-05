@@ -55,7 +55,8 @@ function paginate($count) {
       if ($search)    { $url .= "search=$search&"; }
       if ($id)        { $url .= "id=$id&"; }
       if ($page)      { $url .= "page=$start&"; }
-      if ($edit)      { $url .= "edit=$edit&"; }
+      //if ($edit)      { $url .= "edit=$edit&"; }
+      //remove edit from paginate or bad things happen...
       if ($house)     { $url .= "house=$house&"; }
       if ($issuetype) { $url .= "issuetype=$issuetype&"; }
       if ($status)    { $url .= "status=$status"; }
