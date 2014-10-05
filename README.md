@@ -34,6 +34,6 @@ notes
 users table doesn't do anything yet
 
 This suite uses the following technology:
-   bootstrap 3, supplied via maxcdn
-   medoo, supplied via file
-   jquery 1.11.1, supplied via google's CDN
+   * bootstrap 3, supplied via maxcdn
+   * medoo, supplied via file in include/
+   * jquery 1.11.1, supplied via google's CDN
