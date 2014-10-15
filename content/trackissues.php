@@ -1,4 +1,4 @@
-<?php
+s/Iss<?php
 
 //setup globals
 //if (!$action) { $action = "trackissues"; }
@@ -26,7 +26,7 @@ function showIssueTracking() {
   foreach ($datas as $data) {
     echo '<tr>';
     echo '<td>' . $data["track_date"] . '</td>';
-    echo '<td>' . $data["issue_item"] . '</td>';
+    echo '<td>' . nl2br($data["issue_item"]) . '</td>';
     echo '</tr>';
   }
 
