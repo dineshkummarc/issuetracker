@@ -4,6 +4,10 @@
 // add functions.php
 require_once 'include/mysql.php';
 require_once 'include/functions.php';
+require_once 'include/login.php';
+
+// run the application
+$session = new LoginSession();
 
 // Read the form values
 
@@ -82,6 +86,9 @@ elseif ($action == "issues") { include 'admin/issues.php'; }
 elseif ($action == "houses") { include 'admin/houses.php'; }
 //user actions
 elseif ($action == "trackissues") { include 'content/trackissues.php'; }
+elseif ($action == "login") { include 'content/login.php'; }
+elseif ($action == "logout") { include 'content/login.php'; }
+elseif ($action == "register") { include 'content/login.php'; }
 //default actions
 else { include 'content/home.php'; }
 

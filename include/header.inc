@@ -53,24 +53,30 @@
 
                 </ul>
               </li>
-                <li <?php if ($action == "trackissues") echo 'class="active"'; ?> ><a href="index.php?action=trackissues">
-                                <i class="fa fa-check-square"></i>&nbsp;Track Issues</a></li>
-<!--          <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li> -->
+              <li <?php if ($action == "trackissues") echo 'class="active"'; ?> ><a href="index.php?action=trackissues">
+                 <i class="fa fa-check-square"></i>&nbsp;Track Issues</a>
+              </li>
+             </ul>
 
+<ul class="nav navbar-nav pull-right">
+<?php
+  if (!empty($_SESSION['username']) && ($_SESSION['user_is_logged_in'])) {
+    echo "<p class=\"navbar-text\">Welcome, " . $_SESSION['username'] . "</p>";
+    echo "<li ";
+    if ($action == "logout") { echo 'class="active"'; }
+    echo "><a href=\"index.php?action=logout\"><i class=\"fa fa-gear\"></i>&nbsp;Logout</a></li>";
+  }
+  else {
+    echo "<li ";
+    if ($action == "login")  { echo 'class="active"'; }
+    echo "><a href=\"index.php?action=login\"><i class=\"fa fa-gear\"></i>&nbsp;Login</a></li>";
+    echo "<li ";
+    if ($action == "register")  { echo 'class="active"'; }
+    echo "><a href=\"index.php?action=register\"><i class=\"fa fa-gear\"></i>&nbsp;register</a></li>";
+  }
+?>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
-
 
