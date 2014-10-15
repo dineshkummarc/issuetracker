@@ -360,7 +360,8 @@ if ($edit == "update") {
  ******************************/
 
 // these are required by the dropdowns
-$datahouse = $database->select("houses", array( "id", "name" ));
+//$datahouse = $database->select("houses", array( "id", "name" ));
+$datahouse = $database->select("houses", array( "id", "name" ),array("ORDER" => "name"));
 $dataissue = $database->select("issuetypes", array( "id", "type", "parent" ));
 $datastatus = $database->select("status", array( "id", "status" ));
 
