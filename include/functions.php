@@ -38,10 +38,10 @@ function paginate($count) {
   global $action, $search, $id, $page, $edit;
   global $house, $issuetype, $status;
 
-  if ($count > 5) {
+  if ($count > 10) {
 
-    $pages=$count/5;
-    if ((($count % 5) > 0) AND ($count > 5)) { $pages += 1; }
+    $pages=$count/10;
+    if ((($count % 10) > 0) AND ($count > 10)) { $pages += 1; }
   
     $min = 0;
     $max = $pages;

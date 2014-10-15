@@ -171,7 +171,7 @@ function search() {
 
   //issue
   echo '<p>';
-  echo '<select name="issue">';
+  echo '<select name="issuetype">';
   echo '<option value="">-- By Issue Type --</option>';
   issueDropDown();
   echo '</select>';
@@ -199,23 +199,50 @@ function showTrackIssueList() {
   global $search;
   global $house, $issuetype, $status;
 
-  $limit = 5;
-  $offset = ($page*5) - $limit;
+  $limit = 10;
+  $offset = ($page*$limit) - $limit;
+
+// this doesn't work, not even with %
+//  if (!$house) { $house = '*'; }
+//  if (!$issue) { $issue = '*'; }
+//  if (!$status) { $status = '*'; }
+
+$searchArray = array();
+
+if ($house != "") { $searchArray["issues.house"] = "$house"; }
+else { $searchArray["issues.house[!]"] = null; }
+
+if ($issuetype != "") { $searchArray["issues.issuetype"] = "$issuetype"; }
+else { $searchArray["issues.issue[!]"] = null; }
+
+if ($status != "") { $searchArray["issues.status"] = "$status"; }
+else { $searchArray["issues.status[!]"] = null; }
+
+/* searchArray lunacy
+
+if ($house != "") { add to array "issues.house" => "$house" }
+else { add to array "issues.house[!]" => null }
+
+if ($issue != "") { add to array "issues.issue" => "$issue" }
+else { add to array "issues.issue[!]" => null }
+
+if ($status != "") { add to array "issues.status" => "$status" }
+else { add to array "issues.status[!]" => null }
+
+*/
 
 if ($search == "multi") {
   // select issues left join houses, left join issuetypes, right join status
   // LIMIT array(offset, rows)
-  $count=$database->count("issues",array("AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issuetype","issues.status" => "$status"))));
-
-  //if (!$house) { $house = "*"; }
-  //if (!$issue) { $issue = "*"; }
-  //if (!$status) { $status = "*"; }
+  //$count=$database->count("issues",array("AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issuetype","issues.status" => "$status"))));
+  $count=$database->count("issues",array("AND" => $searchArray));
 
   $datas=$database->select("issues",
     array("[>]houses" => array("house" => "id"),"[>]issuetypes" => array("issuetype" => "id"),"[>]status" => array("status" => "id")),
     array("issues.id(issue_id)","houses.name(house_name)","issuetypes.type(issue_type)","issues.issue(issue)","issues.date(date)","houses.id(house_id)","status.status(status)","issuetypes.parent(issue_parent)"),
     array(
-          "AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issuetype","issues.status" => "$status")),
+//          "AND" => array("OR" => array("issues.house" => "$house","issues.issuetype" => "$issuetype","issues.status" => "$status")),
+          "AND" => $searchArray,
           "LIMIT" => array($offset,$limit),
          )
     );
@@ -235,7 +262,7 @@ else {
   echo '<div class="panel panel-default">';
   echo '<div class="panel-heading">';
   echo "Issue List";
-  if ($search == "multi") { echo " Search : House ID is \"$house\", Issue ID is \"$issue\", Status ID is \"$status\""; }
+  if ($search == "multi") { echo " Search : House ID is \"$house\", Issuetype ID is \"$issuetype\", Status ID is \"$status\""; }
   echo '</div>';
   echo '<div class="panel-body">';
 
