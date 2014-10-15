@@ -1,4 +1,4 @@
-s/Iss<?php
+<?php
 
 //setup globals
 //if (!$action) { $action = "trackissues"; }
@@ -39,14 +39,12 @@ function showIssueTracking() {
 function editIssue() {
   global $database;
   global $id;
-  //global $edit, $status, $search, $action;
   global $edit, $action;
   global $datahouse, $dataissue, $datastatus;
-  //global $house, $issue, $status
 
   //if edit is edit, then id is issue.id
 
-  if ($edit == "edit") {
+  if (($edit == "edit") || ($edit == "addtracking")) {
     $datatrack=$database->get("issues",
       array("issues.house(house_id)",
             "issues.issuetype(issuetype_id)",
@@ -73,7 +71,7 @@ function editIssue() {
   echo '<div class="panel panel-default">';
   echo '<div class="panel-heading">';
 
-  if ($edit == "edit") { echo 'Edit Issue'; }
+  if (($edit=="addtracking") OR ($edit=="edit")) { echo 'Edit Issue'; }
   else { echo 'New Issue'; }
 
   echo '</div>';
@@ -81,7 +79,7 @@ function editIssue() {
 
   echo '<form action="index.php" method="post">';
   echo '<input type="hidden" name="action" value="trackissues">';
-  if ($edit == "edit") {
+  if (($edit=="addtracking") OR ($edit=="edit")) {
     echo '<input type="hidden" name="edit" value="update">';
     echo '<input type="hidden" name="id" value="' . $id . '">';
   }
@@ -115,14 +113,14 @@ function editIssue() {
   //issue - short desc
   echo 'Short Description:<br>';
   echo '<input name="issue" type="text" size="40" maxlength="128"';
-  if ($edit == "edit") { echo 'value="' . $datatrack["issue"] . '"'; }
+  if (($edit=="addtracking") OR ($edit=="edit")) { echo 'value="' . $datatrack["issue"] . '"'; }
   echo '">';
   echo '<br><br>';
 
   //description
   echo 'Issue Details:<br>';
   echo '<textarea name="description" cols="36" rows="8">';
-  if ($edit == "edit") { echo $datatrack["description"]; }
+  if (($edit=="addtracking") OR ($edit=="edit")) { echo $datatrack["description"]; }
   echo '</textarea><br><br>';
   echo '<input class="btn btn-default" type="submit" name="Add &raquo;" value="submit" maxlength="1024">';
   echo '<a class="btn btn-primary pull-right" href="index.php?action=trackissues" class="button right">Reset</a>';
@@ -360,7 +358,6 @@ if ($edit == "update") {
  ******************************/
 
 // these are required by the dropdowns
-//$datahouse = $database->select("houses", array( "id", "name" ));
 $datahouse = $database->select("houses", array( "id", "name" ),array("ORDER" => "name"));
 $dataissue = $database->select("issuetypes", array( "id", "type", "parent" ));
 $datastatus = $database->select("status", array( "id", "status" ));

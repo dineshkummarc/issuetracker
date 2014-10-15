@@ -12,7 +12,7 @@ function statusDropDown($id = 0) {
 
   foreach($datastatus as $data) {                                                                                                                                                                                                                                                 
     echo '<option value="' . $data["id"] . '"';                                                                                                                                                                                                                                   
-    if (($edit == "edit") AND ($data["id"] == $id)) { echo "selected"; }                                                                                                                                                                                      
+    if (($edit == "edit") OR ($edit == "addtracking") AND ($data["id"] == $id)) { echo "selected"; }                                                                                                                                                                                      
     echo '>' . $data["status"] . '</option>\n';                                                                                                                                                                                                                                   
   }
 }
@@ -22,7 +22,7 @@ function houseDropDown($id = 0) {
 
   foreach($datahouse as $data) {
     echo '<option value="' . $data["id"] . '"';
-    if (($edit == "edit") AND ($data["id"] == $id)) { echo "selected"; }
+    if (($edit == "edit") OR ($edit == "addtracking") AND ($data["id"] == $id)) { echo "selected"; }
     echo '>' . $data["name"] . '</option>\n';
   }
 }
