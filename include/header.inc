@@ -60,7 +60,7 @@
 
 <ul class="nav navbar-nav pull-right">
 <?php
-  if (!empty($_SESSION['username']) && ($_SESSION['user_is_logged_in'])) {
+  if (!empty($_SESSION['username']) && ($_SESSION['logged_in'])) {
     echo "<p class=\"navbar-text\">Welcome, " . $_SESSION['username'] . "</p>";
     echo "<li ";
     if ($action == "logout") { echo 'class="active"'; }

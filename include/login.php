@@ -6,15 +6,15 @@
  * @author Daniel Mayoss
  * original author Panique
  * original source link https://github.com/panique/php-login-one-file/
- * @license http://opensource.org/licenses/MIT MIT License (this file)
+ * @license http://opensource.org/licenses/MIT MIT License (for this file)
  */
 
-class LoginSession
+class Session
 {
   /**
    * @var bool Login status of user
    */
-  public $user_is_logged_in = false;
+  public $logged_in = false;
 
   /**
    * @var string System messages, like errors, notices, etc.
@@ -26,9 +26,16 @@ class LoginSession
    */
   public function __construct()
   {
-    if (performMinimumRequirementsCheck()) { runApplication(); }
+    if ($this->checkRequirements()) { $this->runSession(); }
   }
-}
+
+  private function runSession()
+  {
+    // start session
+    session_start();
+    // check for session info, login if valid
+    $this->performUserLoginAction();
+  }
 
   /**
    * Performs a check for minimum requirements to run this application.
@@ -37,7 +44,7 @@ class LoginSession
    * (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
    * @return bool Success status of minimum requirements check, default is false
    */
-  function performMinimumRequirementsCheck()
+  private function checkRequirements()
   {
     if (version_compare(PHP_VERSION, '5.3.7', '<')) {
       echo "Sorry, Simple PHP Login does not run on a PHP version older than 5.3.7 !";
@@ -51,137 +58,92 @@ class LoginSession
     return false;
   }
 
-function runApplication()
-{
-  doStartSession();
-  // check for possible user interactions (login with session/post data or logout)
-  performUserLoginAction();
-}
-
-  /**
-   * Handles the flow of the login/logout process. According to the circumstances, a logout, a login with session
-   * data or a login with post data will be performed
-   */
-  function performUserLoginAction()
+  public function doLogin()
   {
-    if (isset($_GET["action"]) && ($_GET["action"] == "logout")) {
-      doLogout();
-    } elseif (!empty($_SESSION['username']) && ($_SESSION['user_is_logged_in'])) {
-      doLoginWithSessionData();
-    } elseif (isset($_POST["login"])) {
-      doLoginWithPostData();
+    if ($this->checkLogin()) {
+      $this->login();
     }
   }
 
-  /**
-   * Simply starts the session.
-   * It's cleaner to put this into a method than writing it directly into runApplication()
-   */
-  function doStartSession()
+  private function performUserLoginAction()
   {
-    session_start();
+    if (isset($_GET["action"]) && $_GET["action"] == "logout") { $this->doLogout(); }
+    elseif (!empty($_SESSION['username']) && ($_SESSION['logged_in'])) { $this->doSessionLogin(); }
+    elseif (isset($_POST["login"])) { $this->doLogin(); }
   }
 
-  /**
-   * Set a marker (NOTE: is this method necessary ?)
-   */
-  function doLoginWithSessionData()
-  {
-    $user_is_logged_in = true; // ?
-  }
+  private function doSessionLogin()                                                                                                                                                                                                                                     
+  {                                                                                                                                                                                                                                                                             
+    $this->logged_in = true; // not entirely sure this is useful
+  }                                                                            
 
-  /**
-   * Process flow of login with POST data
-   */
-  function doLoginWithPostData()
-  {
-    if (checkLoginFormDataNotEmpty()) {
-      checkPasswordCorrectnessAndLogin();
-    }
-  }
-
-  /**
-   * Logs the user out
-   */
-  function doLogout()
+  public function doLogout()
   {
     $_SESSION = array();
     session_destroy();
-    $user_is_logged_in = false;
-    $feedback = "You were just logged out.";
+    $this->logged_in = false;
+    $this->feedback = "You were just logged out.";
   }
 
-  /**
-   * The registration flow
-   * @return bool
-   */
-  function doRegistration()
+  public function doRegister()
   {
-    if (checkRegistrationData()) {
-      createNewUser();
+    if ($this->checkRegistration()) {
+      $this->createNewUser();
     }
-    // default return
-    return false;
   }
 
   /**
    * Validates the login form data, checks if username and password are provided
    * @return bool Login form data check success state
    */
-  function checkLoginFormDataNotEmpty()
+  private function checkLogin()
   {
     if (!empty($_POST['username']) && !empty($_POST['password'])) {
       return true;
     } elseif (empty($_POST['username'])) {
-      $feedback = "Username field was empty.";
+      $this->feedback = "Username field was empty.";
     } elseif (empty($_POST['password'])) {
-      $feedback = "Password field was empty.";
+      $this->feedback = "Password field was empty.";
+    }
+    // default return
+    return false;
+  }
+
+  private function login() {
+    global $database;
+
+    $result=$database->get("users",
+                     array("users.username(username)",
+                           "users.email(email)",
+                           "users.passhash(passhash)"),
+                     array("OR" => array("users.username[=]" => $_POST['username'],"users.email[=]" => $_POST['username'])));
+
+    if ($result) {
+    // using PHP 5.5's password_verify() function to check password
+      if (password_verify($_POST['password'], $result["passhash"])) {
+        // write user data into PHP SESSION [a file on your server]
+        $_SESSION['username'] = $result["username"];
+        $_SESSION['email'] = $result["email"];
+        $_SESSION['logged_in'] = true;
+        $this->logged_in = true;
+        return true;
+      }
+      else {
+        $this->feedback = "Wrong password.";
+      }
+    }
+    else {
+      $this->feedback = "This user does not exist.";
     }
     // default return
     return false;
   }
 
   /**
-   * Checks if user exists, if so: check if provided password matches the one in the database
-   * @return bool User login success status
-   */
-  function checkPasswordCorrectnessAndLogin() {
-   global $database;
-
-   $result=$database->get("users",
-    array("users.username(username)",
-          "users.email(email)",
-          "users.passhash(passhash)"
-         ),
-    array("OR" => array("users.username[=]" => $_POST['username'],"users.email[=]" => $_POST['username']))
-    );
-
-  if ($result) {
-  // using PHP 5.5's password_verify() function to check password
-   if (password_verify($_POST['password'], $result["passhash"])) {
-   // write user data into PHP SESSION [a file on your server]
-     $_SESSION['username'] = $result["username"];
-     $_SESSION['email'] = $result["email"];
-     $_SESSION['user_is_logged_in'] = true;
-     $user_is_logged_in = true;
-     return true;
-   }
-   else {
-    $feedback = "Wrong password.";
-   }
-  }
-  else {
-   $feedback = "This user does not exist.";
-  }
-  // default return
-  return false;
-  }
-
-  /**
    * Validates the user's registration input
    * @return bool Success status of user's registration data validation
    */
-  function checkRegistrationData()
+  private function checkRegistration()
   {
    // if no registration form submitted: exit the method
    if (!isset($_POST["register"])) {
@@ -204,25 +166,25 @@ function runApplication()
      return true;
      }
     elseif (empty($_POST['username'])) {
-     $feedback = "Empty Username";
+     $this->feedback = "Empty Username";
     } elseif (empty($_POST['password_new']) || empty($_POST['password_repeat'])) {
-      $feedback = "Empty Password";
+      $this->feedback = "Empty Password";
     } elseif ($_POST['password_new'] !== $_POST['password_repeat']) {
-      $feedback = "Password and password repeat are not the same";
+      $this->feedback = "Password and password repeat are not the same";
     } elseif (strlen($_POST['password_new']) < 6) {
-      $feedback = "Password has a minimum length of 6 characters";
+      $this->feedback = "Password has a minimum length of 6 characters";
     } elseif (strlen($_POST['username']) > 64 || strlen($_POST['username']) < 2) {
-      $feedback = "Username cannot be shorter than 2 or longer than 64 characters";
+      $this->feedback = "Username cannot be shorter than 2 or longer than 64 characters";
     } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['username'])) {
-      $feedback = "Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 64 characters";
+      $this->feedback = "Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 64 characters";
     } elseif (empty($_POST['email'])) {
-      $feedback = "Email cannot be empty";
+      $this->feedback = "Email cannot be empty";
     } elseif (strlen($_POST['email']) > 64) {
-      $feedback = "Email cannot be longer than 64 characters";
+      $this->feedback = "Email cannot be longer than 64 characters";
     } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-      $feedback = "Your email address is not in a valid email format";
+      $this->feedback = "Your email address is not in a valid email format";
     } else {
-      $feedback = "An unknown error occurred.";
+      $this->feedback = "An unknown error occurred.";
     }
 
     // default return
@@ -249,7 +211,7 @@ function runApplication()
                        array("OR" => array("users.username[=]" => $_POST['username'],"users.email[=]" => $_POST['username'])));
 
     if ($result) {
-      $feedback = "Sorry, that username or email is already taken. Please choose another one.";
+      $this->feedback = "Sorry, that username or email is already taken. Please choose another one.";
     }
     else {
       $result=$database->insert("users",
@@ -258,11 +220,11 @@ function runApplication()
                                  "email" => $email));
 
       if ($result) {
-        $feedback = "Your account has been created successfully. You can now log in.";
+        $this->feedback = "Your account has been created successfully. You can now log in.";
         return true;
       }
       else {
-        $feedback = "Sorry, your registration failed. Please go back and try again.";
+        $this->feedback = "Sorry, your registration failed. Please go back and try again.";
       }
     }
     // default return
@@ -273,8 +235,8 @@ function runApplication()
    * Simply returns the current status of the user's login
    * @return bool User's login status
    */
-  function getUserLoginStatus()
+  public function getLoginStatus()
   {
-   return $user_is_logged_in;
+   return $this->logged_in;
   }
-
+}

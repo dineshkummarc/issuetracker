@@ -1,20 +1,11 @@
 <?php
 
-/**
- * based on php-login-one-file
- *
- * @author Daniel Mayoss
- * original author Panique
- * original source link https://github.com/panique/php-login-one-file/
- * @license http://opensource.org/licenses/MIT MIT License (this file)
- */
-
   /**
    * Simple demo-"page" with the login form.
    * In a real application you would probably include an html-template here, but for this extremely simple
    * demo the "echo" statements are totally okay.
    */
-  function showPageLoginForm()
+  function showLoginForm()
   {
 
     echo '<h2>Login</h2>';
@@ -35,12 +26,12 @@
    * In a real application you would probably include an html-template here, but for this extremely simple
    * demo the "echo" statements are totally okay.
    */
-  function showPageRegistration()
+  function showRegistrationForm()
   {
 
     echo '<h2>Registration</h2>';
 
-    echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?action=register" name="registerform">';
+    echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?action=doregister" name="registerform">';
     echo '<label for="login_input_username">Username (only letters and numbers, 2 to 64 characters)</label>';
     echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="username" required />';
     echo '<label for="login_input_email">User\'s email</label>';
@@ -55,12 +46,23 @@
     echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '">Homepage</a>';
   }
 
-//login or logout
-performUserLoginAction();
+//login & logout unnecessary, function of calling new $session()
+//$session->doLogin();
 
-//HTML
+//HTML begin
 
-if ($action == "login") { showPageLoginForm(); }
-elseif ($action == "register") { showPageRegistration(); }
-elseif ($action == "logout") { doLogout(); }
+if ($action == "login") {
+  showLoginForm();
+}
+elseif ($action == "register") {
+  showRegistrationForm();
+}
+elseif ($action == "doregister") {
+  $session->doRegister();
+  echo '<p>' . $session->feedback . '</p>';
+}
+elseif ($action == "logout") {
+  // logs out in doLogin(), magic!
+  echo '<p>' . $session->feedback . '</p>';
+}
 else { echo "<p>Please choose Login, Register or Logout.</p>"; }
