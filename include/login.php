@@ -115,7 +115,10 @@ class Session
     $result=$database->get("users",
                      array("users.username(username)",
                            "users.email(email)",
-                           "users.passhash(passhash)"),
+                           "users.passhash(passhash)",
+                           "users.admin(is_admin)",
+                           "users.superuser(is_superuser)",
+                           "users.user(is_user)"),
                      array("OR" => array("users.username[=]" => $_POST['username'],"users.email[=]" => $_POST['username'])));
 
     if ($result) {
@@ -123,7 +126,10 @@ class Session
       if (password_verify($_POST['password'], $result["passhash"])) {
         // write user data into PHP SESSION [a file on your server]
         $_SESSION['username'] = $result["username"];
-        $_SESSION['email'] = $result["email"];
+        $_SESSION['is_user'] = $result["is_user"];
+        $_SESSION['is_superuser'] = $result["is_superuser"];
+        $_SESSION['is_admin'] = $result["is_admin"];
+        $_SESSION['email'] = $result[""];
         $_SESSION['logged_in'] = true;
         $this->logged_in = true;
         return true;
