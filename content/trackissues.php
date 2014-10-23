@@ -70,10 +70,12 @@ function editIssue() {
 
   echo '<div class="panel panel-default">';
   echo '<div class="panel-heading">';
+  echo '<b>';
 
   if (($edit=="addtracking") OR ($edit=="edit")) { echo 'Edit Issue'; }
   else { echo 'New Issue'; }
 
+  echo '</b>';
   echo '</div>';
   echo '<div class="panel-body">';
 
@@ -372,9 +374,10 @@ echo '<div class="container-fluid">';
   echo '<div class="col-md-2">';
 
   //multisearch
-  echo '<p><b>Search:</b></p>';
+  echo '<p>Search:</p>';
   search();
   echo '<p><a class="btn btn-primary pull-right" href="index.php?action=trackissues">Reset</a></p>';
+  echo '</div>'; //end row-fluid
 
   //DEBUG
   //echo "<p>action is $action</p>";
@@ -384,9 +387,7 @@ echo '<div class="container-fluid">';
   //echo "<p>search is $search</p>";
   //DEBUG END
 
-  echo '</div>'; //end col
   echo '<div class="col-md-10">';
-  echo '<div class="row-fluid">';
 
   if ($edit=="search") {
     echo '<div class="col-md-4">';
