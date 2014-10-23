@@ -50,6 +50,8 @@ if (isset($_POST['issue'])){ $issue= $_POST['issue']; }
 else { $issue = ""; }
 if (isset($_POST['description'])){ $description= $_POST['description']; }
 else { $description = ""; }
+if (isset($_POST['parent'])){ $parent= $_POST['parent']; }
+else { $parent = ""; }
 
 //house create/update
 if (isset($_POST['name'])){ $name= $_POST['name']; }

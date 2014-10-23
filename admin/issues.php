@@ -168,7 +168,7 @@ function issueTypeList() {
 if ($edit == "new") {
   $database->insert("issuetypes",
     array("type" => "$issuetype","description" => "$description", "parent" => "$parent"));
-  var_dump($database->error());
+  //var_dump($database->error());
 }
 
 //if ($edit == "edit") { $reentry = "1"; }
