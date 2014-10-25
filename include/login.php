@@ -245,4 +245,106 @@ class Session
   {
    return $this->logged_in;
   }
+
+  private function authenticate( $email, $password, $remember ) {
+    global $database;
+
+    $result=$database->get("users"
+    $sql = "SELECT * FROM `user_table` WHERE `email` = '%s'";
+
+    $db = Database::getInstance();
+    $result = $db->getRecords( sprintf ( $sql, $db->makeSafe( $email ) ) );
+
+    if ( $db->getAffectedRows() == 1 ) {
+        $user = $result[0];
+    } else {
+        throw new AuthException( "This e-mail address was not found in the database." );
+    }
+
+    require_once( "PasswordHash.class.php" );
+
+    $hasher = new PasswordHash( 8, TRUE );
+
+    if ( !$hasher->CheckPassword( $password, $user["password"] ) ) {
+        throw new AuthException( "Invalid password." );
+    }
+
+    $this->setCookie( $user["id"], $remember );
+  }
+
+private function setCookie( $id, $remember = false ) {
+
+    if ( $remember ) {
+        $expiration = time() + 1209600; // 14 days
+    } else {
+        $expiration = time() + 172800; // 48 hours
+    }
+
+    $cookie = $this->generateCookie( $id, $expiration );
+
+    if ( !setcookie( COOKIE_AUTH, $cookie, $expiration, COOKIE_PATH, COOKIE_DOMAIN, false, true ) ) {
+        throw new AuthException( "Could not set cookie." );
+    }
+
+  }
+
+  private function generateCookie( $id, $expiration ) {
+
+    $key = hash_hmac( 'md5', $this->id . $expiration, SECRET_KEY );
+    $hash = hash_hmac( 'md5', $this->id . $expiration, $key );
+
+    $cookie = $id . '|' . $expiration . '|' . $hash;
+
+    return $cookie;
+  }
+    /**
+
+     * Logs in via the Cookie
+     * @return bool success state of cookie login
+     */
+    private function loginWithCookieData()
+    {
+      global $database;
+
+      if (isset($_COOKIE['rememberme'])) {
+        // extract data from the cookie
+        list ($user_id, $token, $hash) = explode(':', $_COOKIE['rememberme']);
+        // check cookie hash validity
+        if ($hash == hash('sha256', $user_id . ':' . $token . COOKIE_SECRET_KEY) && !empty($token)) {
+          // cookie looks good, try to select corresponding user
+          $result=$database->get("users",
+                     array("users.username(username)",
+                           "users.email(email)",
+                           "users.passhash(passhash)",
+                           "users.admin(is_admin)",
+                           "users.superuser(is_superuser)",
+                           "users.user(is_user)"),
+                     array("AND" => array("users.id[=]" => $this->user_id, "users.token[=]" => $this->token, "users.token[!=]" => "")));
+
+          if (isset($result_row->user_id)) {
+            // write user data into PHP SESSION [a file on your server]
+            $_SESSION['user_id'] = $result_row->user_id;
+            $_SESSION['user_name'] = $result_row->user_name;
+            $_SESSION['user_email'] = $result_row->user_email;
+            $_SESSION['user_logged_in'] = 1;
+
+            // declare user id, set the login status to true
+            $this->user_id = $result_row->user_id;
+            $this->user_name = $result_row->user_name;
+            $this->user_email = $result_row->user_email;
+            $this->user_is_logged_in = true;
+
+            // Cookie token usable only once
+            $this->newRememberMeCookie();
+            return true;
+          }
+        }
+      }
+      // A cookie has been used but is not valid... we delete it
+      $this->deleteRememberMeCookie();
+      $this->errors[] = MESSAGE_COOKIE_INVALID;
+    }
+    return false;
+  }
+
 }
