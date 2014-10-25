@@ -70,10 +70,12 @@ function editIssue() {
 
   echo '<div class="panel panel-default">';
   echo '<div class="panel-heading">';
+  echo '<b>';
 
   if (($edit=="addtracking") OR ($edit=="edit")) { echo 'Edit Issue'; }
   else { echo 'New Issue'; }
 
+  echo '</b>';
   echo '</div>';
   echo '<div class="panel-body">';
 
@@ -143,7 +145,7 @@ function addIssueTracking() {
   echo '<input type="hidden" name="edit" value="addtracking">';
   echo '<input type="hidden" name="id" value="' . $id . '">';
   echo '<p>Tracking Info:</p>';
-  echo '<textarea cols="36" rows="8" name="description">Enter Update Here</textarea><br><br>';
+  echo '<textarea cols="36" rows="8" name="description" placeholder="Enter Update Here"></textarea><br><br>';
   echo '<input class="btn btn-default" type="submit" name="Edit &raquo;" value="Edit &raquo;" maxlength="1024">';
   echo '<a href="index.php?action=trackissues&id=' . $id . '" class="btn btn-primary pull-right">Reset</a><br>';
   echo '</form>';
@@ -374,7 +376,6 @@ echo '<div class="container-fluid">';
   echo '<div class="col-md-2">';
 
   //multisearch
-  echo '<div class="row-fluid">';
   echo '<p>Search:</p>';
   search();
   echo '<p><a class="btn btn-primary pull-right" href="index.php?action=trackissues">Reset</a></p>';
@@ -388,9 +389,7 @@ echo '<div class="container-fluid">';
   //echo "<p>search is $search</p>";
   //DEBUG END
 
-  echo '</div>'; //end col
   echo '<div class="col-md-10">';
-  echo '<div class="row-fluid">';
 
   if ($edit=="search") {
     echo '<div class="col-md-4">';

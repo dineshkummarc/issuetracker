@@ -1,5 +1,7 @@
 <?php
 
+if (!$parent) { $parent = ""; }
+
 function updateIssueType() {
   global $database, $id, $dataissue;
   $datatree=buildTree($dataissue);
@@ -28,7 +30,7 @@ function updateIssueType() {
   // parent list dropdown
   echo 'Parent:<br>';
   echo '<select name="parent">\n';
-  echo '<option value="0">-- none --</option>';
+  echo '<option value="">-- none --</option>';
   issueDropDown($data['parent']);
   echo '</select><br><br>';
 
@@ -75,7 +77,7 @@ function newIssueType() {
   // parent list dropdown
   echo 'Parent:<br>';
   echo '<select name="parent">\n';
-  echo '<option value="0">-- none --</option>';
+  echo '<option value="">-- none --</option>';
   issueDropDown();
   echo '</select><br><br>';
 
@@ -96,8 +98,8 @@ function issueTypeList() {
   global $page;
   global $dataissue;
 
-  $limit = 5;
-  $offset = ($page*5) - $limit;
+  $limit = 10;
+  $offset = ($page*$limit) - $limit;
 
   //DEBUG
   //echo "page is $page, limit is $limit, offset is $offset";
@@ -166,6 +168,7 @@ function issueTypeList() {
 if ($edit == "new") {
   $database->insert("issuetypes",
     array("type" => "$issuetype","description" => "$description", "parent" => "$parent"));
+  //var_dump($database->error());
 }
 
 //if ($edit == "edit") { $reentry = "1"; }

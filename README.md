@@ -5,10 +5,14 @@ Issuetracker is a fledgeling php web application for keeping track of issues per
 
 At the moment, it works relatively well, but it has a lot of holes in the capabilities:
    * users don't do anything
-   * neither issues, issuetypes nor issuetracking entries handle html entities
-      * the strings should be safe, but new lines stay new lines, and are not printed
-   * there's a lot of cleanup todo, old CSS to remove and so on
+      * yet...
+   * issues, issuetypes and issuetracking entries handle html entity quirks
+      * used a simple nl2br() call on issuetracking recall, now nl are br
+      * the strings should be safe, but requires a once-over
+   * there's a lot of cleanup to do, old CSS to remove and so on
    * the database doesn't build itself properly, so expect to add values by hand to tables like status.
+      * modify-xx.xx.xx.x.sql files should be run on top of the bare bones sql
+      * utf8 not used everywhere, it needs to be
 
 to install
 ==========
@@ -30,8 +34,6 @@ This suite uses php, pdo, mysql and a webserver capable of running php. I use ph
 
 notes
 =====
-
-users table doesn't do anything yet
 
 This suite uses the following technology:
    * bootstrap 3, supplied via maxcdn
