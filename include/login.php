@@ -249,21 +249,14 @@ class Session
   private function authenticate( $email, $password, $remember ) {
     global $database;
 
-    $result=$database->get("users"
-    $sql = "SELECT * FROM `user_table` WHERE `email` = '%s'";
-
-    $db = Database::getInstance();
-    $result = $db->getRecords( sprintf ( $sql, $db->makeSafe( $email ) ) );
-
-    if ( $db->getAffectedRows() == 1 ) {
-        $user = $result[0];
-    } else {
-        throw new AuthException( "This e-mail address was not found in the database." );
-    }
-
-    require_once( "PasswordHash.class.php" );
-
-    $hasher = new PasswordHash( 8, TRUE );
+    $result=$database->get("users",
+                     array("users.username(username)",
+                           "users.email(email)",
+                           "users.passhash(passhash)",
+                           "users.admin(is_admin)",
+                           "users.superuser(is_superuser)",
+                           "users.user(is_user)"),
+                     array("OR" => array("users.username[=]" => $_POST['username'],"users.email[=]" => $_POST['username'])));
 
     if ( !$hasher->CheckPassword( $password, $user["password"] ) ) {
         throw new AuthException( "Invalid password." );
@@ -344,7 +337,5 @@ private function setCookie( $id, $remember = false ) {
       $this->deleteRememberMeCookie();
       $this->errors[] = MESSAGE_COOKIE_INVALID;
     }
-    return false;
-  }
 
 }
