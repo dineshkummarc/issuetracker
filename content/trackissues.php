@@ -199,6 +199,8 @@ function showTrackIssueList() {
   global $search;
   global $house, $issuetype, $status;
 
+  global $edit, $action; //otherwise it complains in the logs
+
   $limit = 10;
   $offset = ($page*$limit) - $limit;
 

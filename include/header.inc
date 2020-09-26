@@ -1,76 +1,103 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?php
 
-<html>
+echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+echo '<html>';
 
-<head>
+echo '<head>';
+echo '<meta charset="utf-8">';
+echo '<title>Issuetracker</title>';
+echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
+echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+echo '<meta name="description" content="">';
+echo '<meta name="author" content="Unknown">';
+echo '<!-- fontawesome etc -->';
+echo '<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">';
+echo '<!-- Latest compiled and minified CSS -->';
+echo '<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">';
+echo '<!-- Optional theme -->';
+echo '<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->';
+echo '<link rel="icon" href="icons/favicon.ico">';
+echo '</head>';
 
-<meta charset="utf-8">
-<title>Issuetracker</title>
+echo '<body>';
+echo '  <div class="navbar navbar-default">';
+echo '    <div class="container">';
+echo '      <div class="navbar-header">';
+echo '        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">';
+echo '          <span class="sr-only">Toggle navigation</span>';
+echo '          <span class="icon-bar"></span>';
+echo '          <span class="icon-bar"></span>';
+echo '          <span class="icon-bar"></span>';
+echo '        </button>';
+echo '        <a class="navbar-brand" href="#">Issuetracker</a>';
+echo '      </div>';
+echo '      <div class="navbar-collapse collapse">';
+echo '        <ul class="nav navbar-nav">';
 
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author" content="Unknown" >
+if ($_SESSION['is_admin']) {
+  echo '          <li class="dropdown">';
+  echo '            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>';
+  echo '            <ul class="dropdown-menu" role="menu">';
+  echo '              <li';
 
-<!-- fontawesome etc -->
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  if ($action == "users") { echo ' class="active" '; }
 
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  echo '                 ><a href="index.php?action=users">';
+  echo '                 <i class="fa fa-users"></i>&nbsp;User Admin</a></li>';
+  echo '            </ul>';
+  echo '          </li>';
+}
 
-<!-- Optional theme -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
+if ($_SESSION['is_superuser']) {
+  echo '          <li class="dropdown">';
+  echo '            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Poweruser <span class="caret"></span></a>';
+  echo '            <ul class="dropdown-menu" role="menu">';
+  echo '              <li';
 
-<link rel="icon" href="icons/favicon.ico">
+  if ($action == "houses") { echo ' class="active" '; }
 
-</head>
+  echo '                 ><a href="index.php?action=houses">';
+  echo '                 <i class="fa fa-building"></i>&nbsp;House Admin</a></li>';
+  echo '              <li';
 
-<!-- page body -->
-<body>
+  if ($action == "issues") { echo ' class="active "'; }
 
-      <div class="navbar navbar-default">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Issuetracker</a>
-          </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Tasks <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                <li <?php if ($action == "users") echo 'class="active"'; ?> ><a href="index.php?action=users">
-                                <i class="fa fa-users"></i>&nbsp;User Admin</a></li>
-                <li <?php if ($action == "houses") echo 'class="active"'; ?> ><a href="index.php?action=houses">
-                                <i class="fa fa-building"></i>&nbsp;House Admin</a></li>
-                <li <?php if ($action == "issues") echo 'class="active"'; ?> ><a href="index.php?action=issues">
-                                <i class="fa fa-folder-open"></i>&nbsp;Issue Type Admin</a></li>
+  echo '                 ><a href="index.php?action=issues">';
+  echo '                 <i class="fa fa-folder-open"></i>&nbsp;Issue Type Admin</a></li>';
+  echo '            </ul>';
+  echo '          </li>';
+}
 
-                </ul>
-              </li>
-                <li <?php if ($action == "trackissues") echo 'class="active"'; ?> ><a href="index.php?action=trackissues">
-                                <i class="fa fa-check-square"></i>&nbsp;Track Issues</a></li>
-<!--          <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li> -->
+if ($_SESSION['is_user']) {
+  echo '          <li';
 
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
+  if ($action == "trackissues") { echo ' class="active" '; }
 
+  echo '            ><a href="index.php?action=trackissues">';
+  echo '            <i class="fa fa-check-square"></i>&nbsp;Track Issues</a>';
+  echo '          </li>';
+}
+
+echo '        </ul>';
+echo '          <ul class="nav navbar-nav pull-right">';
+
+if (!empty($_SESSION['username']) && ($_SESSION['logged_in'])) {
+  echo "<p class=\"navbar-text\">Welcome, " . $_SESSION['username'] . "</p>";
+  echo "<li ";
+  if ($action == "logout") { echo 'class="active"'; }
+  echo "><a href=\"index.php?action=logout\"><i class=\"fa fa-gear\"></i>&nbsp;Logout</a></li>";
+}
+else {
+  echo "<li ";
+  if ($action == "login")  { echo 'class="active"'; }
+  echo "><a href=\"index.php?action=login\"><i class=\"fa fa-gear\"></i>&nbsp;Login</a></li>";
+  echo "<li ";
+  if ($action == "register")  { echo 'class="active"'; }
+  echo "><a href=\"index.php?action=register\"><i class=\"fa fa-gear\"></i>&nbsp;register</a></li>";
+}
+
+echo '          </ul>';
+echo '        </div><!--/.nav-collapse -->';
+echo '      </div>';
+echo '    </div>';
 
